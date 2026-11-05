@@ -1,0 +1,318 @@
+[
+  {
+    "productId": "758f609b-bb2e-476f-b457-51994414271d",
+    "shelfId": "6fc47f5c-bc36-4978-ad1b-1f1e044e44ba",
+    "quantity": 20,
+    "id": "153fd0b0-bff4-4375-a1e6-8108725e0900",
+    "createdAtUtc": "2026-10-28T14:16:58.530567+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:02.3628528+00:00"
+  },
+  {
+    "productId": "cc710b49-09db-4852-8503-e84665321c33",
+    "shelfId": "6fc47f5c-bc36-4978-ad1b-1f1e044e44ba",
+    "quantity": 40,
+    "id": "269eb617-0151-4c8f-af24-5c2666a8c795",
+    "createdAtUtc": "2026-10-28T14:16:58.5998427+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:00.9094003+00:00"
+  },
+  {
+    "productId": "6c3636ab-1c45-4993-a3e4-6af0eda4f9fb",
+    "shelfId": "6fc47f5c-bc36-4978-ad1b-1f1e044e44ba",
+    "quantity": 28,
+    "id": "35371f4a-c208-4093-9471-a99d5bd06a23",
+    "createdAtUtc": "2026-10-28T14:16:58.6392945+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:00.939533+00:00"
+  },
+  {
+    "productId": "6f010fed-0510-4df9-bd33-db8da750f384",
+    "shelfId": "6fc47f5c-bc36-4978-ad1b-1f1e044e44ba",
+    "quantity": 14,
+    "id": "6fd87625-495c-494b-bed7-66286bdd3a9d",
+    "createdAtUtc": "2026-10-28T14:16:58.6702567+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:02.3981372+00:00"
+  },
+  {
+    "productId": "b9ae78ac-878a-4f86-80bc-4dcd6aeb3dd3",
+    "shelfId": "6fc47f5c-bc36-4978-ad1b-1f1e044e44ba",
+    "quantity": 22,
+    "id": "053e5b6f-e2ea-4810-bf0a-274766bbf7e5",
+    "createdAtUtc": "2026-10-28T14:16:58.6998674+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.005102+00:00"
+  },
+  {
+    "productId": "8605b78a-5806-4bf9-87b1-244d796d91c2",
+    "shelfId": "83c424db-89bd-479e-8957-cdd02aa8edeb",
+    "quantity": 45,
+    "id": "a2c3da69-9abd-443b-8fb9-24200f7ab45d",
+    "createdAtUtc": "2026-10-28T14:16:58.84581+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.7134979+00:00"
+  },
+  {
+    "productId": "fd0b9621-9d0b-437a-855f-498d500cf8dc",
+    "shelfId": "83c424db-89bd-479e-8957-cdd02aa8edeb",
+    "quantity": 42,
+    "id": "2ee1ed34-d952-43af-99ec-6e05ccf710fe",
+    "createdAtUtc": "2026-10-28T14:16:58.8724642+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.8171934+00:00"
+  },
+  {
+    "productId": "896326c3-c108-400a-baae-332fc374b443",
+    "shelfId": "83c424db-89bd-479e-8957-cdd02aa8edeb",
+    "quantity": 35,
+    "id": "0ca238d6-77c3-4ded-98ad-d4cd0054e92f",
+    "createdAtUtc": "2026-10-28T14:16:58.9042747+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.738678+00:00"
+  },
+  {
+    "productId": "432b84a0-e546-47cd-bf02-d63dcac8a75a",
+    "shelfId": "83c424db-89bd-479e-8957-cdd02aa8edeb",
+    "quantity": 25,
+    "id": "1f675138-d8d7-4269-ac9a-59ae3d584709",
+    "createdAtUtc": "2026-10-28T14:16:58.9353441+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.7877257+00:00"
+  },
+  {
+    "productId": "432f5988-9971-4dba-a60f-9cdea4df635e",
+    "shelfId": "91a79ee6-cdf7-481d-93cc-aa5151cc325f",
+    "quantity": 30,
+    "id": "f767f2d0-cf3f-460e-9a39-8a55d614f90e",
+    "createdAtUtc": "2026-10-28T14:16:59.0666328+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.0853307+00:00"
+  },
+  {
+    "productId": "eb8ef364-f786-4c25-bb73-3ee7b8461667",
+    "shelfId": "91a79ee6-cdf7-481d-93cc-aa5151cc325f",
+    "quantity": 10,
+    "id": "2ffba3c2-1351-4cb9-9b7b-361cd54a7afa",
+    "createdAtUtc": "2026-10-28T14:16:59.0990472+00:00"
+  },
+  {
+    "productId": "bd76c3bd-ef79-450c-89aa-236cbc907c0f",
+    "shelfId": "91a79ee6-cdf7-481d-93cc-aa5151cc325f",
+    "quantity": 10,
+    "id": "d016ceb4-a223-4940-8782-a505dd07e20b",
+    "createdAtUtc": "2026-10-28T14:16:59.1360289+00:00"
+  },
+  {
+    "productId": "c950697e-eaca-471e-a194-4ae6094442c1",
+    "shelfId": "91a79ee6-cdf7-481d-93cc-aa5151cc325f",
+    "quantity": 14,
+    "id": "00113007-d971-4aea-a8ae-1838e7adef97",
+    "createdAtUtc": "2026-10-28T14:16:59.1680967+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.1634866+00:00"
+  },
+  {
+    "productId": "225dd3a7-4d28-4d7e-9d9a-5fc77a44af1c",
+    "shelfId": "91a79ee6-cdf7-481d-93cc-aa5151cc325f",
+    "quantity": 12,
+    "id": "80fd72d0-7537-4910-8f34-b63da8eba4c5",
+    "createdAtUtc": "2026-10-28T14:16:59.1970501+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.125028+00:00"
+  },
+  {
+    "productId": "8d04b2cf-28ef-4507-a694-1e1348edda34",
+    "shelfId": "91a79ee6-cdf7-481d-93cc-aa5151cc325f",
+    "quantity": 10,
+    "id": "d0003d2b-8f06-4316-bb0e-e19047461d5c",
+    "createdAtUtc": "2026-10-28T14:16:59.2264668+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.2016888+00:00"
+  },
+  {
+    "productId": "a1847b8d-6df9-48a1-b804-fc4a6f67ca94",
+    "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+    "quantity": 50,
+    "id": "74621fa1-a54a-4ebf-ad20-88bed8c60c57",
+    "createdAtUtc": "2026-10-28T14:16:59.3668628+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.515847+00:00"
+  },
+  {
+    "productId": "3d935bc2-86c7-47ad-8caa-4dbd021ef4e3",
+    "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+    "quantity": 28,
+    "id": "aef853c1-ba2a-45df-99bc-15bfbb013fa4",
+    "createdAtUtc": "2026-10-28T14:16:59.3990933+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:00.755277+00:00"
+  },
+  {
+    "productId": "caad09fe-b31f-4321-bf28-3dc207749a72",
+    "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+    "quantity": 28,
+    "id": "ea87c420-3e2b-4d5d-9402-2b64c7192f06",
+    "createdAtUtc": "2026-10-28T14:16:59.4331674+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:00.7882042+00:00"
+  },
+  {
+    "productId": "7e7a2b71-3752-4039-aec5-80176721e290",
+    "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+    "quantity": 18,
+    "id": "b283a834-74f5-44ef-935a-799ed8b6527b",
+    "createdAtUtc": "2026-10-28T14:16:59.4637807+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.5485983+00:00"
+  },
+  {
+    "productId": "92d1a66e-9cbc-45d5-b515-c2bfb85a2ca3",
+    "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+    "quantity": 12,
+    "id": "c7097985-519e-4b4e-9b13-8b9b9d51ee46",
+    "createdAtUtc": "2026-10-28T14:16:59.4964022+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.6211444+00:00"
+  },
+  {
+    "productId": "e133d839-29ee-49ba-9a26-5fa659ce37e0",
+    "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+    "quantity": 12,
+    "id": "3dc9210b-a4f7-4251-b523-aa53ca3f534a",
+    "createdAtUtc": "2026-10-28T14:16:59.527603+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.5817966+00:00"
+  },
+  {
+    "productId": "3c6aaa45-0783-4c4c-8a47-686b24c92937",
+    "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+    "quantity": 45,
+    "id": "0a7bbed9-88d2-4c61-9fd4-3897c16d1757",
+    "createdAtUtc": "2026-10-28T14:16:59.6775069+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:02.4757898+00:00"
+  },
+  {
+    "productId": "7a72f579-7366-445e-9c90-b9f8ce01c74d",
+    "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+    "quantity": 70,
+    "id": "eec09f07-a0d6-406e-9e1a-a646335d0010",
+    "createdAtUtc": "2026-10-28T14:16:59.7085092+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.4368134+00:00"
+  },
+  {
+    "productId": "5f55bd5a-781b-4a7a-8757-ba9895681a8c",
+    "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+    "quantity": 60,
+    "id": "88367b5c-9606-4ef1-9e57-74985e2b9403",
+    "createdAtUtc": "2026-10-28T14:16:59.7442446+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.3930746+00:00"
+  },
+  {
+    "productId": "da658738-92d6-4842-a574-2e7dd2d7afb2",
+    "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+    "quantity": 35,
+    "id": "4969ad67-d973-4a5b-be4f-07780e4df5c7",
+    "createdAtUtc": "2026-10-28T14:16:59.7785217+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:02.5204059+00:00"
+  },
+  {
+    "productId": "9e7cdf6e-98cd-4174-925e-bfa0bc381c1d",
+    "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+    "quantity": 35,
+    "id": "729ced84-e0b2-4283-8f9a-930d7f46b4d6",
+    "createdAtUtc": "2026-10-28T14:16:59.809287+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.3581146+00:00"
+  },
+  {
+    "productId": "7df319bd-4512-4d48-aa48-01bac1b46f16",
+    "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+    "quantity": 16,
+    "id": "a840101c-2ffd-438c-a128-111eb6b01e65",
+    "createdAtUtc": "2026-10-28T14:16:59.8394502+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.3230757+00:00"
+  },
+  {
+    "productId": "f2365f09-52f1-4ecd-8100-0577b1e49a48",
+    "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+    "quantity": 18,
+    "id": "09af1289-42b7-4f4c-8dc2-c3ecdd92308d",
+    "createdAtUtc": "2026-10-28T14:16:59.8733155+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.2884014+00:00"
+  },
+  {
+    "productId": "e7da7b43-10f8-4c8e-905f-bb0025f7413a",
+    "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+    "quantity": 12,
+    "id": "494b1fbb-0d78-426b-b14d-98afbe579e56",
+    "createdAtUtc": "2026-10-28T14:16:59.9387433+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:02.5621439+00:00"
+  },
+  {
+    "productId": "196166ac-acea-4674-93f0-67b79694f69e",
+    "shelfId": "5167d37e-3215-4dc9-8341-a097aa628ea7",
+    "quantity": 22,
+    "id": "24349e86-7588-412c-83df-d7d6e77096fa",
+    "createdAtUtc": "2026-10-28T14:17:00.0888528+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:02.1686111+00:00"
+  },
+  {
+    "productId": "e7168823-9101-41a6-aec9-06d7f14bfa95",
+    "shelfId": "5167d37e-3215-4dc9-8341-a097aa628ea7",
+    "quantity": 15,
+    "id": "456b7534-43ae-4b6d-aaf0-e24eaa55e196",
+    "createdAtUtc": "2026-10-28T14:17:00.1243922+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:02.2040747+00:00"
+  },
+  {
+    "productId": "769f20f3-da1d-4150-9abe-24096bb0aeaf",
+    "shelfId": "5167d37e-3215-4dc9-8341-a097aa628ea7",
+    "quantity": 18,
+    "id": "27dbf919-ff40-410b-9b99-5a649c97a2b0",
+    "createdAtUtc": "2026-10-28T14:17:00.1616358+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:02.2394127+00:00"
+  },
+  {
+    "productId": "8b804c69-c7a0-4d59-8486-432b43703488",
+    "shelfId": "5167d37e-3215-4dc9-8341-a097aa628ea7",
+    "quantity": 20,
+    "id": "81c432cf-0a03-40b4-8294-6a807c63e894",
+    "createdAtUtc": "2026-10-28T14:17:00.1963766+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:02.2733225+00:00"
+  },
+  {
+    "productId": "3e4a6e0b-f74a-4065-8201-7198187f7385",
+    "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+    "quantity": 30,
+    "id": "0952bdbb-9405-484d-af4d-106b81ca523f",
+    "createdAtUtc": "2026-10-28T14:17:00.3799683+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.9117007+00:00"
+  },
+  {
+    "productId": "1d0195a2-3335-49e6-b8cb-09c9eea1a316",
+    "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+    "quantity": 35,
+    "id": "ca6a7480-df20-407a-a1b1-e17ff8fb6665",
+    "createdAtUtc": "2026-10-28T14:17:00.4152579+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.9465641+00:00"
+  },
+  {
+    "productId": "c8eb89f3-0fb4-46d7-ad4b-754317aaa12b",
+    "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+    "quantity": 22,
+    "id": "5654e3a7-af17-4c27-8af7-a702db9256fa",
+    "createdAtUtc": "2026-10-28T14:17:00.4465939+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.9901722+00:00"
+  },
+  {
+    "productId": "c777b62d-4f97-4fdd-b206-ab29dbd209f6",
+    "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+    "quantity": 20,
+    "id": "f94b335c-a7d5-4663-9564-dbaaf1d2520c",
+    "createdAtUtc": "2026-10-28T14:17:00.4816322+00:00"
+  },
+  {
+    "productId": "2481e7bb-0b1c-40a0-a37e-ef1ca170c3ec",
+    "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+    "quantity": 16,
+    "id": "e92e819d-2af3-4e65-92e2-58e1812ffe15",
+    "createdAtUtc": "2026-10-28T14:17:00.5140974+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:02.0224147+00:00"
+  },
+  {
+    "productId": "b71b0226-6d2e-4cbb-9c38-918f017872d6",
+    "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+    "quantity": 10,
+    "id": "3a90c973-969d-4f7b-a04c-5588393a72a0",
+    "createdAtUtc": "2026-10-28T14:17:00.5466047+00:00"
+  },
+  {
+    "productId": "fb479dfa-6a19-4c74-b42b-ab0ce43d71d4",
+    "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+    "quantity": 14,
+    "id": "1242cbb6-9f8c-42c9-8f3e-7431d2a988b6",
+    "createdAtUtc": "2026-10-28T14:17:00.5823837+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:02.0602384+00:00"
+  }
+]

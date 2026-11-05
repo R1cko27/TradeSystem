@@ -1,0 +1,55 @@
+<UserControl x:Class="TradeSystem.App.Views.InvoiceListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,10">
+            <TextBlock FontSize="18" FontWeight="SemiBold"><Run Text="Счета по заказу "/><Run Text="{Binding OrderNumber, Mode=OneWay}"/></TextBlock>
+            <TextBlock Foreground="Gray"><Run Text="Поставщик: "/><Run Text="{Binding SupplierName, Mode=OneWay}"/>
+                <Run Text="   |   Сумма заказа: "/><Run Text="{Binding OrderTotal, Mode=OneWay, StringFormat=N2}"/></TextBlock>
+        </StackPanel>
+
+        <!-- Форма нового счёта -->
+        <Border Grid.Row="1" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4" Padding="10" Margin="0,0,0,10">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Номер:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <TextBox Width="150" Text="{Binding NewNumber, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,12,0"/>
+                <TextBlock Text="Сумма:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <TextBox Width="100" Text="{Binding NewAmountText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,12,0"/>
+                <TextBlock Text="Срок (дд.мм.гггг):" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <TextBox Width="120" Text="{Binding NewDueDateText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,12,0"/>
+                <Button Content="Создать счёт" Command="{Binding CreateCommand}" Padding="10,4" FontWeight="SemiBold"/>
+            </StackPanel>
+        </Border>
+
+        <DataGrid Grid.Row="2" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedInvoice}"
+                  AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" HeadersVisibility="Column">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Номер" Binding="{Binding Number}" Width="150"/>
+                <DataGridTextColumn Header="Выставлен" Binding="{Binding IssueDateUtc, StringFormat=dd.MM.yyyy}" Width="100"/>
+                <DataGridTextColumn Header="Срок" Binding="{Binding DueDateUtc, StringFormat=dd.MM.yyyy}" Width="100"/>
+                <DataGridTextColumn Header="Сумма" Binding="{Binding Amount, StringFormat=N2}" Width="100"/>
+                <DataGridTextColumn Header="Статус" Binding="{Binding PaymentStatusLabel}" Width="130"/>
+                <DataGridTextColumn Header="Оплачен" Binding="{Binding PaidAtUtc, StringFormat=dd.MM.yyyy HH:mm}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <WrapPanel Grid.Row="3" Margin="0,8,0,0">
+            <Button Content="Отметить оплату" Command="{Binding PayCommand}" Padding="10,4" Margin="0,0,6,0" FontWeight="SemiBold"/>
+            <Button Content="Удалить счёт" Command="{Binding DeleteCommand}" Padding="10,4"/>
+        </WrapPanel>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,12,0,0">
+            <Button Content="← Назад к заказам" Command="{Binding CloseCommand}" Padding="14,6"/>
+            <TextBlock Text="Загрузка..." VerticalAlignment="Center" Margin="16,0,0,0" Foreground="Gray"
+                       Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

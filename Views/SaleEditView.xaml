@@ -1,0 +1,68 @@
+<UserControl x:Class="TradeSystem.App.Views.SaleEditView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Новая продажа" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,12"/>
+
+        <DockPanel Grid.Row="1" Margin="0,0,0,6">
+            <Button DockPanel.Dock="Right" Content="－ Удалить строку" Command="{Binding RemoveLineCommand}" Margin="6,0,0,0" Padding="8,3"/>
+            <Button DockPanel.Dock="Right" Content="＋ Строка" Command="{Binding AddLineCommand}" Padding="8,3" FontWeight="SemiBold"/>
+            <TextBlock Text="Позиции продажи" VerticalAlignment="Center" FontWeight="SemiBold"/>
+        </DockPanel>
+
+        <DataGrid Grid.Row="2"
+                  ItemsSource="{Binding Lines}" SelectedItem="{Binding SelectedLine}"
+                  AutoGenerateColumns="False" CanUserAddRows="False" HeadersVisibility="Column">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Товар *" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding DataContext.AvailableProducts, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                      SelectedValuePath="Id" DisplayMemberPath="Name"
+                                      SelectedValue="{Binding ProductId, UpdateSourceTrigger=PropertyChanged}"
+                                      BorderThickness="0" Background="Transparent"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Полка (только где есть остаток) *" Width="260">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding AvailableShelves}"
+                                      SelectedValuePath="ShelfId" DisplayMemberPath="Display"
+                                      SelectedValue="{Binding ShelfId, UpdateSourceTrigger=PropertyChanged}"
+                                      BorderThickness="0" Background="Transparent"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Кол-во" Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Width="80"/>
+                <DataGridTextColumn Header="Цена продажи" Binding="{Binding UnitPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" Width="110"/>
+                <DataGridTextColumn Header="Сумма" Binding="{Binding Total, StringFormat=N2}" Width="100" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,8,0,0">
+            <TextBlock Text="Итого: " VerticalAlignment="Center" FontWeight="SemiBold"/>
+            <TextBlock Text="{Binding TotalAmount, StringFormat=N2}" VerticalAlignment="Center" FontWeight="Bold" Foreground="#27AE60"/>
+            <TextBlock Margin="24,0,0,0" VerticalAlignment="Center" Foreground="Gray" TextWrapping="Wrap"
+                       Text="Полка выбирается из фактических остатков товара. Финальную проверку достаточности выполняет сервис при проведении."/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,12,0,0">
+            <Button Content="Сохранить черновик" Command="{Binding SaveDraftCommand}" Padding="14,6" Margin="0,0,8,0"/>
+            <Button Content="Сохранить и провести" Command="{Binding SaveAndPostCommand}" Padding="14,6" FontWeight="SemiBold" Margin="0,0,8,0"/>
+            <Button Content="Отмена" Command="{Binding CancelCommand}" Padding="14,6"/>
+            <TextBlock Text="Загрузка..." VerticalAlignment="Center" Margin="16,0,0,0" Foreground="Gray"
+                       Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

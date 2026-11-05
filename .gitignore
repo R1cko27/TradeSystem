@@ -1,0 +1,13 @@
+﻿publish/
+obj/
+bin/
+.build-artifacts-backup/
+
+~$*
+~WRL*.tmp
+
+__pycache__/
+
+TradeSystem.UnitTests/TestResults/
+
+auxiliary/

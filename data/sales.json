@@ -1,0 +1,512 @@
+[
+  {
+    "number": "SALE-20261028-0001",
+    "soldAtUtc": "2026-10-28T14:17:00.6422793+00:00",
+    "status": "Completed",
+    "comment": "\u0423\u0442\u0440\u0435\u043D\u043D\u044F\u044F \u0432\u044B\u043A\u043B\u0430\u0434\u043A\u0430: \u0444\u0440\u0443\u043A\u0442\u044B \u0438 \u043E\u0432\u043E\u0449\u0438",
+    "lines": [
+      {
+        "productId": "a1847b8d-6df9-48a1-b804-fc4a6f67ca94",
+        "productName": "\u042F\u0431\u043B\u043E\u043A\u0438 \u0413\u043E\u043B\u0434\u0435\u043D",
+        "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+        "quantity": 16,
+        "unitPrice": 129.90,
+        "totalPrice": 2078.40,
+        "id": "895e3d5f-9a05-452d-8560-79c0a62d0d0a",
+        "createdAtUtc": "2026-10-28T14:17:00.6433643+00:00"
+      },
+      {
+        "productId": "3d935bc2-86c7-47ad-8caa-4dbd021ef4e3",
+        "productName": "\u0411\u0430\u043D\u0430\u043D\u044B",
+        "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+        "quantity": 22,
+        "unitPrice": 109.90,
+        "totalPrice": 2417.80,
+        "id": "3afe4d43-ac13-480a-a53f-6ca7e7e24ad7",
+        "createdAtUtc": "2026-10-28T14:17:00.6439733+00:00"
+      },
+      {
+        "productId": "caad09fe-b31f-4321-bf28-3dc207749a72",
+        "productName": "\u0410\u043F\u0435\u043B\u044C\u0441\u0438\u043D\u044B",
+        "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+        "quantity": 12,
+        "unitPrice": 149.90,
+        "totalPrice": 1798.80,
+        "id": "079bbbde-2ab2-4727-987e-0bd2b391fd31",
+        "createdAtUtc": "2026-10-28T14:17:00.6439797+00:00"
+      },
+      {
+        "productId": "3c6aaa45-0783-4c4c-8a47-686b24c92937",
+        "productName": "\u041A\u0430\u0440\u0442\u043E\u0444\u0435\u043B\u044C",
+        "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+        "quantity": 45,
+        "unitPrice": 49.90,
+        "totalPrice": 2245.50,
+        "id": "51dbbb25-fcc0-46e3-9802-813d0aec20e0",
+        "createdAtUtc": "2026-10-28T14:17:00.6439809+00:00"
+      }
+    ],
+    "id": "5219ad49-94b7-4302-aa07-88b8e3aa7248",
+    "createdAtUtc": "2026-10-28T14:17:00.6375661+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:00.8346386+00:00"
+  },
+  {
+    "number": "SALE-20261028-0002",
+    "soldAtUtc": "2026-10-28T14:17:00.8552763+00:00",
+    "status": "Completed",
+    "comment": "\u041C\u043E\u043B\u043E\u0447\u043D\u0430\u044F \u043F\u0440\u043E\u0434\u0443\u043A\u0446\u0438\u044F, \u043F\u0435\u0440\u0432\u0430\u044F \u043F\u043E\u043B\u043E\u0432\u0438\u043D\u0430 \u0434\u043D\u044F",
+    "lines": [
+      {
+        "productId": "758f609b-bb2e-476f-b457-51994414271d",
+        "productName": "\u041C\u043E\u043B\u043E\u043A\u043E 3,2% 1 \u043B",
+        "shelfId": "6fc47f5c-bc36-4978-ad1b-1f1e044e44ba",
+        "quantity": 28,
+        "unitPrice": 99.90,
+        "totalPrice": 2797.20,
+        "id": "fd920a10-268b-407f-aed7-5fdd88aa6f2f",
+        "createdAtUtc": "2026-10-28T14:17:00.8552809+00:00"
+      },
+      {
+        "productId": "cc710b49-09db-4852-8503-e84665321c33",
+        "productName": "\u041A\u0435\u0444\u0438\u0440 1% 1 \u043B",
+        "shelfId": "6fc47f5c-bc36-4978-ad1b-1f1e044e44ba",
+        "quantity": 20,
+        "unitPrice": 95.90,
+        "totalPrice": 1918.00,
+        "id": "62ad3d29-a1d2-4c6e-b21e-dac41279feda",
+        "createdAtUtc": "2026-10-28T14:17:00.8552834+00:00"
+      },
+      {
+        "productId": "6c3636ab-1c45-4993-a3e4-6af0eda4f9fb",
+        "productName": "\u0421\u043C\u0435\u0442\u0430\u043D\u0430 20% 400 \u0433",
+        "shelfId": "6fc47f5c-bc36-4978-ad1b-1f1e044e44ba",
+        "quantity": 12,
+        "unitPrice": 165.90,
+        "totalPrice": 1990.80,
+        "id": "97067169-ec57-4d0b-b97b-2106b6ea661c",
+        "createdAtUtc": "2026-10-28T14:17:00.8552838+00:00"
+      },
+      {
+        "productId": "6f010fed-0510-4df9-bd33-db8da750f384",
+        "productName": "\u0422\u0432\u043E\u0440\u043E\u0433 5% 250 \u0433",
+        "shelfId": "6fc47f5c-bc36-4978-ad1b-1f1e044e44ba",
+        "quantity": 18,
+        "unitPrice": 119.90,
+        "totalPrice": 2158.20,
+        "id": "19a2353f-076a-4207-ade8-c17438f8cae5",
+        "createdAtUtc": "2026-10-28T14:17:00.8552842+00:00"
+      },
+      {
+        "productId": "b9ae78ac-878a-4f86-80bc-4dcd6aeb3dd3",
+        "productName": "\u041C\u0430\u0441\u043B\u043E \u0441\u043B\u0438\u0432\u043E\u0447\u043D\u043E\u0435 82,5% 200 \u0433",
+        "shelfId": "6fc47f5c-bc36-4978-ad1b-1f1e044e44ba",
+        "quantity": 8,
+        "unitPrice": 249.90,
+        "totalPrice": 1999.20,
+        "id": "0af34e7f-6d8f-4a42-bfef-16842d92c096",
+        "createdAtUtc": "2026-10-28T14:17:00.8552849+00:00"
+      }
+    ],
+    "id": "82b410e8-be0a-43ac-b912-98d25c3981f5",
+    "createdAtUtc": "2026-10-28T14:17:00.8421847+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.0177417+00:00"
+  },
+  {
+    "number": "SALE-20261028-0003",
+    "soldAtUtc": "2026-10-28T14:17:01.0529319+00:00",
+    "status": "Completed",
+    "comment": "\u041C\u044F\u0441\u043D\u043E\u0439 \u043E\u0442\u0434\u0435\u043B",
+    "lines": [
+      {
+        "productId": "432f5988-9971-4dba-a60f-9cdea4df635e",
+        "productName": "\u041A\u0443\u0440\u0438\u0446\u0430 \u0446\u0435\u043B\u0430\u044F \u043E\u0445\u043B.",
+        "shelfId": "91a79ee6-cdf7-481d-93cc-aa5151cc325f",
+        "quantity": 10,
+        "unitPrice": 249.90,
+        "totalPrice": 2499.00,
+        "id": "9dd2daff-53b6-4956-8f7a-e3a02443f860",
+        "createdAtUtc": "2026-10-28T14:17:01.0529372+00:00"
+      },
+      {
+        "productId": "225dd3a7-4d28-4d7e-9d9a-5fc77a44af1c",
+        "productName": "\u0421\u043E\u0441\u0438\u0441\u043A\u0438 \u043C\u043E\u043B\u043E\u0447\u043D\u044B\u0435 500 \u0433",
+        "shelfId": "91a79ee6-cdf7-481d-93cc-aa5151cc325f",
+        "quantity": 8,
+        "unitPrice": 319.90,
+        "totalPrice": 2559.20,
+        "id": "42f87f69-6c4c-41bb-aa21-84a78c31e32e",
+        "createdAtUtc": "2026-10-28T14:17:01.0529411+00:00"
+      },
+      {
+        "productId": "c950697e-eaca-471e-a194-4ae6094442c1",
+        "productName": "\u0424\u0430\u0440\u0448 \u00AB\u0414\u043E\u043C\u0430\u0448\u043D\u0438\u0439\u00BB 500 \u0433",
+        "shelfId": "91a79ee6-cdf7-481d-93cc-aa5151cc325f",
+        "quantity": 6,
+        "unitPrice": 340.90,
+        "totalPrice": 2045.40,
+        "id": "eae78914-fb02-41f2-9f18-912f3c5e0632",
+        "createdAtUtc": "2026-10-28T14:17:01.0529423+00:00"
+      },
+      {
+        "productId": "8d04b2cf-28ef-4507-a694-1e1348edda34",
+        "productName": "\u041A\u043E\u043B\u0431\u0430\u0441\u0430 \u00AB\u0414\u043E\u043A\u0442\u043E\u0440\u0441\u043A\u0430\u044F\u00BB 400 \u0433",
+        "shelfId": "91a79ee6-cdf7-481d-93cc-aa5151cc325f",
+        "quantity": 5,
+        "unitPrice": 489.90,
+        "totalPrice": 2449.50,
+        "id": "b51796de-219a-4711-8380-f2f90bdc4954",
+        "createdAtUtc": "2026-10-28T14:17:01.0529432+00:00"
+      }
+    ],
+    "id": "3a7852d0-9c3e-488e-9133-7ee37e11884b",
+    "createdAtUtc": "2026-10-28T14:17:01.0303139+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.2140999+00:00"
+  },
+  {
+    "number": "SALE-20261028-0004",
+    "soldAtUtc": "2026-10-28T14:17:01.2472071+00:00",
+    "status": "Completed",
+    "comment": "\u041E\u0432\u043E\u0449\u0438 \u043D\u0430 \u043E\u0431\u0435\u0434",
+    "lines": [
+      {
+        "productId": "f2365f09-52f1-4ecd-8100-0577b1e49a48",
+        "productName": "\u041F\u043E\u043C\u0438\u0434\u043E\u0440\u044B",
+        "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+        "quantity": 12,
+        "unitPrice": 199.90,
+        "totalPrice": 2398.80,
+        "id": "fd84342e-8ded-492c-9ddf-e0c090b633cf",
+        "createdAtUtc": "2026-10-28T14:17:01.2472135+00:00"
+      },
+      {
+        "productId": "7df319bd-4512-4d48-aa48-01bac1b46f16",
+        "productName": "\u041E\u0433\u0443\u0440\u0446\u044B",
+        "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+        "quantity": 14,
+        "unitPrice": 169.90,
+        "totalPrice": 2378.60,
+        "id": "aa385b7e-b5b6-4977-9428-43700a8755aa",
+        "createdAtUtc": "2026-10-28T14:17:01.2472224+00:00"
+      },
+      {
+        "productId": "9e7cdf6e-98cd-4174-925e-bfa0bc381c1d",
+        "productName": "\u041A\u0430\u043F\u0443\u0441\u0442\u0430 \u0431\u0435\u043B\u043E\u043A\u043E\u0447\u0430\u043D\u043D\u0430\u044F",
+        "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+        "quantity": 25,
+        "unitPrice": 42.90,
+        "totalPrice": 1072.50,
+        "id": "1709a350-5916-48d3-b35d-c1d6815d4dba",
+        "createdAtUtc": "2026-10-28T14:17:01.2472237+00:00"
+      },
+      {
+        "productId": "5f55bd5a-781b-4a7a-8757-ba9895681a8c",
+        "productName": "\u041B\u0443\u043A \u0440\u0435\u043F\u0447\u0430\u0442\u044B\u0439",
+        "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+        "quantity": 20,
+        "unitPrice": 49.90,
+        "totalPrice": 998.00,
+        "id": "0c384225-c5a4-4597-a008-9666d29d98b0",
+        "createdAtUtc": "2026-10-28T14:17:01.2472269+00:00"
+      },
+      {
+        "productId": "7a72f579-7366-445e-9c90-b9f8ce01c74d",
+        "productName": "\u041C\u043E\u0440\u043A\u043E\u0432\u044C",
+        "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+        "quantity": 30,
+        "unitPrice": 55.90,
+        "totalPrice": 1677.00,
+        "id": "f9a441c4-96e7-4c4a-af10-c2b5180f0839",
+        "createdAtUtc": "2026-10-28T14:17:01.2472279+00:00"
+      }
+    ],
+    "id": "896fb094-0cb8-4280-a965-2c086fc978c2",
+    "createdAtUtc": "2026-10-28T14:17:01.2262142+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.451512+00:00"
+  },
+  {
+    "number": "SALE-20261028-0005",
+    "soldAtUtc": "2026-10-28T14:17:01.481769+00:00",
+    "status": "Completed",
+    "comment": "\u0424\u0440\u0443\u043A\u0442\u044B, \u0432\u0435\u0447\u0435\u0440\u043D\u0438\u0439 \u0441\u043F\u0440\u043E\u0441",
+    "lines": [
+      {
+        "productId": "a1847b8d-6df9-48a1-b804-fc4a6f67ca94",
+        "productName": "\u042F\u0431\u043B\u043E\u043A\u0438 \u0413\u043E\u043B\u0434\u0435\u043D",
+        "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+        "quantity": 14,
+        "unitPrice": 129.90,
+        "totalPrice": 1818.60,
+        "id": "df2d5f0a-68f2-4420-a398-d50de4992438",
+        "createdAtUtc": "2026-10-28T14:17:01.4817732+00:00"
+      },
+      {
+        "productId": "7e7a2b71-3752-4039-aec5-80176721e290",
+        "productName": "\u0413\u0440\u0443\u0448\u0438 \u041A\u043E\u043D\u0444\u0435\u0440\u0435\u043D\u0446\u0438\u044F",
+        "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+        "quantity": 12,
+        "unitPrice": 169.90,
+        "totalPrice": 2038.80,
+        "id": "1b501993-a0c1-4652-871b-21a0569f69a3",
+        "createdAtUtc": "2026-10-28T14:17:01.4817777+00:00"
+      },
+      {
+        "productId": "e133d839-29ee-49ba-9a26-5fa659ce37e0",
+        "productName": "\u0412\u0438\u043D\u043E\u0433\u0440\u0430\u0434 \u041A\u0438\u0448\u043C\u0438\u0448",
+        "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+        "quantity": 8,
+        "unitPrice": 249.90,
+        "totalPrice": 1999.20,
+        "id": "8fe40191-5f2e-41be-9c44-0359f8c9cbed",
+        "createdAtUtc": "2026-10-28T14:17:01.4817799+00:00"
+      },
+      {
+        "productId": "92d1a66e-9cbc-45d5-b515-c2bfb85a2ca3",
+        "productName": "\u041B\u0438\u043C\u043E\u043D\u044B",
+        "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+        "quantity": 8,
+        "unitPrice": 139.90,
+        "totalPrice": 1119.20,
+        "id": "d1ab501d-c9f4-405b-8ba6-eddc749e4c69",
+        "createdAtUtc": "2026-10-28T14:17:01.4817815+00:00"
+      }
+    ],
+    "id": "3be5789c-cdb6-4deb-bd62-e4e3267ab884",
+    "createdAtUtc": "2026-10-28T14:17:01.4631043+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.6419059+00:00"
+  },
+  {
+    "number": "SALE-20261028-0006",
+    "soldAtUtc": "2026-10-28T14:17:01.6767884+00:00",
+    "status": "Completed",
+    "comment": "\u0425\u043B\u0435\u0431 \u0438 \u0432\u044B\u043F\u0435\u0447\u043A\u0430",
+    "lines": [
+      {
+        "productId": "8605b78a-5806-4bf9-87b1-244d796d91c2",
+        "productName": "\u0425\u043B\u0435\u0431 \u0431\u0435\u043B\u044B\u0439 400 \u0433",
+        "shelfId": "83c424db-89bd-479e-8957-cdd02aa8edeb",
+        "quantity": 35,
+        "unitPrice": 62.90,
+        "totalPrice": 2201.50,
+        "id": "0b9df22a-db22-4898-b281-8e41f82e4a0b",
+        "createdAtUtc": "2026-10-28T14:17:01.6767924+00:00"
+      },
+      {
+        "productId": "896326c3-c108-400a-baae-332fc374b443",
+        "productName": "\u0411\u0430\u0442\u043E\u043D \u043C\u043E\u043B\u043E\u0447\u043D\u044B\u0439 400 \u0433",
+        "shelfId": "83c424db-89bd-479e-8957-cdd02aa8edeb",
+        "quantity": 25,
+        "unitPrice": 58.90,
+        "totalPrice": 1472.50,
+        "id": "70548afa-5259-4bdf-a1cd-502af3e25976",
+        "createdAtUtc": "2026-10-28T14:17:01.6767984+00:00"
+      },
+      {
+        "productId": "432b84a0-e546-47cd-bf02-d63dcac8a75a",
+        "productName": "\u0411\u0430\u0433\u0435\u0442 \u0444\u0440\u0430\u043D\u0446\u0443\u0437\u0441\u043A\u0438\u0439 250 \u0433",
+        "shelfId": "83c424db-89bd-479e-8957-cdd02aa8edeb",
+        "quantity": 15,
+        "unitPrice": 89.90,
+        "totalPrice": 1348.50,
+        "id": "164f78b9-67da-495f-9e83-1c2bbbcc0c83",
+        "createdAtUtc": "2026-10-28T14:17:01.6767994+00:00"
+      },
+      {
+        "productId": "fd0b9621-9d0b-437a-855f-498d500cf8dc",
+        "productName": "\u0425\u043B\u0435\u0431 \u00AB\u0411\u043E\u0440\u043E\u0434\u0438\u043D\u0441\u043A\u0438\u0439\u00BB 400 \u0433",
+        "shelfId": "83c424db-89bd-479e-8957-cdd02aa8edeb",
+        "quantity": 18,
+        "unitPrice": 72.90,
+        "totalPrice": 1312.20,
+        "id": "028334e7-ca35-4d1d-8fd7-ada62e5c01b5",
+        "createdAtUtc": "2026-10-28T14:17:01.6768001+00:00"
+      }
+    ],
+    "id": "e1e1b269-cd8e-4da8-8fc4-203cb8a3b7d0",
+    "createdAtUtc": "2026-10-28T14:17:01.6561558+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:01.8335893+00:00"
+  },
+  {
+    "number": "SALE-20261028-0007",
+    "soldAtUtc": "2026-10-28T14:17:01.8698651+00:00",
+    "status": "Completed",
+    "comment": "\u0411\u0430\u043A\u0430\u043B\u0435\u044F",
+    "lines": [
+      {
+        "productId": "3e4a6e0b-f74a-4065-8201-7198187f7385",
+        "productName": "\u0420\u0438\u0441 \u043A\u0440\u0443\u0433\u043B\u043E\u0437\u0451\u0440\u043D\u044B\u0439 900 \u0433",
+        "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+        "quantity": 10,
+        "unitPrice": 189.90,
+        "totalPrice": 1899.00,
+        "id": "9e00b4be-8747-4b3a-b9cd-58c83441a2be",
+        "createdAtUtc": "2026-10-28T14:17:01.8698712+00:00"
+      },
+      {
+        "productId": "1d0195a2-3335-49e6-b8cb-09c9eea1a316",
+        "productName": "\u0413\u0440\u0435\u0447\u043A\u0430 800 \u0433",
+        "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+        "quantity": 15,
+        "unitPrice": 129.90,
+        "totalPrice": 1948.50,
+        "id": "68e50563-7bb8-458e-9a78-9463dcfeb838",
+        "createdAtUtc": "2026-10-28T14:17:01.8698771+00:00"
+      },
+      {
+        "productId": "c8eb89f3-0fb4-46d7-ad4b-754317aaa12b",
+        "productName": "\u041C\u0430\u043A\u0430\u0440\u043E\u043D\u044B \u0441\u043F\u0430\u0433\u0435\u0442\u0442\u0438 450 \u0433",
+        "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+        "quantity": 18,
+        "unitPrice": 119.90,
+        "totalPrice": 2158.20,
+        "id": "9a806dce-b79f-482a-8508-e8031b616a33",
+        "createdAtUtc": "2026-10-28T14:17:01.8698782+00:00"
+      },
+      {
+        "productId": "2481e7bb-0b1c-40a0-a37e-ef1ca170c3ec",
+        "productName": "\u0421\u0430\u0445\u0430\u0440-\u043F\u0435\u0441\u043E\u043A 1 \u043A\u0433",
+        "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+        "quantity": 14,
+        "unitPrice": 92.90,
+        "totalPrice": 1300.60,
+        "id": "9372d716-8175-47e6-8606-c0c44df5b004",
+        "createdAtUtc": "2026-10-28T14:17:01.8698795+00:00"
+      },
+      {
+        "productId": "fb479dfa-6a19-4c74-b42b-ab0ce43d71d4",
+        "productName": "\u041C\u0430\u0441\u043B\u043E \u043F\u043E\u0434\u0441\u043E\u043B\u043D\u0435\u0447\u043D\u043E\u0435 1 \u043B",
+        "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+        "quantity": 6,
+        "unitPrice": 149.90,
+        "totalPrice": 899.40,
+        "id": "2ad0ab71-85c0-45b2-bd98-3068020954c1",
+        "createdAtUtc": "2026-10-28T14:17:01.8698925+00:00"
+      }
+    ],
+    "id": "0d06be62-4f05-4e32-838f-0a488b870549",
+    "createdAtUtc": "2026-10-28T14:17:01.843766+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:02.0918344+00:00"
+  },
+  {
+    "number": "SALE-20261028-0008",
+    "soldAtUtc": "2026-10-28T14:17:02.1258579+00:00",
+    "status": "Completed",
+    "comment": "\u041D\u0430\u043F\u0438\u0442\u043A\u0438",
+    "lines": [
+      {
+        "productId": "196166ac-acea-4674-93f0-67b79694f69e",
+        "productName": "\u0427\u0430\u0439 \u0447\u0451\u0440\u043D\u044B\u0439 100 \u043F\u0430\u043A.",
+        "shelfId": "5167d37e-3215-4dc9-8341-a097aa628ea7",
+        "quantity": 8,
+        "unitPrice": 249.90,
+        "totalPrice": 1999.20,
+        "id": "d32793a5-23e5-4866-81a0-b29d36a115cd",
+        "createdAtUtc": "2026-10-28T14:17:02.1258646+00:00"
+      },
+      {
+        "productId": "e7168823-9101-41a6-aec9-06d7f14bfa95",
+        "productName": "\u041A\u043E\u0444\u0435 \u043C\u043E\u043B\u043E\u0442\u044B\u0439 250 \u0433",
+        "shelfId": "5167d37e-3215-4dc9-8341-a097aa628ea7",
+        "quantity": 5,
+        "unitPrice": 549.90,
+        "totalPrice": 2749.50,
+        "id": "a01471d6-2cbf-4d5a-9a7e-f52c50fe78e6",
+        "createdAtUtc": "2026-10-28T14:17:02.1258681+00:00"
+      },
+      {
+        "productId": "769f20f3-da1d-4150-9abe-24096bb0aeaf",
+        "productName": "\u0412\u043E\u0434\u0430 \u043F\u0438\u0442\u044C\u0435\u0432\u0430\u044F 5 \u043B",
+        "shelfId": "5167d37e-3215-4dc9-8341-a097aa628ea7",
+        "quantity": 12,
+        "unitPrice": 120.00,
+        "totalPrice": 1440.00,
+        "id": "e21455d7-d4dc-48b6-8d66-651b25c515ed",
+        "createdAtUtc": "2026-10-28T14:17:02.1258691+00:00"
+      },
+      {
+        "productId": "8b804c69-c7a0-4d59-8486-432b43703488",
+        "productName": "\u0421\u043E\u043A \u044F\u0431\u043B\u043E\u0447\u043D\u044B\u0439 1 \u043B",
+        "shelfId": "5167d37e-3215-4dc9-8341-a097aa628ea7",
+        "quantity": 10,
+        "unitPrice": 145.90,
+        "totalPrice": 1459.00,
+        "id": "5bf4528d-1a4d-4244-8972-06a1661a3291",
+        "createdAtUtc": "2026-10-28T14:17:02.1258698+00:00"
+      }
+    ],
+    "id": "392b3b4c-e056-4eb3-9bfe-4b88c5d13562",
+    "createdAtUtc": "2026-10-28T14:17:02.1077931+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:02.287566+00:00"
+  },
+  {
+    "number": "SALE-20261028-0009",
+    "soldAtUtc": "2026-10-28T14:17:02.322105+00:00",
+    "status": "Completed",
+    "comment": "\u041C\u043E\u043B\u043E\u0447\u043D\u0430\u044F \u043F\u0440\u043E\u0434\u0443\u043A\u0446\u0438\u044F, \u0432\u0435\u0447\u0435\u0440",
+    "lines": [
+      {
+        "productId": "758f609b-bb2e-476f-b457-51994414271d",
+        "productName": "\u041C\u043E\u043B\u043E\u043A\u043E 3,2% 1 \u043B",
+        "shelfId": "6fc47f5c-bc36-4978-ad1b-1f1e044e44ba",
+        "quantity": 12,
+        "unitPrice": 99.90,
+        "totalPrice": 1198.80,
+        "id": "49e16f70-fd8b-4e0a-bcc2-5b1951899413",
+        "createdAtUtc": "2026-10-28T14:17:02.3221105+00:00"
+      },
+      {
+        "productId": "6f010fed-0510-4df9-bd33-db8da750f384",
+        "productName": "\u0422\u0432\u043E\u0440\u043E\u0433 5% 250 \u0433",
+        "shelfId": "6fc47f5c-bc36-4978-ad1b-1f1e044e44ba",
+        "quantity": 8,
+        "unitPrice": 119.90,
+        "totalPrice": 959.20,
+        "id": "7af6c185-6077-49da-8eb1-7f376ae5bb52",
+        "createdAtUtc": "2026-10-28T14:17:02.3221146+00:00"
+      }
+    ],
+    "id": "2fa692e9-83e2-4540-9116-aa30a2467c3e",
+    "createdAtUtc": "2026-10-28T14:17:02.3072742+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:02.4094742+00:00"
+  },
+  {
+    "number": "SALE-20261028-0010",
+    "soldAtUtc": "2026-10-28T14:17:02.4406617+00:00",
+    "status": "Completed",
+    "comment": "\u041E\u0432\u043E\u0449\u0438, \u0432\u0435\u0447\u0435\u0440\u043D\u044F\u044F \u043F\u0440\u043E\u0434\u0430\u0436\u0430",
+    "lines": [
+      {
+        "productId": "3c6aaa45-0783-4c4c-8a47-686b24c92937",
+        "productName": "\u041A\u0430\u0440\u0442\u043E\u0444\u0435\u043B\u044C",
+        "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+        "quantity": 30,
+        "unitPrice": 49.90,
+        "totalPrice": 1497.00,
+        "id": "afdfb9c9-969c-4f7c-b220-8089d1cd7860",
+        "createdAtUtc": "2026-10-28T14:17:02.4406663+00:00"
+      },
+      {
+        "productId": "da658738-92d6-4842-a574-2e7dd2d7afb2",
+        "productName": "\u0421\u0432\u0451\u043A\u043B\u0430",
+        "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+        "quantity": 15,
+        "unitPrice": 52.90,
+        "totalPrice": 793.50,
+        "id": "e0a73c4f-fc1d-4baf-8444-4ddbabd78bce",
+        "createdAtUtc": "2026-10-28T14:17:02.4406691+00:00"
+      },
+      {
+        "productId": "e7da7b43-10f8-4c8e-905f-bb0025f7413a",
+        "productName": "\u041F\u0435\u0440\u0435\u0446 \u0431\u043E\u043B\u0433\u0430\u0440\u0441\u043A\u0438\u0439",
+        "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+        "quantity": 8,
+        "unitPrice": 219.90,
+        "totalPrice": 1759.20,
+        "id": "9306126c-2cc1-400f-b392-18fdc6e33ebd",
+        "createdAtUtc": "2026-10-28T14:17:02.4406702+00:00"
+      }
+    ],
+    "id": "d39a90ed-2fc8-4b82-9ec3-e99d82f0a6b2",
+    "createdAtUtc": "2026-10-28T14:17:02.4198079+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:02.579514+00:00"
+  }
+]

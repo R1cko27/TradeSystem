@@ -1,0 +1,83 @@
+<UserControl x:Class="TradeSystem.App.Views.OrderAutoPreviewView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Автоформирование заказов по дефициту" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,4"/>
+        <TextBlock Grid.Row="1" Margin="0,0,0,10" Foreground="Gray" TextWrapping="Wrap"
+                   Text="Система подобрала товары, которые нужно пополнить. Для товаров с несколькими поставщиками выберите нужного — заказ будет разбит по поставщикам автоматически."/>
+
+        <!-- Добавление дополнительного товара -->
+        <DockPanel Grid.Row="2" VerticalAlignment="Top" Height="0" Margin="0"/><!-- spacer -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,8" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <TextBlock Text="Добавить товар:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+            <ComboBox Width="260" ItemsSource="{Binding AllActiveProducts}" SelectedValuePath="Id" DisplayMemberPath="Name"
+                      SelectedItem="{Binding ProductToAdd}" Margin="0,0,8,0"/>
+            <Button Content="+ В план" Command="{Binding AddAdditionalCommand}" Padding="8,3" Margin="0,0,8,0"/>
+            <Button Content="Убрать доп." Command="{Binding RemoveAdditionalCommand}" Padding="8,3"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="2" Margin="0,40,0,0"
+                  ItemsSource="{Binding Rows}" AutoGenerateColumns="False" IsReadOnly="True"
+                  CanUserAddRows="False" HeadersVisibility="Column">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Товар" Binding="{Binding ProductName}" Width="*"/>
+                <DataGridTextColumn Header="Ед." Binding="{Binding UnitLabel}" Width="50"/>
+                <DataGridTextColumn Header="Остаток" Binding="{Binding CurrentStock}" Width="70"/>
+                <DataGridTextColumn Header="Мин." Binding="{Binding MinimumStockQuantity}" Width="55"/>
+                <DataGridTemplateColumn Header="Поставщик (выберите при нескольких)" Width="240">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding Options}" SelectedItem="{Binding SelectedOption, UpdateSourceTrigger=PropertyChanged}"
+                                      BorderThickness="0" Background="Transparent">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding SupplierName}"/>
+                                            <TextBlock Text=" ★" Foreground="#D4A017"
+                                                       Visibility="{Binding IsPreferred, Converter={StaticResource BoolToVis}}"/>
+                                            <TextBlock Text="{Binding AdjustedQuantity, StringFormat=' → {0} шт.'}" Foreground="Gray"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Кол-во" Binding="{Binding SelectedOption.AdjustedQuantity}" Width="70"/>
+                <DataGridTextColumn Header="Сумма" Binding="{Binding SelectedOption.LineAmount, StringFormat=N2}" Width="90"/>
+                <DataGridTemplateColumn Header="" Width="40">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="доп." Foreground="#2980B9" FontSize="10" VerticalAlignment="Center"
+                                       Visibility="{Binding IsAdditional, Converter={StaticResource BoolToVis}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Предупреждения -->
+        <ItemsControl Grid.Row="3" ItemsSource="{Binding Warnings}" Margin="0,8,0,0">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" Foreground="#C0392B" TextWrapping="Wrap" Margin="0,1"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,12,0,0">
+            <Button Content="Создать заказы" Command="{Binding ConfirmCommand}" Padding="14,6" FontWeight="SemiBold" Margin="0,0,8,0"/>
+            <Button Content="Отмена" Command="{Binding CancelCommand}" Padding="14,6"/>
+            <TextBlock Text="Загрузка..." VerticalAlignment="Center" Margin="16,0,0,0" Foreground="Gray"
+                       Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

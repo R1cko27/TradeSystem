@@ -1,0 +1,83 @@
+<UserControl x:Class="TradeSystem.App.Views.OrdersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="12">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" MinWidth="360"/>
+            <ColumnDefinition Width="8"/>
+            <ColumnDefinition Width="2*" MinWidth="320"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Панель действий -->
+        <DockPanel Grid.Row="0" Grid.ColumnSpan="3" LastChildFill="True" Margin="0,0,0,8">
+            <Button DockPanel.Dock="Right" Content="Обновить" Command="{Binding RefreshCommand}" Margin="6,0,0,0" Padding="10,4"/>
+            <Button DockPanel.Dock="Right" Content="Новый вручную" Command="{Binding NewManualCommand}" Margin="6,0,0,0" Padding="10,4"/>
+            <Button DockPanel.Dock="Right" Content="⚡ Автоподбор по дефициту" Command="{Binding AutoGenerateCommand}" Margin="6,0,0,0" Padding="10,4" FontWeight="SemiBold"/>
+            <CheckBox DockPanel.Dock="Right" Content="Показывать отменённые" IsChecked="{Binding ShowCancelled}" VerticalAlignment="Center" Margin="12,0"/>
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Padding="4"
+                     ToolTip="Поиск по номеру заказа или поставщику"/>
+        </DockPanel>
+
+        <!-- Список заказов -->
+        <DataGrid Grid.Row="1" Grid.Column="0"
+                  ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedOrder}"
+                  AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Номер" Binding="{Binding Number}" Width="130"/>
+                <DataGridTextColumn Header="Поставщик" Binding="{Binding SupplierName}" Width="*"/>
+                <DataGridTextColumn Header="Дата" Binding="{Binding OrderDateUtc, StringFormat=dd.MM.yyyy}" Width="90"/>
+                <DataGridTextColumn Header="Статус" Binding="{Binding StatusLabel}" Width="120"/>
+                <DataGridTextColumn Header="Сумма" Binding="{Binding TotalAmount, StringFormat=N2}" Width="90"/>
+                <DataGridTextColumn Header="Оплата" Binding="{Binding PaymentStatusLabel}" Width="110"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Детали выбранного заказа -->
+        <Border Grid.Row="1" Grid.Column="2" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4" Padding="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0">
+                    <TextBlock Text="Детали заказа" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,6"/>
+                    <TextBlock Text="Выберите заказ слева" Foreground="Gray"
+                               Visibility="{Binding SelectedOrder, Converter={StaticResource NullToVis}}"/>
+                    <StackPanel Visibility="{Binding SelectedOrder, Converter={StaticResource NotNullToVis}}">
+                        <TextBlock><Run Text="Номер: "/><Run Text="{Binding SelectedOrder.Number, Mode=OneWay}" FontWeight="SemiBold"/></TextBlock>
+                        <TextBlock><Run Text="Поставщик: "/><Run Text="{Binding SelectedOrder.SupplierName, Mode=OneWay}"/></TextBlock>
+                        <TextBlock><Run Text="Статус: "/><Run Text="{Binding SelectedOrder.StatusLabel, Mode=OneWay}"/></TextBlock>
+                        <TextBlock><Run Text="Оплата: "/><Run Text="{Binding SelectedOrder.PaymentStatusLabel, Mode=OneWay}"/></TextBlock>
+                        <TextBlock><Run Text="Сумма: "/><Run Text="{Binding SelectedOrder.TotalAmount, Mode=OneWay, StringFormat=N2}"/></TextBlock>
+                    </StackPanel>
+                </StackPanel>
+
+                <DataGrid Grid.Row="1" Margin="0,8"
+                          ItemsSource="{Binding SelectedOrder.Lines}"
+                          AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False"
+                          HeadersVisibility="Column" Visibility="{Binding SelectedOrder, Converter={StaticResource NotNullToVis}}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Товар" Binding="{Binding ProductName}" Width="*"/>
+                        <DataGridTextColumn Header="Заказ." Binding="{Binding OrderedQuantity}" Width="60"/>
+                        <DataGridTextColumn Header="Получ." Binding="{Binding ReceivedQuantity}" Width="60"/>
+                        <DataGridTextColumn Header="Цена" Binding="{Binding UnitPrice, StringFormat=N2}" Width="80"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <WrapPanel Grid.Row="2" Margin="0,8,0,0">
+                    <Button Content="Подтвердить" Command="{Binding ConfirmCommand}" Padding="10,4" Margin="0,0,6,4"/>
+                    <Button Content="Отменить" Command="{Binding CancelCommand}" Padding="10,4" Margin="0,0,6,4"/>
+                    <Button Content="Закрыть" Command="{Binding CloseCommand}" Padding="10,4" Margin="0,0,6,4"/>
+                    <Button Content="Удалить" Command="{Binding DeleteCommand}" Padding="10,4" Margin="0,0,6,4"/>
+                    <Button Content="Счета / Оплата" Command="{Binding InvoicesCommand}" Padding="10,4" Margin="0,0,6,4" FontWeight="SemiBold"/>
+                </WrapPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

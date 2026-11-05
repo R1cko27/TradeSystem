@@ -1,0 +1,93 @@
+<!-- Views/ProductsView.xaml -->
+<UserControl x:Class="TradeSystem.App.Views.ProductsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Панель инструментов -->
+        <DockPanel Grid.Row="0" LastChildFill="True" Margin="0,0,0,8">
+            <Button DockPanel.Dock="Right" Content="Обновить"
+                    Command="{Binding RefreshCommand}" Margin="6,0,0,0" Padding="10,4"/>
+            <Button DockPanel.Dock="Right" Content="Добавить"
+                    Command="{Binding AddCommand}" Margin="6,0,0,0" Padding="10,4"
+                    FontWeight="SemiBold"/>
+            <CheckBox DockPanel.Dock="Right" Content="Показывать неактивные"
+                      IsChecked="{Binding ShowInactive}" VerticalAlignment="Center" Margin="12,0"/>
+            <CheckBox DockPanel.Dock="Right" Content="Только к пополнению"
+                      IsChecked="{Binding OnlyLowStock}" VerticalAlignment="Center" Margin="12,0"/>
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     VerticalAlignment="Center" Padding="4"
+                     ToolTip="Поиск по названию или артикулу"/>
+        </DockPanel>
+
+        <!-- Таблица -->
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedItem}"
+                  AutoGenerateColumns="False" IsReadOnly="True"
+                  CanUserAddRows="False" HeadersVisibility="Column"
+                  GridLinesVisibility="Horizontal" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Наименование" Binding="{Binding Name}" Width="*"/>
+                <DataGridTextColumn Header="Артикул" Binding="{Binding Article}" Width="120"/>
+                <DataGridTextColumn Header="Ед." Binding="{Binding UnitLabel}" Width="60"/>
+                <DataGridTextColumn Header="Остаток" Binding="{Binding CurrentStock}" Width="80"/>
+                <DataGridTextColumn Header="Мин." Binding="{Binding MinimumStockQuantity}" Width="60"/>
+                <DataGridTemplateColumn Header="Пополнить" Width="90">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock HorizontalAlignment="Center" FontWeight="SemiBold">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Text" Value=""/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding NeedsReplenish}" Value="True">
+                                                <Setter Property="Text" Value="Да"/>
+                                                <Setter Property="Foreground" Value="#C0392B"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Поставщиков" Binding="{Binding SuppliersCount}" Width="100"/>
+                <DataGridTemplateColumn Header="Активен" Width="80">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock HorizontalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Text" Value="Нет"/>
+                                        <Setter Property="Foreground" Value="#7F8C8D"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                                <Setter Property="Text" Value="Да"/>
+                                                <Setter Property="Foreground" Value="#27AE60"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Нижняя панель -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0">
+            <Button Content="Изменить" Command="{Binding EditCommand}" Padding="10,4" Margin="0,0,6,0"/>
+            <Button Content="Удалить" Command="{Binding DeleteCommand}" Padding="10,4"/>
+            <TextBlock Text="Загрузка..." VerticalAlignment="Center" Margin="16,0,0,0"
+                       Foreground="Gray"
+                       Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

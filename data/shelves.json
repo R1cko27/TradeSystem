@@ -1,0 +1,58 @@
+[
+  {
+    "code": "FRT-A1",
+    "name": "\u0424\u0440\u0443\u043A\u0442\u044B",
+    "location": "\u0417\u043E\u043D\u0430 A, \u0441\u0442\u0435\u043B\u043B\u0430\u0436 1, \u0432\u0435\u0440\u0445\u043D\u044F\u044F \u043F\u043E\u043B\u043A\u0430",
+    "isActive": true,
+    "id": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+    "createdAtUtc": "2026-10-28T14:16:52.8887604+00:00"
+  },
+  {
+    "code": "VEG-A2",
+    "name": "\u041E\u0432\u043E\u0449\u0438",
+    "location": "\u0417\u043E\u043D\u0430 A, \u0441\u0442\u0435\u043B\u043B\u0430\u0436 2, \u043D\u0438\u0436\u043D\u044F\u044F \u043F\u043E\u043B\u043A\u0430",
+    "isActive": true,
+    "id": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+    "createdAtUtc": "2026-10-28T14:16:52.9735505+00:00"
+  },
+  {
+    "code": "MLK-B1",
+    "name": "\u041C\u043E\u043B\u043E\u0447\u043D\u0430\u044F \u043F\u0440\u043E\u0434\u0443\u043A\u0446\u0438\u044F",
+    "location": "\u0417\u043E\u043D\u0430 B, \u0445\u043E\u043B\u043E\u0434\u0438\u043B\u044C\u043D\u0430\u044F \u043A\u0430\u043C\u0435\u0440\u0430 1",
+    "isActive": true,
+    "id": "6fc47f5c-bc36-4978-ad1b-1f1e044e44ba",
+    "createdAtUtc": "2026-10-28T14:16:53.0071251+00:00"
+  },
+  {
+    "code": "BAK-B2",
+    "name": "\u0425\u043B\u0435\u0431 \u0438 \u0432\u044B\u043F\u0435\u0447\u043A\u0430",
+    "location": "\u0417\u043E\u043D\u0430 B, \u0441\u0442\u0435\u043B\u043B\u0430\u0436 2, \u0432\u0435\u0440\u0445\u043D\u044F\u044F \u043F\u043E\u043B\u043A\u0430",
+    "isActive": true,
+    "id": "83c424db-89bd-479e-8957-cdd02aa8edeb",
+    "createdAtUtc": "2026-10-28T14:16:53.0414342+00:00"
+  },
+  {
+    "code": "MET-B3",
+    "name": "\u041C\u044F\u0441\u043E \u0438 \u043A\u043E\u043B\u0431\u0430\u0441\u044B",
+    "location": "\u0417\u043E\u043D\u0430 B, \u0445\u043E\u043B\u043E\u0434\u0438\u043B\u044C\u043D\u0430\u044F \u043A\u0430\u043C\u0435\u0440\u0430 2",
+    "isActive": true,
+    "id": "91a79ee6-cdf7-481d-93cc-aa5151cc325f",
+    "createdAtUtc": "2026-10-28T14:16:53.1060444+00:00"
+  },
+  {
+    "code": "GRO-C1",
+    "name": "\u0411\u0430\u043A\u0430\u043B\u0435\u044F",
+    "location": "\u0417\u043E\u043D\u0430 C, \u0441\u0442\u0435\u043B\u043B\u0430\u0436 1",
+    "isActive": true,
+    "id": "086836ab-af94-42aa-84df-608ba5c51fbb",
+    "createdAtUtc": "2026-10-28T14:16:53.138323+00:00"
+  },
+  {
+    "code": "BEV-C2",
+    "name": "\u041D\u0430\u043F\u0438\u0442\u043A\u0438",
+    "location": "\u0417\u043E\u043D\u0430 C, \u0441\u0442\u0435\u043B\u043B\u0430\u0436 2",
+    "isActive": true,
+    "id": "5167d37e-3215-4dc9-8341-a097aa628ea7",
+    "createdAtUtc": "2026-10-28T14:16:53.1820454+00:00"
+  }
+]

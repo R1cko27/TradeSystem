@@ -1,0 +1,445 @@
+[
+  {
+    "number": "GR-20261028-0001",
+    "supplierId": "124f175f-641e-450e-a174-fc8961e492ee",
+    "orderId": "587e1ea1-cd66-4ead-872f-6efb157901bb",
+    "receivedAtUtc": "2026-10-28T14:16:58.4466696+00:00",
+    "status": "Posted",
+    "comment": "\u041F\u043E\u0441\u0442\u0430\u0432\u043A\u0430 \u043C\u043E\u043B\u043E\u0447\u043D\u043E\u0439 \u043F\u0440\u043E\u0434\u0443\u043A\u0446\u0438\u0438, \u043C\u043E\u043B\u043E\u043A\u043E \u043F\u0440\u0438\u043D\u044F\u0442\u043E \u0447\u0430\u0441\u0442\u0438\u0447\u043D\u043E",
+    "lines": [
+      {
+        "orderLineId": "308655b8-8761-4bac-92f4-fc3c18dac756",
+        "productId": "758f609b-bb2e-476f-b457-51994414271d",
+        "productName": "\u041C\u043E\u043B\u043E\u043A\u043E 3,2% 1 \u043B",
+        "shelfId": "6fc47f5c-bc36-4978-ad1b-1f1e044e44ba",
+        "quantity": 60,
+        "id": "16f3a437-457c-40e8-bf0e-52b64e1e3d20",
+        "createdAtUtc": "2026-10-28T14:16:58.4474951+00:00"
+      },
+      {
+        "orderLineId": "6a13e52c-74fc-4e3a-a23f-7a5dc870e0bc",
+        "productId": "cc710b49-09db-4852-8503-e84665321c33",
+        "productName": "\u041A\u0435\u0444\u0438\u0440 1% 1 \u043B",
+        "shelfId": "6fc47f5c-bc36-4978-ad1b-1f1e044e44ba",
+        "quantity": 60,
+        "id": "5ad226b1-c3c9-481d-82d8-9b907b0e4e0e",
+        "createdAtUtc": "2026-10-28T14:16:58.448201+00:00"
+      },
+      {
+        "orderLineId": "ef8bbaeb-4ea8-4d8e-a8c0-7f6fd618a2bc",
+        "productId": "6c3636ab-1c45-4993-a3e4-6af0eda4f9fb",
+        "productName": "\u0421\u043C\u0435\u0442\u0430\u043D\u0430 20% 400 \u0433",
+        "shelfId": "6fc47f5c-bc36-4978-ad1b-1f1e044e44ba",
+        "quantity": 40,
+        "id": "4ca32e0d-bd2e-4ef6-ad5d-061e9ce873bd",
+        "createdAtUtc": "2026-10-28T14:16:58.4482057+00:00"
+      },
+      {
+        "orderLineId": "0963e6e6-00f2-49a5-8c30-ce5f9dc41e1d",
+        "productId": "6f010fed-0510-4df9-bd33-db8da750f384",
+        "productName": "\u0422\u0432\u043E\u0440\u043E\u0433 5% 250 \u0433",
+        "shelfId": "6fc47f5c-bc36-4978-ad1b-1f1e044e44ba",
+        "quantity": 40,
+        "id": "daf81d06-1eaf-4639-a149-fe4ce43ea1d6",
+        "createdAtUtc": "2026-10-28T14:16:58.4482073+00:00"
+      },
+      {
+        "orderLineId": "4f43720c-f5ed-4418-a671-313ce097a098",
+        "productId": "b9ae78ac-878a-4f86-80bc-4dcd6aeb3dd3",
+        "productName": "\u041C\u0430\u0441\u043B\u043E \u0441\u043B\u0438\u0432\u043E\u0447\u043D\u043E\u0435 82,5% 200 \u0433",
+        "shelfId": "6fc47f5c-bc36-4978-ad1b-1f1e044e44ba",
+        "quantity": 30,
+        "id": "b94c4e26-59e8-4156-8cad-10f337003e65",
+        "createdAtUtc": "2026-10-28T14:16:58.4482093+00:00"
+      }
+    ],
+    "id": "98154770-1033-4d7e-a0f0-0cc18f1a36b6",
+    "createdAtUtc": "2026-10-28T14:16:58.4433345+00:00",
+    "modifiedAtUtc": "2026-10-28T14:16:58.7346959+00:00"
+  },
+  {
+    "number": "GR-20261028-0002",
+    "supplierId": "423db7c6-a645-4cbf-9803-5c697360d272",
+    "orderId": "895c196c-bd77-4cb7-8da7-39541d5bdf6a",
+    "receivedAtUtc": "2026-10-28T14:16:58.8067664+00:00",
+    "status": "Posted",
+    "comment": "\u041F\u043E\u0441\u0442\u0430\u0432\u043A\u0430 \u0445\u043B\u0435\u0431\u0430 \u0438 \u0432\u044B\u043F\u0435\u0447\u043A\u0438",
+    "lines": [
+      {
+        "orderLineId": "362cb801-bca2-48dc-983f-684e18d168d9",
+        "productId": "8605b78a-5806-4bf9-87b1-244d796d91c2",
+        "productName": "\u0425\u043B\u0435\u0431 \u0431\u0435\u043B\u044B\u0439 400 \u0433",
+        "shelfId": "83c424db-89bd-479e-8957-cdd02aa8edeb",
+        "quantity": 80,
+        "id": "41641ddd-bcd0-4abd-9d50-fd193523656d",
+        "createdAtUtc": "2026-10-28T14:16:58.8067806+00:00"
+      },
+      {
+        "orderLineId": "14600f35-11f0-4f89-801b-d61188c14d61",
+        "productId": "fd0b9621-9d0b-437a-855f-498d500cf8dc",
+        "productName": "\u0425\u043B\u0435\u0431 \u00AB\u0411\u043E\u0440\u043E\u0434\u0438\u043D\u0441\u043A\u0438\u0439\u00BB 400 \u0433",
+        "shelfId": "83c424db-89bd-479e-8957-cdd02aa8edeb",
+        "quantity": 60,
+        "id": "1a07fd49-708c-4bf2-800d-373062e65f9e",
+        "createdAtUtc": "2026-10-28T14:16:58.806785+00:00"
+      },
+      {
+        "orderLineId": "f37bf43b-4882-45d5-a30a-b7a20e3bea6b",
+        "productId": "896326c3-c108-400a-baae-332fc374b443",
+        "productName": "\u0411\u0430\u0442\u043E\u043D \u043C\u043E\u043B\u043E\u0447\u043D\u044B\u0439 400 \u0433",
+        "shelfId": "83c424db-89bd-479e-8957-cdd02aa8edeb",
+        "quantity": 60,
+        "id": "79068f80-8640-44e5-97cf-a47b29588851",
+        "createdAtUtc": "2026-10-28T14:16:58.8067862+00:00"
+      },
+      {
+        "orderLineId": "948d9678-0054-4ecf-9897-1aa43eb72aff",
+        "productId": "432b84a0-e546-47cd-bf02-d63dcac8a75a",
+        "productName": "\u0411\u0430\u0433\u0435\u0442 \u0444\u0440\u0430\u043D\u0446\u0443\u0437\u0441\u043A\u0438\u0439 250 \u0433",
+        "shelfId": "83c424db-89bd-479e-8957-cdd02aa8edeb",
+        "quantity": 40,
+        "id": "edbcce41-fe91-4346-990f-a9a434e84588",
+        "createdAtUtc": "2026-10-28T14:16:58.8067871+00:00"
+      }
+    ],
+    "id": "5450f808-6879-4df2-940e-46f16374943e",
+    "createdAtUtc": "2026-10-28T14:16:58.8045145+00:00",
+    "modifiedAtUtc": "2026-10-28T14:16:58.9576297+00:00"
+  },
+  {
+    "number": "GR-20261028-0003",
+    "supplierId": "05100af7-fbf7-4f12-bad1-3b4fbf7ee769",
+    "orderId": "0816dc59-fe3a-4b07-8e58-cc68a304c904",
+    "receivedAtUtc": "2026-10-28T14:16:59.0329671+00:00",
+    "status": "Posted",
+    "comment": "\u041F\u043E\u0441\u0442\u0430\u0432\u043A\u0430 \u043C\u044F\u0441\u0430 \u0438 \u043A\u043E\u043B\u0431\u0430\u0441",
+    "lines": [
+      {
+        "orderLineId": "ef49c95a-e67e-444f-86d3-3ce6b031ea31",
+        "productId": "432f5988-9971-4dba-a60f-9cdea4df635e",
+        "productName": "\u041A\u0443\u0440\u0438\u0446\u0430 \u0446\u0435\u043B\u0430\u044F \u043E\u0445\u043B.",
+        "shelfId": "91a79ee6-cdf7-481d-93cc-aa5151cc325f",
+        "quantity": 40,
+        "id": "4cdf3b95-c4c6-4f86-a1e1-8d8d110da8b9",
+        "createdAtUtc": "2026-10-28T14:16:59.0329753+00:00"
+      },
+      {
+        "orderLineId": "488bf68a-67eb-4cb6-b612-b7a65ef9091f",
+        "productId": "eb8ef364-f786-4c25-bb73-3ee7b8461667",
+        "productName": "\u0421\u0432\u0438\u043D\u0438\u043D\u0430 (\u0448\u0435\u044F) \u043E\u0445\u043B.",
+        "shelfId": "91a79ee6-cdf7-481d-93cc-aa5151cc325f",
+        "quantity": 10,
+        "id": "9d20e3b9-4285-4277-bdd6-5895606cd7e4",
+        "createdAtUtc": "2026-10-28T14:16:59.0329787+00:00"
+      },
+      {
+        "orderLineId": "b2d1245d-ec70-4b38-9e97-083db2a8ac6d",
+        "productId": "bd76c3bd-ef79-450c-89aa-236cbc907c0f",
+        "productName": "\u0413\u043E\u0432\u044F\u0434\u0438\u043D\u0430 (\u043B\u043E\u043F\u0430\u0442\u043A\u0430) \u043E\u0445\u043B.",
+        "shelfId": "91a79ee6-cdf7-481d-93cc-aa5151cc325f",
+        "quantity": 10,
+        "id": "a0423f00-0c94-4240-8444-a88bf7b84563",
+        "createdAtUtc": "2026-10-28T14:16:59.03298+00:00"
+      },
+      {
+        "orderLineId": "227387f7-c1d5-4527-8f62-05b93f83be61",
+        "productId": "c950697e-eaca-471e-a194-4ae6094442c1",
+        "productName": "\u0424\u0430\u0440\u0448 \u00AB\u0414\u043E\u043C\u0430\u0448\u043D\u0438\u0439\u00BB 500 \u0433",
+        "shelfId": "91a79ee6-cdf7-481d-93cc-aa5151cc325f",
+        "quantity": 20,
+        "id": "8beaf9cc-bbac-4574-ba68-ca5b0dadce39",
+        "createdAtUtc": "2026-10-28T14:16:59.0329813+00:00"
+      },
+      {
+        "orderLineId": "0b5b64f3-2c10-473f-ac97-19c3c9d72362",
+        "productId": "225dd3a7-4d28-4d7e-9d9a-5fc77a44af1c",
+        "productName": "\u0421\u043E\u0441\u0438\u0441\u043A\u0438 \u043C\u043E\u043B\u043E\u0447\u043D\u044B\u0435 500 \u0433",
+        "shelfId": "91a79ee6-cdf7-481d-93cc-aa5151cc325f",
+        "quantity": 20,
+        "id": "44f2f0e5-e95b-4c18-98f0-a5e4ad6d9d6f",
+        "createdAtUtc": "2026-10-28T14:16:59.0329823+00:00"
+      },
+      {
+        "orderLineId": "7172a191-af3d-4895-b0a1-e9c54f90ea31",
+        "productId": "8d04b2cf-28ef-4507-a694-1e1348edda34",
+        "productName": "\u041A\u043E\u043B\u0431\u0430\u0441\u0430 \u00AB\u0414\u043E\u043A\u0442\u043E\u0440\u0441\u043A\u0430\u044F\u00BB 400 \u0433",
+        "shelfId": "91a79ee6-cdf7-481d-93cc-aa5151cc325f",
+        "quantity": 15,
+        "id": "67bd883c-9b9e-4f92-96f7-7b8e24b79262",
+        "createdAtUtc": "2026-10-28T14:16:59.0329837+00:00"
+      }
+    ],
+    "id": "df906037-e43e-4eef-ad21-8db8ce987b9f",
+    "createdAtUtc": "2026-10-28T14:16:59.0317172+00:00",
+    "modifiedAtUtc": "2026-10-28T14:16:59.2494059+00:00"
+  },
+  {
+    "number": "GR-20261028-0004",
+    "supplierId": "b101eb17-e3aa-4fab-8cc8-c624772d7c27",
+    "orderId": "a2403064-b500-446a-ae34-44d3f28c7b78",
+    "receivedAtUtc": "2026-10-28T14:16:59.3303449+00:00",
+    "status": "Posted",
+    "comment": "\u041F\u043E\u0441\u0442\u0430\u0432\u043A\u0430 \u0444\u0440\u0443\u043A\u0442\u043E\u0432",
+    "lines": [
+      {
+        "orderLineId": "de179302-c6fb-4266-a28a-b257d2065081",
+        "productId": "a1847b8d-6df9-48a1-b804-fc4a6f67ca94",
+        "productName": "\u042F\u0431\u043B\u043E\u043A\u0438 \u0413\u043E\u043B\u0434\u0435\u043D",
+        "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+        "quantity": 80,
+        "id": "e95879e6-0f4d-4d1c-9fae-0a0fbf5f699b",
+        "createdAtUtc": "2026-10-28T14:16:59.3303534+00:00"
+      },
+      {
+        "orderLineId": "7a4305f1-37e5-4767-bb25-72a6b1ff48cb",
+        "productId": "3d935bc2-86c7-47ad-8caa-4dbd021ef4e3",
+        "productName": "\u0411\u0430\u043D\u0430\u043D\u044B",
+        "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+        "quantity": 50,
+        "id": "649bd51a-dac8-46da-a3e8-abe64d82da13",
+        "createdAtUtc": "2026-10-28T14:16:59.3303572+00:00"
+      },
+      {
+        "orderLineId": "91cdc6bf-91b1-4d03-a14e-cc7dee47d53b",
+        "productId": "caad09fe-b31f-4321-bf28-3dc207749a72",
+        "productName": "\u0410\u043F\u0435\u043B\u044C\u0441\u0438\u043D\u044B",
+        "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+        "quantity": 40,
+        "id": "98a07740-4e8b-46b8-90fd-9d56103b40f8",
+        "createdAtUtc": "2026-10-28T14:16:59.3303589+00:00"
+      },
+      {
+        "orderLineId": "6405749f-fe40-4cf4-9ea9-58953a8c127b",
+        "productId": "7e7a2b71-3752-4039-aec5-80176721e290",
+        "productName": "\u0413\u0440\u0443\u0448\u0438 \u041A\u043E\u043D\u0444\u0435\u0440\u0435\u043D\u0446\u0438\u044F",
+        "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+        "quantity": 30,
+        "id": "7528a932-5734-4d37-be8b-4d152611b161",
+        "createdAtUtc": "2026-10-28T14:16:59.3303601+00:00"
+      },
+      {
+        "orderLineId": "cc4eab64-29c9-441e-a591-90914254139e",
+        "productId": "92d1a66e-9cbc-45d5-b515-c2bfb85a2ca3",
+        "productName": "\u041B\u0438\u043C\u043E\u043D\u044B",
+        "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+        "quantity": 20,
+        "id": "9f5e99d8-cad5-4968-9aa2-6b26614d0a41",
+        "createdAtUtc": "2026-10-28T14:16:59.3303622+00:00"
+      },
+      {
+        "orderLineId": "0de05407-3a4d-41ce-858b-830a2178a3fc",
+        "productId": "e133d839-29ee-49ba-9a26-5fa659ce37e0",
+        "productName": "\u0412\u0438\u043D\u043E\u0433\u0440\u0430\u0434 \u041A\u0438\u0448\u043C\u0438\u0448",
+        "shelfId": "7c5325c5-62fd-4f1a-a791-2d8c8f2f2ca8",
+        "quantity": 20,
+        "id": "fe1aa8ec-3cd7-45f7-915a-13448bca6fb2",
+        "createdAtUtc": "2026-10-28T14:16:59.3303639+00:00"
+      }
+    ],
+    "id": "0d11a33a-a047-43e1-bb73-a1005bb127d8",
+    "createdAtUtc": "2026-10-28T14:16:59.3289572+00:00",
+    "modifiedAtUtc": "2026-10-28T14:16:59.550564+00:00"
+  },
+  {
+    "number": "GR-20261028-0005",
+    "supplierId": "c26d759c-e544-4f1b-ac3a-ff73301a3d0a",
+    "orderId": "3d6208ee-2da1-4585-b38d-a5b88edbcbb8",
+    "receivedAtUtc": "2026-10-28T14:16:59.6403927+00:00",
+    "status": "Posted",
+    "comment": "\u041F\u043E\u0441\u0442\u0430\u0432\u043A\u0430 \u043E\u0432\u043E\u0449\u0435\u0439, \u043A\u0430\u0440\u0442\u043E\u0444\u0435\u043B\u044C \u043F\u0440\u0438\u043D\u044F\u0442 \u0447\u0430\u0441\u0442\u0438\u0447\u043D\u043E",
+    "lines": [
+      {
+        "orderLineId": "9d3caf55-26e7-45f3-abb9-02fd19940792",
+        "productId": "3c6aaa45-0783-4c4c-8a47-686b24c92937",
+        "productName": "\u041A\u0430\u0440\u0442\u043E\u0444\u0435\u043B\u044C",
+        "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+        "quantity": 120,
+        "id": "cca4daa4-281f-4029-929e-b068a19acb73",
+        "createdAtUtc": "2026-10-28T14:16:59.6404017+00:00"
+      },
+      {
+        "orderLineId": "a02c71af-ff74-4d07-9190-1550cad87e7f",
+        "productId": "7a72f579-7366-445e-9c90-b9f8ce01c74d",
+        "productName": "\u041C\u043E\u0440\u043A\u043E\u0432\u044C",
+        "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+        "quantity": 100,
+        "id": "69926d68-bf8a-4df9-8622-fbbc0d21c6d8",
+        "createdAtUtc": "2026-10-28T14:16:59.6404096+00:00"
+      },
+      {
+        "orderLineId": "7599e7a9-a4ff-4540-b769-a1868762294e",
+        "productId": "5f55bd5a-781b-4a7a-8757-ba9895681a8c",
+        "productName": "\u041B\u0443\u043A \u0440\u0435\u043F\u0447\u0430\u0442\u044B\u0439",
+        "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+        "quantity": 80,
+        "id": "2f9c1ed5-aa7d-432c-9a37-e6d516601a5e",
+        "createdAtUtc": "2026-10-28T14:16:59.6404136+00:00"
+      },
+      {
+        "orderLineId": "3881428e-666f-4c51-ac88-9c3daf07b064",
+        "productId": "da658738-92d6-4842-a574-2e7dd2d7afb2",
+        "productName": "\u0421\u0432\u0451\u043A\u043B\u0430",
+        "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+        "quantity": 50,
+        "id": "31444301-dbc4-48d8-b534-402a6e9edf56",
+        "createdAtUtc": "2026-10-28T14:16:59.6404147+00:00"
+      },
+      {
+        "orderLineId": "5de73151-ef70-45ae-a7a5-8923c3a3aa6b",
+        "productId": "9e7cdf6e-98cd-4174-925e-bfa0bc381c1d",
+        "productName": "\u041A\u0430\u043F\u0443\u0441\u0442\u0430 \u0431\u0435\u043B\u043E\u043A\u043E\u0447\u0430\u043D\u043D\u0430\u044F",
+        "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+        "quantity": 60,
+        "id": "42aa30f2-8dc0-46ba-8a1e-960793b8cae5",
+        "createdAtUtc": "2026-10-28T14:16:59.640417+00:00"
+      },
+      {
+        "orderLineId": "b2df5db3-9f64-43db-afef-06cf96b11bf0",
+        "productId": "7df319bd-4512-4d48-aa48-01bac1b46f16",
+        "productName": "\u041E\u0433\u0443\u0440\u0446\u044B",
+        "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+        "quantity": 30,
+        "id": "1d0a0b42-c180-4139-9ca2-f007c6be44e2",
+        "createdAtUtc": "2026-10-28T14:16:59.6404186+00:00"
+      },
+      {
+        "orderLineId": "db11a13a-847e-45b2-9830-ed6a0f85662f",
+        "productId": "f2365f09-52f1-4ecd-8100-0577b1e49a48",
+        "productName": "\u041F\u043E\u043C\u0438\u0434\u043E\u0440\u044B",
+        "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+        "quantity": 30,
+        "id": "1a75ee02-3429-455f-a83e-85b1a17daa21",
+        "createdAtUtc": "2026-10-28T14:16:59.6404196+00:00"
+      },
+      {
+        "orderLineId": "73df9352-3c34-4c6f-b41e-5667b9a1c75a",
+        "productId": "e7da7b43-10f8-4c8e-905f-bb0025f7413a",
+        "productName": "\u041F\u0435\u0440\u0435\u0446 \u0431\u043E\u043B\u0433\u0430\u0440\u0441\u043A\u0438\u0439",
+        "shelfId": "97dd2e52-a3c7-4558-8fd9-deda4097f614",
+        "quantity": 20,
+        "id": "c92cbf51-833b-49d3-b426-c76479a91a5c",
+        "createdAtUtc": "2026-10-28T14:16:59.6404205+00:00"
+      }
+    ],
+    "id": "727e35c5-771d-4b05-a80b-d6ab3c844a29",
+    "createdAtUtc": "2026-10-28T14:16:59.6387375+00:00",
+    "modifiedAtUtc": "2026-10-28T14:16:59.9600879+00:00"
+  },
+  {
+    "number": "GR-20261028-0006",
+    "supplierId": "7b09ea3c-42d3-48a0-a92e-e6299d9ff12a",
+    "orderId": "4cd6615a-fc65-4332-8e5a-a31e9161ef50",
+    "receivedAtUtc": "2026-10-28T14:17:00.0525293+00:00",
+    "status": "Posted",
+    "comment": "\u041F\u043E\u0441\u0442\u0430\u0432\u043A\u0430 \u043D\u0430\u043F\u0438\u0442\u043A\u043E\u0432, \u0432\u043E\u0434\u0430 \u043F\u0440\u0438\u043D\u044F\u0442\u0430 \u0447\u0430\u0441\u0442\u0438\u0447\u043D\u043E",
+    "lines": [
+      {
+        "orderLineId": "5f44e505-9ef9-40f1-8645-98b0370a6ba4",
+        "productId": "196166ac-acea-4674-93f0-67b79694f69e",
+        "productName": "\u0427\u0430\u0439 \u0447\u0451\u0440\u043D\u044B\u0439 100 \u043F\u0430\u043A.",
+        "shelfId": "5167d37e-3215-4dc9-8341-a097aa628ea7",
+        "quantity": 30,
+        "id": "27339d9f-ce19-4831-9ba2-c58b8015e7d0",
+        "createdAtUtc": "2026-10-28T14:17:00.0525366+00:00"
+      },
+      {
+        "orderLineId": "4685b5a5-fb2a-4833-99ad-6fc8602a80d8",
+        "productId": "e7168823-9101-41a6-aec9-06d7f14bfa95",
+        "productName": "\u041A\u043E\u0444\u0435 \u043C\u043E\u043B\u043E\u0442\u044B\u0439 250 \u0433",
+        "shelfId": "5167d37e-3215-4dc9-8341-a097aa628ea7",
+        "quantity": 20,
+        "id": "d3023c58-98bf-4389-b116-e4f37808f351",
+        "createdAtUtc": "2026-10-28T14:17:00.052541+00:00"
+      },
+      {
+        "orderLineId": "6d0f2b13-983c-4e26-a43f-0408940ef71c",
+        "productId": "769f20f3-da1d-4150-9abe-24096bb0aeaf",
+        "productName": "\u0412\u043E\u0434\u0430 \u043F\u0438\u0442\u044C\u0435\u0432\u0430\u044F 5 \u043B",
+        "shelfId": "5167d37e-3215-4dc9-8341-a097aa628ea7",
+        "quantity": 30,
+        "id": "d96f5cff-9603-4cf2-be99-00d707e1e170",
+        "createdAtUtc": "2026-10-28T14:17:00.0525421+00:00"
+      },
+      {
+        "orderLineId": "cc49f5ee-cdb7-4069-8162-79eaa4a1894b",
+        "productId": "8b804c69-c7a0-4d59-8486-432b43703488",
+        "productName": "\u0421\u043E\u043A \u044F\u0431\u043B\u043E\u0447\u043D\u044B\u0439 1 \u043B",
+        "shelfId": "5167d37e-3215-4dc9-8341-a097aa628ea7",
+        "quantity": 30,
+        "id": "1214bec2-e0b9-4464-8c10-7a4813d8c640",
+        "createdAtUtc": "2026-10-28T14:17:00.052543+00:00"
+      }
+    ],
+    "id": "51011088-a38a-483f-97da-c3f9f023c7fc",
+    "createdAtUtc": "2026-10-28T14:17:00.0509431+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:00.2239471+00:00"
+  },
+  {
+    "number": "GR-20261028-0007",
+    "supplierId": "3047e8a8-489f-4dbd-af9e-448835aaea47",
+    "receivedAtUtc": "2026-10-28T14:17:00.3399689+00:00",
+    "status": "Posted",
+    "comment": "\u0420\u0430\u0437\u043E\u0432\u0430\u044F \u0437\u0430\u043A\u0443\u043F\u043A\u0430 \u0431\u0430\u043A\u0430\u043B\u0435\u0438 (\u0431\u0435\u0437 \u0437\u0430\u043A\u0430\u0437\u0430)",
+    "lines": [
+      {
+        "productId": "3e4a6e0b-f74a-4065-8201-7198187f7385",
+        "productName": "\u0420\u0438\u0441 \u043A\u0440\u0443\u0433\u043B\u043E\u0437\u0451\u0440\u043D\u044B\u0439 900 \u0433",
+        "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+        "quantity": 40,
+        "id": "d1b10c86-0e67-4e10-9d48-0376dbfb5ed3",
+        "createdAtUtc": "2026-10-28T14:17:00.3399789+00:00"
+      },
+      {
+        "productId": "1d0195a2-3335-49e6-b8cb-09c9eea1a316",
+        "productName": "\u0413\u0440\u0435\u0447\u043A\u0430 800 \u0433",
+        "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+        "quantity": 50,
+        "id": "ed066b18-61be-4211-984d-01883453ee8a",
+        "createdAtUtc": "2026-10-28T14:17:00.3399848+00:00"
+      },
+      {
+        "productId": "c8eb89f3-0fb4-46d7-ad4b-754317aaa12b",
+        "productName": "\u041C\u0430\u043A\u0430\u0440\u043E\u043D\u044B \u0441\u043F\u0430\u0433\u0435\u0442\u0442\u0438 450 \u0433",
+        "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+        "quantity": 40,
+        "id": "15b34cc6-4e65-42b9-af3e-6c802ebb0fdd",
+        "createdAtUtc": "2026-10-28T14:17:00.3399865+00:00"
+      },
+      {
+        "productId": "c777b62d-4f97-4fdd-b206-ab29dbd209f6",
+        "productName": "\u041C\u0443\u043A\u0430 \u043F\u0448\u0435\u043D\u0438\u0447\u043D\u0430\u044F 2 \u043A\u0433",
+        "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+        "quantity": 20,
+        "id": "bf89a27d-d9ba-47a0-ae31-1af06aa36a41",
+        "createdAtUtc": "2026-10-28T14:17:00.3399876+00:00"
+      },
+      {
+        "productId": "2481e7bb-0b1c-40a0-a37e-ef1ca170c3ec",
+        "productName": "\u0421\u0430\u0445\u0430\u0440-\u043F\u0435\u0441\u043E\u043A 1 \u043A\u0433",
+        "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+        "quantity": 30,
+        "id": "87a72fa4-f44f-4762-8497-cdba6daa79ba",
+        "createdAtUtc": "2026-10-28T14:17:00.3399886+00:00"
+      },
+      {
+        "productId": "b71b0226-6d2e-4cbb-9c38-918f017872d6",
+        "productName": "\u0421\u043E\u043B\u044C \u043F\u043E\u0432\u0430\u0440\u0435\u043D\u043D\u0430\u044F 1 \u043A\u0433",
+        "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+        "quantity": 10,
+        "id": "15057cbf-92bc-4b24-a62d-fe66ff5b89f7",
+        "createdAtUtc": "2026-10-28T14:17:00.33999+00:00"
+      },
+      {
+        "productId": "fb479dfa-6a19-4c74-b42b-ab0ce43d71d4",
+        "productName": "\u041C\u0430\u0441\u043B\u043E \u043F\u043E\u0434\u0441\u043E\u043B\u043D\u0435\u0447\u043D\u043E\u0435 1 \u043B",
+        "shelfId": "086836ab-af94-42aa-84df-608ba5c51fbb",
+        "quantity": 20,
+        "id": "90ac5d3c-9c59-4ab8-bf62-df29574624dc",
+        "createdAtUtc": "2026-10-28T14:17:00.3399961+00:00"
+      }
+    ],
+    "id": "1e3d340c-84a2-4ebc-abdb-e2627de7b4d2",
+    "createdAtUtc": "2026-10-28T14:17:00.3375978+00:00",
+    "modifiedAtUtc": "2026-10-28T14:17:00.5965879+00:00"
+  }
+]
