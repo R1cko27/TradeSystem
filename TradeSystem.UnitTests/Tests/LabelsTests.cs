@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TradeSystem.UnitTests.Tests;
 
-/// <summary>Проверки русских названий перечислений.</summary>
+// Проверки русских названий перечислений.
 [TestClass]
 public sealed class LabelsTests
 {
@@ -28,6 +28,7 @@ public sealed class LabelsTests
         Check.Equal("кор.", MeasurementUnit.Box.Of());
         Check.Equal("др.", MeasurementUnit.Other.Of());
     }
+// Ожидаем: текст «не указано».
 
     [TestMethod]
     public void Units_NotSpecified_ReturnsText()
@@ -52,6 +53,7 @@ public sealed class LabelsTests
         Check.Equal("Частично оплачен", PaymentStatus.PartiallyPaid.Of());
         Check.Equal("Оплачен", PaymentStatus.Paid.Of());
     }
+// Ожидаем: русские названия статусов поступления.
 
     [TestMethod]
     public void ReceiptStatuses_ReturnRussianLabels()
@@ -59,6 +61,7 @@ public sealed class LabelsTests
         Check.Equal("Черновик", GoodsReceiptStatus.Draft.Of());
         Check.Equal("Проведён", GoodsReceiptStatus.Posted.Of());
     }
+// Ожидаем: русские названия статусов продажи.
 
     [TestMethod]
     public void SaleStatuses_ReturnRussianLabels()

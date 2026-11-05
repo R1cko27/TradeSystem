@@ -5,6 +5,7 @@ using TradeSystem.Domain.Entities;
 
 namespace TradeSystem.Infrastructure.Persistence.Json;
 
+// Репозиторий поставщиков.
 public sealed class SupplierRepository : JsonFileRepository<Supplier>, ISupplierRepository
 {
     public SupplierRepository(IJsonFileStore<Supplier> store) : base(store)
@@ -12,6 +13,7 @@ public sealed class SupplierRepository : JsonFileRepository<Supplier>, ISupplier
     }
 }
 
+// Репозиторий товаров.
 public sealed class ProductRepository : JsonFileRepository<Product>, IProductRepository
 {
     public ProductRepository(IJsonFileStore<Product> store) : base(store)
@@ -19,6 +21,7 @@ public sealed class ProductRepository : JsonFileRepository<Product>, IProductRep
     }
 }
 
+// Репозиторий полок.
 public sealed class ShelfRepository : JsonFileRepository<Shelf>, IShelfRepository
 {
     public ShelfRepository(IJsonFileStore<Shelf> store) : base(store)
@@ -26,6 +29,7 @@ public sealed class ShelfRepository : JsonFileRepository<Shelf>, IShelfRepositor
     }
 }
 
+// Репозиторий связей товара и поставщика.
 public sealed class SupplierProductRepository : JsonFileRepository<SupplierProduct>, ISupplierProductRepository
 {
     public SupplierProductRepository(IJsonFileStore<SupplierProduct> store) : base(store)
@@ -33,6 +37,7 @@ public sealed class SupplierProductRepository : JsonFileRepository<SupplierProdu
     }
 }
 
+// Репозиторий остатков.
 public sealed class StockBalanceRepository : JsonFileRepository<StockBalance>, IStockBalanceRepository
 {
     public StockBalanceRepository(IJsonFileStore<StockBalance> store) : base(store)
@@ -40,6 +45,7 @@ public sealed class StockBalanceRepository : JsonFileRepository<StockBalance>, I
     }
 }
 
+// Репозиторий заказов.
 public sealed class PurchaseOrderRepository : JsonFileRepository<PurchaseOrder>, IPurchaseOrderRepository
 {
     public PurchaseOrderRepository(IJsonFileStore<PurchaseOrder> store) : base(store)
@@ -47,6 +53,7 @@ public sealed class PurchaseOrderRepository : JsonFileRepository<PurchaseOrder>,
     }
 }
 
+// Репозиторий счетов.
 public sealed class InvoiceRepository : JsonFileRepository<Invoice>, IInvoiceRepository
 {
     public InvoiceRepository(IJsonFileStore<Invoice> store) : base(store)
@@ -54,6 +61,7 @@ public sealed class InvoiceRepository : JsonFileRepository<Invoice>, IInvoiceRep
     }
 }
 
+// Репозиторий поступлений.
 public sealed class GoodsReceiptRepository : JsonFileRepository<GoodsReceipt>, IGoodsReceiptRepository
 {
     public GoodsReceiptRepository(IJsonFileStore<GoodsReceipt> store) : base(store)
@@ -61,6 +69,7 @@ public sealed class GoodsReceiptRepository : JsonFileRepository<GoodsReceipt>, I
     }
 }
 
+// Репозиторий продаж.
 public sealed class SaleRepository : JsonFileRepository<Sale>, ISaleRepository
 {
     public SaleRepository(IJsonFileStore<Sale> store) : base(store)
@@ -68,6 +77,7 @@ public sealed class SaleRepository : JsonFileRepository<Sale>, ISaleRepository
     }
 }
 
+// Репозиторий движений товара.
 public sealed class StockMovementRepository : JsonFileRepository<StockMovement>, IStockMovementRepository
 {
     public StockMovementRepository(IJsonFileStore<StockMovement> store) : base(store)

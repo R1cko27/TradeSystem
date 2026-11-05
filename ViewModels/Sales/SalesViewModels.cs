@@ -16,21 +16,22 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace TradeSystem.App.ViewModels.Sales;
 
+// Список продаж с поиском.
 public partial class SalesListViewModel : ViewModelBase, IActivatable
 {
-    private readonly ISaleService _sales;
-    private IReadOnlyList<SaleDto> _all = Array.Empty<SaleDto>();
+    private readonly ISaleService _sales; // Сервис продаж
+    private IReadOnlyList<SaleDto> _all = Array.Empty<SaleDto>(); // Полный список до фильтрации
 
-    public ObservableCollection<SaleDto> Items { get; } = new();
+    public ObservableCollection<SaleDto> Items { get; } = new(); // Отображаемые продажи
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(PostCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteCommand))]
-    private SaleDto? _selectedSale;
+    private SaleDto? _selectedSale; // Выбранная продажа
 
-    [ObservableProperty] private string _searchText = string.Empty;
+    [ObservableProperty] private string _searchText = string.Empty; // Строка поиска
 
-    public event Action? NewRequested;
+    public event Action? NewRequested; // Запрос на создание
 
     public SalesListViewModel(ISaleService sales, IDialogService dialog)
         : base(dialog)
@@ -47,6 +48,7 @@ public partial class SalesListViewModel : ViewModelBase, IActivatable
     private void New() => NewRequested?.Invoke();
 
     [RelayCommand(CanExecute = nameof(CanPost))]
+    // Проводит выбранную продажу после подтверждения.
     private Task PostAsync()
     {
         var target = SelectedSale;
@@ -65,6 +67,7 @@ public partial class SalesListViewModel : ViewModelBase, IActivatable
     }
 
     [RelayCommand(CanExecute = nameof(CanDelete))]
+    // Удаляет черновик продажи.
     private Task DeleteAsync()
     {
         var target = SelectedSale;
@@ -80,19 +83,20 @@ public partial class SalesListViewModel : ViewModelBase, IActivatable
         });
     }
 
-    private bool CanPost => SelectedSale?.Status == SaleStatus.Draft;
-    private bool CanDelete => SelectedSale?.Status == SaleStatus.Draft;
+    private bool CanPost => SelectedSale?.Status == SaleStatus.Draft; // Провести можно черновик
+    private bool CanDelete => SelectedSale?.Status == SaleStatus.Draft; // Удалить можно черновик
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
 
-    /// <summary>Загрузка без RunAsync: вызывается из мест, где RunAsync уже активен.</summary>
-    private async Task ReloadCoreAsync(Guid? keepSelectedId) // Загрузить продажи и применить фильтр
+    // Загружает продажи без RunAsync: вызывается из уже активного RunAsync.
+    private async Task ReloadCoreAsync(Guid? keepSelectedId)
     {
         _all = await _sales.GetSalesAsync();
         ApplyFilter(keepSelectedId);
     }
 
-    private void ApplyFilter(Guid? keepSelectedId = null) // Применить фильтр поиска
+    // Фильтрует по номеру, сохраняя выбор.
+    private void ApplyFilter(Guid? keepSelectedId = null)
     {
         IEnumerable<SaleDto> query = _all;
 
@@ -116,20 +120,21 @@ public partial class SalesListViewModel : ViewModelBase, IActivatable
         !string.IsNullOrEmpty(source) && source.Contains(value, StringComparison.CurrentCultureIgnoreCase);
 }
 
+// Создание продажи: строки, полки и итог.
 public partial class SaleEditViewModel : ViewModelBase
 {
-    private readonly ISaleService _sales;
-    private readonly ICatalogService _catalog;
-    private readonly IStockService _stock;
+    private readonly ISaleService _sales; // Сервис продаж
+    private readonly ICatalogService _catalog; // Сервис справочников
+    private readonly IStockService _stock; // Складской сервис
 
-    [ObservableProperty] private SaleLineViewModel? _selectedLine;
-    [ObservableProperty] private IReadOnlyList<ProductDto> _availableProducts = Array.Empty<ProductDto>();
+    [ObservableProperty] private SaleLineViewModel? _selectedLine; // Выбранная строка
+    [ObservableProperty] private IReadOnlyList<ProductDto> _availableProducts = Array.Empty<ProductDto>(); // Товары для добавления
 
-    public ObservableCollection<SaleLineViewModel> Lines { get; } = new();
+    public ObservableCollection<SaleLineViewModel> Lines { get; } = new(); // Позиции продажи
 
-    public decimal TotalAmount => Lines.Sum(l => l.Total);
+    public decimal TotalAmount => Lines.Sum(l => l.Total); // Итог по позициям
 
-    public event Action? CloseRequested;
+    public event Action? CloseRequested; // Запрос на закрытие
 
     public SaleEditViewModel(
         ISaleService sales,
@@ -146,6 +151,7 @@ public partial class SaleEditViewModel : ViewModelBase
         Lines.CollectionChanged += OnLinesCollectionChanged;
     }
 
+    // Очищает форму и загружает товары.
     public async Task LoadAsync()
     {
         await RunAsync(async () =>
@@ -157,6 +163,7 @@ public partial class SaleEditViewModel : ViewModelBase
         });
     }
 
+    // Добавляет строку и подписывается на смену товара.
     [RelayCommand]
     private void AddLine()
     {
@@ -166,6 +173,7 @@ public partial class SaleEditViewModel : ViewModelBase
         SelectedLine = line;
     }
 
+    // Удаляет выбранную строку.
     [RelayCommand(CanExecute = nameof(HasLineSelection))]
     private void RemoveLine()
     {
@@ -176,8 +184,9 @@ public partial class SaleEditViewModel : ViewModelBase
         SelectedLine = Lines.LastOrDefault();
     }
 
-    private bool HasLineSelection => SelectedLine is not null;
+    private bool HasLineSelection => SelectedLine is not null; // Есть выбранная строка
 
+    // Пересчитывает итог при изменении состава строк.
     private void OnLinesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (e.NewItems is not null)
@@ -191,6 +200,7 @@ public partial class SaleEditViewModel : ViewModelBase
         OnPropertyChanged(nameof(TotalAmount));
     }
 
+    // Пересчитывает итог при изменении количества или цены.
     private void OnLinePropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName is nameof(SaleLineViewModel.Quantity)
@@ -200,6 +210,7 @@ public partial class SaleEditViewModel : ViewModelBase
         }
     }
 
+    // Загружает полки с остатком выбранного товара.
     private async Task ReloadShelvesAsync(SaleLineViewModel line, Guid productId)
     {
         if (productId == Guid.Empty)
@@ -224,6 +235,7 @@ public partial class SaleEditViewModel : ViewModelBase
         line.ShelfId = Guid.Empty;
     }
 
+    // Сохраняет черновик продажи.
     [RelayCommand]
     private Task SaveDraftAsync() => RunAsync(async () =>
     {
@@ -232,6 +244,7 @@ public partial class SaleEditViewModel : ViewModelBase
         CloseRequested?.Invoke();
     });
 
+    // Сохраняет и сразу проводит продажу.
     [RelayCommand]
     private Task SaveAndPostAsync() => RunAsync(async () =>
     {
@@ -244,6 +257,7 @@ public partial class SaleEditViewModel : ViewModelBase
     [RelayCommand]
     private void Cancel() => CloseRequested?.Invoke();
 
+    // Проверяет форму и собирает входные данные.
     private bool TryBuildInput(out SaleInput input)
     {
         input = new SaleInput();
@@ -266,6 +280,7 @@ public partial class SaleEditViewModel : ViewModelBase
         return true;
     }
 
+    // Проверяет товары, полки, количество и остатки.
     private List<string> Validate()
     {
         var errors = new List<string>();
@@ -304,42 +319,38 @@ public partial class SaleEditViewModel : ViewModelBase
     }
 }
 
+// Строка продажи: товар, полка, количество и цена.
 public partial class SaleLineViewModel : ObservableObject
 {
-    [ObservableProperty] private Guid _productId;
-    [ObservableProperty] private Guid _shelfId;
+    [ObservableProperty] private Guid _productId; // Товар
+    [ObservableProperty] private Guid _shelfId; // Полка
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(Total))]
-    private int _quantity = 1;
+    private int _quantity = 1; // Количество
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(Total))]
-    private decimal _unitPrice;
+    private decimal _unitPrice; // Цена продажи
 
-    // Доступные полки для текущего товара (заполняет редактор по событию ProductChanged).
-    [ObservableProperty] private IReadOnlyList<ShelfStockOption> _availableShelves = Array.Empty<ShelfStockOption>();
+    [ObservableProperty] private IReadOnlyList<ShelfStockOption> _availableShelves = Array.Empty<ShelfStockOption>(); // Полки с остатком выбранного товара
 
-    /// <summary>Поднимается при смене товара, чтобы редактор перезагрузил полки.</summary>
+    // Событие смены товара: редактор перезагружает полки.
     public event Action<Guid>? ProductChanged;
 
-    partial void OnProductIdChanged(Guid value) => ProductChanged?.Invoke(value);
+    partial void OnProductIdChanged(Guid value) => ProductChanged?.Invoke(value); // Сообщает редактору о смене товара
 
-    public decimal Total => UnitPrice * Math.Max(0, Quantity);
+    public decimal Total => UnitPrice * Math.Max(0, Quantity); // Стоимость строки
 
-    /// <summary>Сколько товара выбранного вида лежит на выбранной полке (0, если полка не выбрана/нет остатка).</summary>
+    // Остаток выбранного товара на выбранной полке.
     public int AvailableOnShelf =>
         ShelfId == Guid.Empty
             ? 0
             : AvailableShelves.FirstOrDefault(s => s.ShelfId == ShelfId)?.Available ?? 0;
 }
 
-/// <summary>
-/// Полка, на которой выбранного товара есть остаток. Используется как
-/// источник для ComboBox «Полка» в строке продажи, чтобы нельзя было
-/// указать полку, где товара нет.
-/// </summary>
+// Полка с остатком товара для ComboBox выбора полки.
 public sealed record ShelfStockOption(Guid ShelfId, string ShelfCode, string ShelfName, int Available)
 {
-    public string Display => $"{ShelfCode} · {ShelfName} (остаток {Available})";
+    public string Display => $"{ShelfCode} · {ShelfName} (остаток {Available})"; // Текст для ComboBox
 }

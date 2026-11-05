@@ -12,6 +12,7 @@ using TradeSystem.Application.Dto;
 
 namespace TradeSystem.App.Views;
 
+// Реализация диалогов на MessageBox.
 public sealed class DialogService : IDialogService
 {
     public void ShowInfo(string message, string title = "Информация") =>
@@ -28,9 +29,11 @@ public sealed class DialogService : IDialogService
         == MessageBoxResult.Yes;
 }
 
+// Печать и сохранение отчётов через системные диалоги WPF.
 public sealed class DocumentOutputService : IDocumentOutputService
 {
-    public bool Print(ReportDocument document) // Напечатать документ через системный диалог
+    // Печатает документ через системный диалог печати.
+    public bool Print(ReportDocument document)
     {
         ArgumentNullException.ThrowIfNull(document);
 
@@ -56,6 +59,7 @@ public sealed class DocumentOutputService : IDocumentOutputService
         }
     }
 
+    // Сохраняет текст в файл через диалог сохранения.
     public bool SaveDocument(string content, string suggestedFileName, string filter)
     {
         try
@@ -82,6 +86,7 @@ public sealed class DocumentOutputService : IDocumentOutputService
         }
     }
 
+    // Собирает FlowDocument с моноширинным текстом для печати.
     private static FlowDocument BuildFlowDocument(ReportDocument document)
     {
         var flow = new FlowDocument

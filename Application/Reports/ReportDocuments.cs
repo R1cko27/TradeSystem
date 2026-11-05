@@ -8,14 +8,12 @@ using TradeSystem.Application.Dto;
 
 namespace TradeSystem.Application.Reports;
 
-/// <summary>
-/// Фабрика справочных документов из DTO. Чистые функции без состояния и зависимостей,
-/// поэтому статический класс уместнее, чем ещё один инъектируемый сервис.
-/// </summary>
+// Фабрика справочных документов из DTO: чистые функции без состояния.
 public static class ReportDocuments
 {
-    private static readonly CultureInfo Cul = CultureInfo.CurrentCulture;
+    private static readonly CultureInfo Cul = CultureInfo.CurrentCulture; // Текущая культура для форматирования чисел
 
+    // Все товары: остатки, минимумы, поставщики и признак пополнения.
     public static ReportDocument FromAllProducts(IReadOnlyList<ProductDto> items)
     {
         var headers = new[] { "Наименование", "Артикул", "Ед.", "Остаток", "Мин.", "Целевой", "Поставщиков", "Пополнить" };
@@ -35,6 +33,7 @@ public static class ReportDocuments
         return new ReportDocument("Список всех товаров", headers, rows);
     }
 
+    // Товары в наличии: остаток и полки хранения.
     public static ReportDocument FromAvailableProducts(IReadOnlyList<ProductDto> items)
     {
         var headers = new[] { "Наименование", "Артикул", "Ед.", "Остаток", "Полка хранения" };
@@ -51,6 +50,7 @@ public static class ReportDocuments
         return new ReportDocument("Товары, имеющиеся в наличии", headers, rows);
     }
 
+    // Товары к пополнению: минимум и рекомендуемое количество.
     public static ReportDocument FromToReplenish(IReadOnlyList<LowStockProductDto> items)
     {
         var headers = new[] { "Наименование", "Ед.", "Текущий остаток", "Минимум", "Рекомендуется заказать" };
@@ -67,6 +67,7 @@ public static class ReportDocuments
         return new ReportDocument("Товары, количество которых необходимо пополнить", headers, rows);
     }
 
+    // Товары выбранного поставщика с условиями закупки.
     public static ReportDocument FromSupplierProducts(string supplierName, IReadOnlyList<SupplierProductDto> items)
     {
         var headers = new[] { "Товар", "Артикул поставщика", "Цена закупки", "Срок, дн.", "Мин. заказ", "Кратность", "Предпочт." };
@@ -85,6 +86,7 @@ public static class ReportDocuments
         return new ReportDocument($"Товары, поставляемые: {supplierName}", headers, rows);
     }
 
+    // Число в текущей культуре.
     private static string Num(int value) => value.ToString(Cul);
-    private static string YesNo(bool value) => value ? "Да" : "";
+    private static string YesNo(bool value) => value ? "Да" : ""; // «Да» для true, иначе пустая строка
 }

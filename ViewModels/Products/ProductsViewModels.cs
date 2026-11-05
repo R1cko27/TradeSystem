@@ -15,30 +15,31 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace TradeSystem.App.ViewModels.Products;
 
+// Список товаров с поиском и фильтром дефицита.
 public partial class ProductsListViewModel : ViewModelBase, IActivatable
 {
-    private readonly ICatalogService _catalog;
+    private readonly ICatalogService _catalog; // Сервис справочников
 
-    private IReadOnlyList<ProductDto> _all = Array.Empty<ProductDto>();
+    private IReadOnlyList<ProductDto> _all = Array.Empty<ProductDto>(); // Полный список до фильтрации
 
-    public ObservableCollection<ProductDto> Items { get; } = new();
+    public ObservableCollection<ProductDto> Items { get; } = new(); // Отображаемые товары
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(EditCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteCommand))]
-    private ProductDto? _selectedItem;
+    private ProductDto? _selectedItem; // Выбранный товар
 
     [ObservableProperty]
-    private string _searchText = string.Empty;
+    private string _searchText = string.Empty; // Строка поиска
 
     [ObservableProperty]
     private bool _onlyLowStock; // Показывать только товары к пополнению
 
     [ObservableProperty]
-    private bool _showInactive;
+    private bool _showInactive; // Показывать неактивные товары
 
-    public event Action<Guid?>? EditRequested;
-    public event Action? AddRequested;
+    public event Action<Guid?>? EditRequested; // Запрос на редактирование
+    public event Action? AddRequested; // Запрос на добавление
 
     public ProductsListViewModel(ICatalogService catalog, IDialogService dialog)
         : base(dialog)
@@ -61,6 +62,7 @@ public partial class ProductsListViewModel : ViewModelBase, IActivatable
             EditRequested?.Invoke(SelectedItem.Id);
     }
 
+    // Удаляет выбранный товар после подтверждения.
     [RelayCommand(CanExecute = nameof(HasSelection))]
     private Task DeleteAsync()
     {
@@ -78,20 +80,21 @@ public partial class ProductsListViewModel : ViewModelBase, IActivatable
         });
     }
 
-    private bool HasSelection => SelectedItem is not null;
+    private bool HasSelection => SelectedItem is not null; // Есть ли выбранная строка
 
-    partial void OnSearchTextChanged(string value) => ApplyFilter();
-    partial void OnOnlyLowStockChanged(bool value) => ApplyFilter();
-    partial void OnShowInactiveChanged(bool value) => _ = RunAsync(LoadCoreAsync);
+    partial void OnSearchTextChanged(string value) => ApplyFilter(); // Перефильтровать при поиске
+    partial void OnOnlyLowStockChanged(bool value) => ApplyFilter(); // Перефильтровать по дефициту
+    partial void OnShowInactiveChanged(bool value) => _ = RunAsync(LoadCoreAsync); // Перечитать список
 
-    /// <summary>Загрузка без RunAsync: вызывается из мест, где RunAsync уже активен.</summary>
-    private async Task LoadCoreAsync() // Загрузить товары и применить фильтр
+    // Загружает товары без RunAsync: вызывается из уже активного RunAsync.
+    private async Task LoadCoreAsync()
     {
         _all = await _catalog.GetProductsAsync(includeInactive: ShowInactive);
         ApplyFilter();
     }
 
-    private void ApplyFilter() // Применить фильтр поиска и остатков
+    // Фильтрует по поиску и признаку дефицита.
+    private void ApplyFilter()
     {
         IEnumerable<ProductDto> query = _all;
 
@@ -114,27 +117,29 @@ public partial class ProductsListViewModel : ViewModelBase, IActivatable
         source.Contains(value, StringComparison.CurrentCultureIgnoreCase);
 }
 
+// Создание и редактирование товара.
 public partial class ProductEditViewModel : ViewModelBase
 {
-    private readonly ICatalogService _catalog;
-    private Guid? _productId;
+    private readonly ICatalogService _catalog; // Сервис справочников
+    private Guid? _productId; // Id редактируемого товара (null — новый)
 
-    [ObservableProperty] private bool _isNew = true;
-    [ObservableProperty] private bool _isActive = true;
-    [ObservableProperty] private string _name = string.Empty;
-    [ObservableProperty] private string _article = string.Empty;
-    [ObservableProperty] private MeasurementUnit _unit = MeasurementUnit.Piece;
-    [ObservableProperty] private int _minimumStockQuantity;
-    [ObservableProperty] private string _targetStockText = string.Empty;
+    [ObservableProperty] private bool _isNew = true; // Признак новой записи
+    [ObservableProperty] private bool _isActive = true; // Признак активности
+    [ObservableProperty] private string _name = string.Empty; // Наименование
+    [ObservableProperty] private string _article = string.Empty; // Артикул
+    [ObservableProperty] private MeasurementUnit _unit = MeasurementUnit.Piece; // Единица измерения
+    [ObservableProperty] private int _minimumStockQuantity; // Минимальный остаток
+    [ObservableProperty] private string _targetStockText = string.Empty; // Целевой остаток (текст)
     [ObservableProperty] private Guid? _defaultShelfId; // Идентификатор полки по умолчанию
-    [ObservableProperty] private IReadOnlyList<ShelfDto> _shelves = Array.Empty<ShelfDto>();
+    [ObservableProperty] private IReadOnlyList<ShelfDto> _shelves = Array.Empty<ShelfDto>(); // Доступные полки
 
+    // Варианты единиц измерения для ComboBox.
     public IReadOnlyList<UnitOption> AvailableUnits { get; } =
         Enum.GetValues<MeasurementUnit>()
             .Select(u => new UnitOption(u, u.Of()))
             .ToList();
 
-    public event Action? CloseRequested;
+    public event Action? CloseRequested; // Запрос на закрытие
 
     public ProductEditViewModel(ICatalogService catalog, IDialogService dialog)
         : base(dialog)
@@ -142,7 +147,7 @@ public partial class ProductEditViewModel : ViewModelBase
         _catalog = catalog;
     }
 
-    /// <summary>Загружает форму. id == null — новый товар.</summary>
+    // Загружает форму; id == null — новый товар.
     public async Task LoadAsync(Guid? id)
     {
         await RunAsync(async () =>
@@ -182,6 +187,7 @@ public partial class ProductEditViewModel : ViewModelBase
     [RelayCommand]
     private void Cancel() => CloseRequested?.Invoke();
 
+    // Проверяет поля и сохраняет товар.
     private async Task SaveImplementationAsync()
     {
         var errors = Validate(out int? target);
@@ -211,6 +217,7 @@ public partial class ProductEditViewModel : ViewModelBase
         CloseRequested?.Invoke();
     }
 
+    // Проверяет поля и разбирает целевой остаток.
     private List<string> Validate(out int? target)
     {
         target = null;
@@ -234,6 +241,7 @@ public partial class ProductEditViewModel : ViewModelBase
         return errors;
     }
 
+    // Очищает форму.
     private void ResetForm()
     {
         Name = string.Empty;
@@ -246,5 +254,5 @@ public partial class ProductEditViewModel : ViewModelBase
     }
 }
 
-/// <summary>Пара «значение enum + человекочитаемая метка» для привязки к ComboBox.</summary>
+// Значение перечисления и его подпись для ComboBox.
 public sealed record UnitOption(MeasurementUnit Value, string Label);

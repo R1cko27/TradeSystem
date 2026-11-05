@@ -15,28 +15,29 @@ using TradeSystem.Domain.Enums;
 
 namespace TradeSystem.App.ViewModels.Invoices;
 
+// Счета выбранного заказа: создание, оплата и удаление.
 public partial class InvoiceListViewModel : ViewModelBase
 {
-    private readonly IInvoiceService _invoices;
-    private readonly IPurchaseOrderService _orders;
-    private Guid _orderId;
+    private readonly IInvoiceService _invoices; // Сервис счетов
+    private readonly IPurchaseOrderService _orders; // Сервис заказов
+    private Guid _orderId; // Заказ, для которого показываются счета
 
-    [ObservableProperty] private string _orderNumber = string.Empty;
-    [ObservableProperty] private string _supplierName = string.Empty;
-    [ObservableProperty] private decimal _orderTotal;
+    [ObservableProperty] private string _orderNumber = string.Empty; // Номер заказа
+    [ObservableProperty] private string _supplierName = string.Empty; // Поставщик заказа
+    [ObservableProperty] private decimal _orderTotal; // Сумма заказа
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(PayCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteCommand))]
-    private InvoiceDto? _selectedInvoice;
+    private InvoiceDto? _selectedInvoice; // Выбранный счёт
 
-    [ObservableProperty] private string _newNumber = string.Empty;
-    [ObservableProperty] private string _newAmountText = string.Empty;
-    [ObservableProperty] private string _newDueDateText = string.Empty;
+    [ObservableProperty] private string _newNumber = string.Empty; // Номер нового счёта
+    [ObservableProperty] private string _newAmountText = string.Empty; // Сумма нового счёта (текст)
+    [ObservableProperty] private string _newDueDateText = string.Empty; // Срок оплаты нового счёта (текст)
 
-    public ObservableCollection<InvoiceDto> Items { get; } = new();
+    public ObservableCollection<InvoiceDto> Items { get; } = new(); // Счета заказа
 
-    public event Action? CloseRequested;
+    public event Action? CloseRequested; // Запрос на закрытие
 
     public InvoiceListViewModel(IInvoiceService invoices, IPurchaseOrderService orders, IDialogService dialog)
         : base(dialog)
@@ -45,6 +46,7 @@ public partial class InvoiceListViewModel : ViewModelBase
         _orders = orders;
     }
 
+    // Загружает заказ и его счета.
     public async Task LoadAsync(Guid orderId)
     {
         await RunAsync(async () =>
@@ -70,6 +72,7 @@ public partial class InvoiceListViewModel : ViewModelBase
         });
     }
 
+    // Создаёт счёт после проверки полей.
     [RelayCommand]
     private Task CreateAsync() => RunAsync(async () =>
     {
@@ -85,6 +88,7 @@ public partial class InvoiceListViewModel : ViewModelBase
         await ReloadInvoicesAsync();
     });
 
+    // Отмечает выбранный счёт оплаченным.
     [RelayCommand(CanExecute = nameof(CanPay))]
     private Task PayAsync() => RunAsync(async () =>
     {
@@ -95,6 +99,7 @@ public partial class InvoiceListViewModel : ViewModelBase
         await ReloadInvoicesAsync();
     });
 
+    // Удаляет выбранный счёт.
     [RelayCommand(CanExecute = nameof(CanDelete))]
     private Task DeleteAsync() => RunAsync(async () =>
     {
@@ -105,12 +110,14 @@ public partial class InvoiceListViewModel : ViewModelBase
         await ReloadInvoicesAsync();
     });
 
+    // Закрывает экран.
     [RelayCommand]
     private void Close() => CloseRequested?.Invoke();
 
-    private bool CanPay => SelectedInvoice is { } i && i.PaymentStatus != PaymentStatus.Paid && i.PaymentStatus != PaymentStatus.Cancelled;
-    private bool CanDelete => SelectedInvoice is { } i && i.PaymentStatus != PaymentStatus.Paid;
+    private bool CanPay => SelectedInvoice is { } i && i.PaymentStatus != PaymentStatus.Paid && i.PaymentStatus != PaymentStatus.Cancelled; // Можно оплатить неоплаченный счёт
+    private bool CanDelete => SelectedInvoice is { } i && i.PaymentStatus != PaymentStatus.Paid; // Можно удалить неоплаченный счёт
 
+    // Перечитывает счета заказа.
     private async Task ReloadInvoicesAsync()
     {
         var list = await _invoices.GetInvoicesByOrderAsync(_orderId);
@@ -119,6 +126,7 @@ public partial class InvoiceListViewModel : ViewModelBase
         SelectedInvoice = null;
     }
 
+    // Проверяет поля нового счёта.
     private List<string> ValidateNew(out decimal amount, out DateTimeOffset? due)
     {
         amount = 0m; due = null;
@@ -135,6 +143,7 @@ public partial class InvoiceListViewModel : ViewModelBase
         return errors;
     }
 
+    // Следующий номер счёта за день.
     private async Task<string> GenerateNextNumberAsync(Guid orderId)
     {
         var existing = await _invoices.GetInvoicesByOrderAsync(orderId);

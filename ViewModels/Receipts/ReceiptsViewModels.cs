@@ -14,21 +14,22 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace TradeSystem.App.ViewModels.Receipts;
 
+// Список поступлений товара с поиском.
 public partial class ReceiptsListViewModel : ViewModelBase, IActivatable
 {
-    private readonly IGoodsReceiptService _receipts;
-    private IReadOnlyList<GoodsReceiptDto> _all = Array.Empty<GoodsReceiptDto>();
+    private readonly IGoodsReceiptService _receipts; // Сервис поступлений
+    private IReadOnlyList<GoodsReceiptDto> _all = Array.Empty<GoodsReceiptDto>(); // Полный список до фильтрации
 
-    public ObservableCollection<GoodsReceiptDto> Items { get; } = new();
+    public ObservableCollection<GoodsReceiptDto> Items { get; } = new(); // Отображаемые поступления
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(PostCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteCommand))]
-    private GoodsReceiptDto? _selectedReceipt;
+    private GoodsReceiptDto? _selectedReceipt; // Выбранное поступление
 
-    [ObservableProperty] private string _searchText = string.Empty;
+    [ObservableProperty] private string _searchText = string.Empty; // Строка поиска
 
-    public event Action? NewRequested;
+    public event Action? NewRequested; // Запрос на создание
 
     public ReceiptsListViewModel(IGoodsReceiptService receipts, IDialogService dialog)
         : base(dialog)
@@ -45,6 +46,7 @@ public partial class ReceiptsListViewModel : ViewModelBase, IActivatable
     private void New() => NewRequested?.Invoke();
 
     [RelayCommand(CanExecute = nameof(CanPost))]
+    // Проводит выбранное поступление после подтверждения.
     private Task PostAsync()
     {
         var target = SelectedReceipt;
@@ -63,6 +65,7 @@ public partial class ReceiptsListViewModel : ViewModelBase, IActivatable
     }
 
     [RelayCommand(CanExecute = nameof(CanDelete))]
+    // Удаляет черновик поступления.
     private Task DeleteAsync()
     {
         var target = SelectedReceipt;
@@ -78,19 +81,19 @@ public partial class ReceiptsListViewModel : ViewModelBase, IActivatable
         });
     }
 
-    // Проводить и удалять можно только черновик.
-    private bool CanPost => SelectedReceipt?.Status == GoodsReceiptStatus.Draft;
-    private bool CanDelete => SelectedReceipt?.Status == GoodsReceiptStatus.Draft;
+    private bool CanPost => SelectedReceipt?.Status == GoodsReceiptStatus.Draft; // Провести можно черновик
+    private bool CanDelete => SelectedReceipt?.Status == GoodsReceiptStatus.Draft; // Удалить можно черновик
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
 
-    /// <summary>Загрузка без RunAsync: вызывается из мест, где RunAsync уже активен.</summary>
+    // Загружает поступления без RunAsync: вызывается из уже активного RunAsync.
     private async Task ReloadCoreAsync(Guid? keepSelectedId)
     {
         _all = await _receipts.GetReceiptsAsync();
         ApplyFilter(keepSelectedId);
     }
 
+    // Фильтрует по номеру и поставщику, сохраняя выбор.
     private void ApplyFilter(Guid? keepSelectedId = null)
     {
         IEnumerable<GoodsReceiptDto> query = _all;
@@ -115,59 +118,58 @@ public partial class ReceiptsListViewModel : ViewModelBase, IActivatable
         !string.IsNullOrEmpty(source) && source.Contains(value, StringComparison.CurrentCultureIgnoreCase);
 }
 
-/// <summary>Источник строк поступления.</summary>
+// Режим создания поступления: по заказу или свободный.
 public enum ReceiptSourceMode
 {
-    ByOrder = 0,
-    Free = 1
+    ByOrder = 0, // По заказу поставщика
+    Free = 1 // Свободное поступление
 }
 
-/// <summary>Пара «значение режима + подпись» для привязки к ComboBox.</summary>
+// Режим и его подпись для ComboBox.
 public sealed record ReceiptSourceModeOption(ReceiptSourceMode Value, string Label);
 
+// Создание поступления: по заказу или свободным приходом.
 public partial class ReceiptEditViewModel : ViewModelBase
 {
-    private readonly IGoodsReceiptService _receipts;
-    private readonly IPurchaseOrderService _orders;
-    private readonly ICatalogService _catalog;
+    private readonly IGoodsReceiptService _receipts; // Сервис поступлений
+    private readonly IPurchaseOrderService _orders; // Сервис заказов
+    private readonly ICatalogService _catalog; // Сервис справочников
 
-    // Полный набор заказов (для фильтра по поставщику) и словарь «товар -> полка по умолчанию».
-    private IReadOnlyList<PurchaseOrderDto> _allOrders = Array.Empty<PurchaseOrderDto>();
-    private Dictionary<Guid, Guid?> _defaultShelfByProduct = new();
+    private IReadOnlyList<PurchaseOrderDto> _allOrders = Array.Empty<PurchaseOrderDto>(); // Все заказы для фильтра
+    private Dictionary<Guid, Guid?> _defaultShelfByProduct = new(); // Полка по умолчанию по товару
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LoadOrderLinesCommand))]
     [NotifyCanExecuteChangedFor(nameof(AddLineCommand))]
     [NotifyCanExecuteChangedFor(nameof(RemoveLineCommand))]
-    private ReceiptSourceMode _sourceMode = ReceiptSourceMode.ByOrder;
+    private ReceiptSourceMode _sourceMode = ReceiptSourceMode.ByOrder; // Режим поступления
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LoadOrderLinesCommand))]
-    private Guid _supplierId;
+    private Guid _supplierId; // Выбранный поставщик
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(LoadOrderLinesCommand))]
-    private Guid _selectedOrderId;
+    private Guid _selectedOrderId; // Выбранный заказ
 
-    [ObservableProperty] private ReceiptLineViewModel? _selectedLine;
-    [ObservableProperty] private IReadOnlyList<SupplierDto> _suppliers = Array.Empty<SupplierDto>();
-    [ObservableProperty] private IReadOnlyList<ShelfDto> _shelves = Array.Empty<ShelfDto>();
-    [ObservableProperty] private IReadOnlyList<SupplierProductDto> _availableProducts = Array.Empty<SupplierProductDto>();
-    [ObservableProperty] private IReadOnlyList<PurchaseOrderDto> _ordersForSupplier = Array.Empty<PurchaseOrderDto>();
+    [ObservableProperty] private ReceiptLineViewModel? _selectedLine; // Выбранная строка
+    [ObservableProperty] private IReadOnlyList<SupplierDto> _suppliers = Array.Empty<SupplierDto>(); // Поставщики
+    [ObservableProperty] private IReadOnlyList<ShelfDto> _shelves = Array.Empty<ShelfDto>(); // Полки
+    [ObservableProperty] private IReadOnlyList<SupplierProductDto> _availableProducts = Array.Empty<SupplierProductDto>(); // Товары поставщика
+    [ObservableProperty] private IReadOnlyList<PurchaseOrderDto> _ordersForSupplier = Array.Empty<PurchaseOrderDto>(); // Доступные заказы поставщика
 
-    public ObservableCollection<ReceiptLineViewModel> Lines { get; } = new();
+    public ObservableCollection<ReceiptLineViewModel> Lines { get; } = new(); // Позиции поступления
 
-    // Полный список поставщиков; в режиме «по заказу» он сужается до тех,
-    private IReadOnlyList<SupplierDto> _allSuppliers = Array.Empty<SupplierDto>();
+    private IReadOnlyList<SupplierDto> _allSuppliers = Array.Empty<SupplierDto>(); // Полный список поставщиков; в режиме «по заказу» сужается до доступных
 
-    /// <summary>Варианты режима поступления для ComboBox.</summary>
+    // Варианты режима поступления для ComboBox.
     public IReadOnlyList<ReceiptSourceModeOption> SourceModes { get; } = new[]
     {
         new ReceiptSourceModeOption(ReceiptSourceMode.ByOrder, "По заказу поставщика"),
         new ReceiptSourceModeOption(ReceiptSourceMode.Free, "Свободное поступление")
     };
 
-    public event Action? CloseRequested;
+    public event Action? CloseRequested; // Запрос на закрытие
 
     public ReceiptEditViewModel(
         IGoodsReceiptService receipts,
@@ -181,6 +183,7 @@ public partial class ReceiptEditViewModel : ViewModelBase
         _catalog = catalog;
     }
 
+    // Загружает справочники и сбрасывает форму.
     public async Task LoadAsync()
     {
         await RunAsync(async () =>
@@ -213,10 +216,7 @@ public partial class ReceiptEditViewModel : ViewModelBase
         });
     }
 
-    /// <summary>
-    /// В режиме «по заказу» доступны только поставщики с активным оплаченным заказом,
-    /// в свободном режиме — все активные поставщики.
-    /// </summary>
+    // Оставляет поставщиков, доступных в выбранном режиме.
     private void ApplySupplierFilter()
     {
         if (SourceMode == ReceiptSourceMode.Free)
@@ -233,24 +233,22 @@ public partial class ReceiptEditViewModel : ViewModelBase
         Suppliers = _allSuppliers.Where(s => allowed.Contains(s.Id)).ToList();
     }
 
-    /// <summary>
-    /// Заказ годится для оформления поступления: не отменён и не закрыт,
-    /// есть недополученные позиции и он полностью оплачен.
-    /// </summary>
+    // Заказ годен для поступления: не отменён/закрыт, есть недополученное и он оплачен.
     private static bool IsReceivableOrder(PurchaseOrderDto order)
         => order.Status is not (PurchaseOrderStatus.Cancelled or PurchaseOrderStatus.Closed)
            && order.PaymentStatus == PaymentStatus.Paid
            && order.Lines.Any(l => !l.IsClosed && l.RemainingQuantity > 0);
 
-    private Guid _appliedSupplierId = Guid.Empty;
-    private bool _restoringSupplierId;
+    private Guid _appliedSupplierId = Guid.Empty; // Ранее выбранный поставщик
+    private bool _restoringSupplierId; // Флаг отката выбора
 
-    partial void OnSupplierIdChanged(Guid value)
+    partial void OnSupplierIdChanged(Guid value) // Реагирует на смену поставщика
     {
         if (_restoringSupplierId) return;
         _ = HandleSupplierChangedAsync(value);
     }
 
+    // Смена поставщика очищает строки и загружает его товары.
     private async Task HandleSupplierChangedAsync(Guid supplierId)
     {
         // Смена поставщика сбрасывает заказ и строки: они принадлежат другому поставщику.
@@ -289,6 +287,7 @@ public partial class ReceiptEditViewModel : ViewModelBase
         });
     }
 
+    // Смена режима пересобирает список поставщиков.
     partial void OnSourceModeChanged(ReceiptSourceMode value)
     {
         Lines.Clear();
@@ -302,6 +301,7 @@ public partial class ReceiptEditViewModel : ViewModelBase
             ResetSupplierSelection();
     }
 
+    // Сбрасывает выбранного поставщика и связанные списки.
     private void ResetSupplierSelection()
     {
         _restoringSupplierId = true;
@@ -314,6 +314,7 @@ public partial class ReceiptEditViewModel : ViewModelBase
         OrdersForSupplier = Array.Empty<PurchaseOrderDto>();
     }
 
+    // Смена заказа очищает строки, чтобы не потерять ввод.
     partial void OnSelectedOrderIdChanged(Guid value)
     {
         // Не перегружаем строки молча, чтобы не потерять ручной ввод: очистка + явная кнопка.
@@ -321,6 +322,7 @@ public partial class ReceiptEditViewModel : ViewModelBase
         SelectedLine = null;
     }
 
+    // Заполняет строки незакрытыми позициями заказа.
     [RelayCommand(CanExecute = nameof(CanLoadOrderLines))]
     private Task LoadOrderLinesAsync() => RunAsync(async () =>
     {
@@ -355,9 +357,10 @@ public partial class ReceiptEditViewModel : ViewModelBase
         SelectedLine = Lines.FirstOrDefault();
     });
 
-    private bool CanLoadOrderLines =>
+    private bool CanLoadOrderLines => // Загружать строки можно в режиме по заказу с выбранным заказом
         SourceMode == ReceiptSourceMode.ByOrder && SelectedOrderId != Guid.Empty;
 
+    // Добавляет пустую строку в свободном режиме.
     [RelayCommand(CanExecute = nameof(CanAddLine))]
     private void AddLine()
     {
@@ -365,8 +368,9 @@ public partial class ReceiptEditViewModel : ViewModelBase
         SelectedLine = Lines.Last();
     }
 
-    private bool CanAddLine => SourceMode == ReceiptSourceMode.Free && SupplierId != Guid.Empty;
+    private bool CanAddLine => SourceMode == ReceiptSourceMode.Free && SupplierId != Guid.Empty; // Добавлять можно в свободном режиме при выбранном поставщике
 
+    // Удаляет выбранную строку.
     [RelayCommand(CanExecute = nameof(HasLineSelection))]
     private void RemoveLine()
     {
@@ -375,8 +379,9 @@ public partial class ReceiptEditViewModel : ViewModelBase
         SelectedLine = Lines.LastOrDefault();
     }
 
-    private bool HasLineSelection => SelectedLine is not null;
+    private bool HasLineSelection => SelectedLine is not null; // Есть выбранная строка
 
+    // Сохраняет черновик поступления.
     [RelayCommand]
     private Task SaveDraftAsync() => RunAsync(async () =>
     {
@@ -385,6 +390,7 @@ public partial class ReceiptEditViewModel : ViewModelBase
         CloseRequested?.Invoke();
     });
 
+    // Сохраняет и сразу проводит поступление.
     [RelayCommand]
     private Task SaveAndPostAsync() => RunAsync(async () =>
     {
@@ -397,6 +403,7 @@ public partial class ReceiptEditViewModel : ViewModelBase
     [RelayCommand]
     private void Cancel() => CloseRequested?.Invoke();
 
+    // Проверяет форму и собирает входные данные.
     private bool TryBuildInput(out GoodsReceiptInput input)
     {
         input = new GoodsReceiptInput();
@@ -421,6 +428,7 @@ public partial class ReceiptEditViewModel : ViewModelBase
         return true;
     }
 
+    // Проверяет обязательные поля, количества и дубли.
     private List<string> Validate()
     {
         var errors = new List<string>();
@@ -458,23 +466,16 @@ public partial class ReceiptEditViewModel : ViewModelBase
     }
 }
 
-/// <summary>
-/// Строка поступления. Наблюдаемые поля (товар, полка, количество) меняются
-/// пользователем; служебные (ссылка на строку заказа, редактируемость товара)
-/// фиксируются при создании строки и потому не требуют уведомлений.
-/// </summary>
+// Строка поступления: товар, полка и количество.
 public partial class ReceiptLineViewModel : ObservableObject
 {
-    [ObservableProperty] private Guid _productId;
-    [ObservableProperty] private Guid _shelfId;
-    [ObservableProperty] private int _quantity = 1;
+    [ObservableProperty] private Guid _productId; // Товар
+    [ObservableProperty] private Guid _shelfId; // Полка
+    [ObservableProperty] private int _quantity = 1; // Количество
 
-    /// <summary>Верхняя граница количества (остаток по строке заказа). null — без лимита.</summary>
-    [ObservableProperty] private int? _maxQuantity;
+    [ObservableProperty] private int? _maxQuantity; // Верхняя граница количества (null — без лимита)
 
-    /// <summary>Ссылка на строку заказа (для режима «по заказу»). Не меняется после создания.</summary>
-    public Guid? OrderLineId { get; set; }
+    public Guid? OrderLineId { get; set; } // Ссылка на строку заказа (не меняется)
 
-    /// <summary>Можно ли менять товар (true — свободный ввод, false — товар из заказа).</summary>
-    public bool IsProductEditable { get; set; }
+    public bool IsProductEditable { get; set; } // Можно ли менять товар (false — товар из заказа)
 }

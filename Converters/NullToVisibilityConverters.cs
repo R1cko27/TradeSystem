@@ -5,11 +5,10 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-// Файл содержит конвертеры NullToVisibilityConverter и NotNullToVisibilityConverter,
 
 namespace TradeSystem.App.Converters;
 
-/// <summary>null → Visible, не null → Collapsed (подсказка «выберите заказ»).</summary>
+// null → Visible, не null → Collapsed: подсказка «выберите заказ».
 public sealed class NullToVisibilityConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
@@ -19,7 +18,7 @@ public sealed class NullToVisibilityConverter : IValueConverter
         => throw new NotSupportedException();
 }
 
-/// <summary>не null → Visible, null → Collapsed (панель деталей).</summary>
+// не null → Visible, null → Collapsed: панель деталей.
 public sealed class NotNullToVisibilityConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)

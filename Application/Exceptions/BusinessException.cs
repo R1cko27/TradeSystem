@@ -4,10 +4,7 @@ using System;
 
 namespace TradeSystem.Application.Exceptions;
 
-/// <summary>
-/// Ошибка, нарушающая бизнес-правило предметной области
-/// (недостаточный остаток, товар не у этого поставщика и т.п.).
-/// </summary>
+// Нарушение бизнес-правила: недостаточный остаток, чужой товар, неверный статус и т.п.
 public sealed class BusinessException : Exception
 {
     public BusinessException(string message) : base(message)

@@ -17,14 +17,19 @@ namespace TradeSystem.Application.Contracts.Services
 {
     public interface IStockService
     {
+        // Суммарный остаток товара по всем полкам.
         Task<int> GetTotalStockAsync(Guid productId, CancellationToken ct = default);
 
+        // Остатки всех товаров одним словарём.
         Task<IReadOnlyDictionary<Guid, int>> GetTotalStocksAsync(CancellationToken ct = default);
 
+        // Остатки товара по полкам.
         Task<IReadOnlyList<StockBalanceDto>> GetBalancesByProductAsync(Guid productId, CancellationToken ct = default);
 
+        // Остатки на полке.
         Task<IReadOnlyList<StockBalanceDto>> GetBalancesByShelfAsync(Guid shelfId, CancellationToken ct = default);
 
+        // Приход на полку: увеличивает остаток и пишет движение.
         Task ReceiveAsync(
             Guid productId,
             Guid shelfId,
@@ -36,7 +41,7 @@ namespace TradeSystem.Application.Contracts.Services
             string? comment,
             CancellationToken ct = default);
 
-        //Расход с полки. Бросает BusinessException, если недостаточно
+        // Расход с полки: недостаток остатка — BusinessException.
         Task ShipAsync(
             Guid productId,
             Guid shelfId,
@@ -48,8 +53,11 @@ namespace TradeSystem.Application.Contracts.Services
             string? comment,
             CancellationToken ct = default);
 
+        // Дефицитные товары с рекомендуемым количеством.
         Task<IReadOnlyList<LowStockProductDto>> GetLowStockProductsAsync(CancellationToken ct = default);
+        // Сырые остатки для подсчётов.
         Task<IReadOnlyList<StockBalance>> GetAllBalancesRawAsync(CancellationToken ct = default);
+        // Удаляет нулевой остаток.
         Task RemoveZeroBalanceAsync(Guid balanceId, CancellationToken ct = default);
     }
 }
@@ -58,10 +66,10 @@ namespace TradeSystem.Application.Services
 {
     public sealed class StockService : IStockService
     {
-        private readonly IProductRepository _products;
-        private readonly IShelfRepository _shelves;
-        private readonly IStockBalanceRepository _balances;
-        private readonly IStockMovementRepository _movements;
+        private readonly IProductRepository _products; // Репозиторий товаров
+        private readonly IShelfRepository _shelves; // Репозиторий полок
+        private readonly IStockBalanceRepository _balances; // Репозиторий остатков
+        private readonly IStockMovementRepository _movements; // Репозиторий движений
 
         public StockService(
             IProductRepository products,
@@ -75,12 +83,14 @@ namespace TradeSystem.Application.Services
             _movements = movements;
         }
 
+        // Суммарный остаток товара по всем полкам.
         public async Task<int> GetTotalStockAsync(Guid productId, CancellationToken ct = default)
         {
             var balances = await _balances.GetAllAsync(ct);
             return balances.Where(b => b.ProductId == productId).Sum(b => b.Quantity);
         }
 
+        // Остатки всех товаров одним словарём.
         public async Task<IReadOnlyDictionary<Guid, int>> GetTotalStocksAsync(CancellationToken ct = default)
         {
             var balances = await _balances.GetAllAsync(ct);
@@ -89,21 +99,25 @@ namespace TradeSystem.Application.Services
                 .ToDictionary(g => g.Key, g => g.Sum(b => b.Quantity));
         }
 
+        // Остатки товара по полкам.
         public async Task<IReadOnlyList<StockBalanceDto>> GetBalancesByProductAsync(Guid productId, CancellationToken ct = default)
         {
             var balances = (await _balances.GetAllAsync(ct)).Where(b => b.ProductId == productId).ToList();
             return await BuildBalanceDtosAsync(balances, ct);
         }
 
+        // Остатки на полке.
         public async Task<IReadOnlyList<StockBalanceDto>> GetBalancesByShelfAsync(Guid shelfId, CancellationToken ct = default)
         {
             var balances = (await _balances.GetAllAsync(ct)).Where(b => b.ShelfId == shelfId).ToList();
             return await BuildBalanceDtosAsync(balances, ct);
         }
 
+        // Сырые остатки для подсчётов.
         public async Task<IReadOnlyList<StockBalance>> GetAllBalancesRawAsync(CancellationToken ct = default)
             => await _balances.GetAllAsync(ct);
 
+        // Удаляет нулевой остаток.
         public async Task RemoveZeroBalanceAsync(Guid balanceId, CancellationToken ct = default)
         {
             var b = await _balances.GetByIdAsync(balanceId, ct);
@@ -113,6 +127,7 @@ namespace TradeSystem.Application.Services
             await _balances.DeleteAsync(balanceId, ct);
         }
 
+            // Приход на полку: увеличивает остаток и пишет движение.
             public async Task ReceiveAsync(
                 Guid productId, Guid shelfId, int quantity,
                 StockMovementType type, DocumentType sourceType,
@@ -139,6 +154,7 @@ namespace TradeSystem.Application.Services
             await WriteMovementAsync(productId, shelfId, +quantity, type, sourceType, sourceId, sourceLineId, comment, ct);
         }
 
+        // Расход с полки: уменьшает остаток и пишет движение.
         public async Task ShipAsync(
             Guid productId, Guid shelfId, int quantity,
             StockMovementType type, DocumentType sourceType,
@@ -162,6 +178,7 @@ namespace TradeSystem.Application.Services
             await WriteMovementAsync(productId, shelfId, -quantity, type, sourceType, sourceId, sourceLineId, comment, ct);
         }
 
+        // Дефицит: товары, у которых остаток ниже минимума.
         public async Task<IReadOnlyList<LowStockProductDto>> GetLowStockProductsAsync(CancellationToken ct = default)
         {
             var products = (await _products.GetAllAsync(ct)).Where(p => p.IsActive && p.MinimumStockQuantity > 0).ToList();
@@ -192,6 +209,7 @@ namespace TradeSystem.Application.Services
             return result.OrderBy(x => x.ProductName, StringComparer.CurrentCultureIgnoreCase).ToList();
         }
 
+        // Проверяет существование товара и полки.
         private async Task EnsureProductAndShelfAsync(Guid productId, Guid shelfId, CancellationToken ct)
         {
             if (await _products.GetByIdAsync(productId, ct) is null)
@@ -200,6 +218,7 @@ namespace TradeSystem.Application.Services
                 throw new BusinessException("Полка не найдена.");
         }
 
+        // Пишет движение товара.
         private async Task WriteMovementAsync(
             Guid productId, Guid shelfId, int delta,
             StockMovementType type, DocumentType sourceType,
@@ -221,6 +240,7 @@ namespace TradeSystem.Application.Services
             await _movements.AddAsync(movement, ct);
         }
 
+        // Подставляет названия товара и полки в остатки.
         private async Task<IReadOnlyList<StockBalanceDto>> BuildBalanceDtosAsync(List<StockBalance> balances, CancellationToken ct)
         {
             if (balances.Count == 0) return Array.Empty<StockBalanceDto>();

@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TradeSystem.UnitTests.Tests;
 
-/// <summary>Проверки начальных значений доменных сущностей.</summary>
+// Проверки начальных значений доменных сущностей.
 [TestClass]
 public sealed class DomainTests
 {

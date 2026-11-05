@@ -11,29 +11,30 @@ using TradeSystem.UnitTests.Fakes;
 
 namespace TradeSystem.UnitTests;
 
-/// <summary>Собирает сервисы с репозиториями в памяти, чтобы тесты не трогали файлы.</summary>
+// Сервисы с репозиториями в памяти для изоляции тестов.
 public sealed class TestContext
 {
-    public InMemorySupplierRepository Suppliers { get; } = new();
-    public InMemoryProductRepository Products { get; } = new();
-    public InMemoryShelfRepository Shelves { get; } = new();
-    public InMemorySupplierProductRepository Links { get; } = new();
-    public InMemoryStockBalanceRepository Balances { get; } = new();
-    public InMemoryPurchaseOrderRepository Orders { get; } = new();
-    public InMemoryInvoiceRepository Invoices { get; } = new();
-    public InMemoryGoodsReceiptRepository Receipts { get; } = new();
-    public InMemorySaleRepository Sales { get; } = new();
-    public InMemoryStockMovementRepository Movements { get; } = new();
+    public InMemorySupplierRepository Suppliers { get; } = new(); // Поставщики
+    public InMemoryProductRepository Products { get; } = new(); // Товары
+    public InMemoryShelfRepository Shelves { get; } = new(); // Полки
+    public InMemorySupplierProductRepository Links { get; } = new(); // Связи товара и поставщика
+    public InMemoryStockBalanceRepository Balances { get; } = new(); // Остатки
+    public InMemoryPurchaseOrderRepository Orders { get; } = new(); // Заказы
+    public InMemoryInvoiceRepository Invoices { get; } = new(); // Счета
+    public InMemoryGoodsReceiptRepository Receipts { get; } = new(); // Поступления
+    public InMemorySaleRepository Sales { get; } = new(); // Продажи
+    public InMemoryStockMovementRepository Movements { get; } = new(); // Движения
 
-    public DtoMapper Mapper { get; }
-    public StockService Stock { get; }
-    public CatalogService Catalog { get; }
-    public PurchaseOrderService OrderService { get; }
-    public InvoiceService InvoiceService { get; }
-    public GoodsReceiptService ReceiptService { get; }
-    public SaleService SaleService { get; }
-    public ReportService ReportService { get; }
+    public DtoMapper Mapper { get; } // Преобразователь в DTO
+    public StockService Stock { get; } // Складской сервис
+    public CatalogService Catalog { get; } // Сервис справочников
+    public PurchaseOrderService OrderService { get; } // Сервис заказов
+    public InvoiceService InvoiceService { get; } // Сервис счетов
+    public GoodsReceiptService ReceiptService { get; } // Сервис поступлений
+    public SaleService SaleService { get; } // Сервис продаж
+    public ReportService ReportService { get; } // Сервис отчётов
 
+    // Собирает граф сервисов на репозиториях в памяти.
     public TestContext()
     {
         var configuration = new MapperConfiguration(
@@ -52,6 +53,7 @@ public sealed class TestContext
         ReportService = new ReportService(Products, Shelves, Suppliers, Links, Stock, Mapper);
     }
 
+    // Добавляет товар в репозиторий.
     public Product AddProduct(string name = "Морковь", int min = 0, int? target = null,
         bool active = true, MeasurementUnit unit = MeasurementUnit.Kilogram)
     {
@@ -66,17 +68,20 @@ public sealed class TestContext
         });
     }
 
+    // Добавляет поставщика.
     public Supplier AddSupplier(string name = "ООО Ромашка", string phone = "+7 383 000-00-00",
         bool active = true)
     {
         return Suppliers.Seed(new Supplier { Name = name, Phone = phone, IsActive = active });
     }
 
+    // Добавляет полку.
     public Shelf AddShelf(string code = "A-1", string name = "Полка A-1", bool active = true)
     {
         return Shelves.Seed(new Shelf { Code = code, Name = name, IsActive = active });
     }
 
+    // Добавляет связь товара и поставщика.
     public SupplierProduct AddLink(Guid productId, Guid supplierId, decimal? price = 100m,
         int? min = null, int? multiple = null, bool preferred = false, bool active = true,
         int? leadTime = null)
@@ -94,6 +99,7 @@ public sealed class TestContext
         });
     }
 
+    // Добавляет остаток на полку.
     public StockBalance AddBalance(Guid productId, Guid shelfId, int quantity)
     {
         return Balances.Seed(new StockBalance
@@ -104,6 +110,7 @@ public sealed class TestContext
         });
     }
 
+    // Добавляет заказ.
     public PurchaseOrder AddOrder(Guid supplierId, PurchaseOrderStatus status = PurchaseOrderStatus.Draft)
     {
         return Orders.Seed(new PurchaseOrder
@@ -114,6 +121,7 @@ public sealed class TestContext
         });
     }
 
+    // Добавляет позицию в заказ и пересчитывает сумму.
     public PurchaseOrderLine AddOrderLine(PurchaseOrder order, Product product, int quantity,
         int received = 0, decimal price = 100m)
     {

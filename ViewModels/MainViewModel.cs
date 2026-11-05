@@ -17,29 +17,31 @@ using TradeSystem.App.ViewModels.Suppliers;
 
 namespace TradeSystem.App.ViewModels;
 
+// Главная ViewModel: навигация между разделами и общие команды.
 public partial class MainViewModel : ViewModelBase
 {
-    private readonly ProductsListViewModel _productsList;
-    private readonly ProductEditViewModel _productEdit;
-    private readonly SuppliersListViewModel _suppliersList;
-    private readonly SupplierEditViewModel _supplierEdit;
-    private readonly ShelvesListViewModel _shelvesList;
-    private readonly ShelfEditViewModel _shelfEdit;
-    private readonly SupplierProductsListViewModel _supplierProductsList;
-    private readonly SupplierProductEditViewModel _supplierProductEdit;
-    private readonly OrdersListViewModel _ordersList;
-    private readonly OrderAutoPreviewViewModel _autoPreview;
-    private readonly OrderManualEditViewModel _manualEdit;
-    private readonly InvoiceListViewModel _invoiceList;
-    private readonly ReceiptsListViewModel _receiptsList;
-    private readonly ReceiptEditViewModel _receiptEdit;
-    private readonly SalesListViewModel _salesList;
-    private readonly SaleEditViewModel _saleEdit;
-    private readonly ReportsViewModel _reports;
+    private readonly ProductsListViewModel _productsList; // Список товаров
+    private readonly ProductEditViewModel _productEdit; // Редактор товара
+    private readonly SuppliersListViewModel _suppliersList; // Список поставщиков
+    private readonly SupplierEditViewModel _supplierEdit; // Редактор поставщика
+    private readonly ShelvesListViewModel _shelvesList; // Список полок
+    private readonly ShelfEditViewModel _shelfEdit; // Редактор полки
+    private readonly SupplierProductsListViewModel _supplierProductsList; // Список связей товара и поставщика
+    private readonly SupplierProductEditViewModel _supplierProductEdit; // Редактор связи
+    private readonly OrdersListViewModel _ordersList; // Список заказов
+    private readonly OrderAutoPreviewViewModel _autoPreview; // Предпросмотр автоформирования заказов
+    private readonly OrderManualEditViewModel _manualEdit; // Ручное создание заказа
+    private readonly InvoiceListViewModel _invoiceList; // Счета заказа
+    private readonly ReceiptsListViewModel _receiptsList; // Список поступлений
+    private readonly ReceiptEditViewModel _receiptEdit; // Редактор поступления
+    private readonly SalesListViewModel _salesList; // Список продаж
+    private readonly SaleEditViewModel _saleEdit; // Редактор продажи
+    private readonly ReportsViewModel _reports; // Отчёты
 
     [ObservableProperty]
-    private object? _currentViewModel;
+    private object? _currentViewModel; // Текущий отображаемый экран
 
+    // Подписывается на события навигации и связывает экраны.
     public MainViewModel(
         ProductsListViewModel productsList, ProductEditViewModel productEdit,
         SuppliersListViewModel suppliersList, SupplierEditViewModel supplierEdit,
@@ -94,8 +96,10 @@ public partial class MainViewModel : ViewModelBase
         _currentViewModel = _productsList;
     }
 
+    // Запускает начальный экран.
     public Task StartAsync() => ActivateAsync(CurrentViewModel);
 
+    // Команды меню для перехода между разделами.
     [RelayCommand] private Task ProductsAsync() => NavigateToAsync(_productsList);
     [RelayCommand] private Task SuppliersAsync() => NavigateToAsync(_suppliersList);
     [RelayCommand] private Task ShelvesAsync() => NavigateToAsync(_shelvesList);
@@ -105,22 +109,27 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand] private Task SalesAsync() => NavigateToAsync(_salesList);
     [RelayCommand] private Task ReportsAsync() => NavigateToAsync(_reports);
 
+    // Заглушка для разделов в разработке.
     [RelayCommand]
     private void Feature(string? name) =>
         Dialog.ShowInfo($"Раздел «{name}» в разработке", "В разработке");
 
+    // Переключает экран и активирует его.
     private async Task NavigateToAsync(object page) { CurrentViewModel = page; await ActivateAsync(page); }
 
+    // Возврат к списку после закрытия редактора.
     private async Task ReturnToOrdersAsync() { CurrentViewModel = _ordersList; await _ordersList.OnActivatedAsync(); }
     private async Task ReturnToReceiptsAsync() { CurrentViewModel = _receiptsList; await _receiptsList.OnActivatedAsync(); }
     private async Task ReturnToSalesAsync() { CurrentViewModel = _salesList; await _salesList.OnActivatedAsync(); }
 
+    // Открывает редактор и загружает в него данные.
     private async Task OpenAutoPreviewAsync() { await _autoPreview.LoadAsync(); CurrentViewModel = _autoPreview; }
     private async Task OpenManualAsync() { await _manualEdit.LoadAsync(); CurrentViewModel = _manualEdit; }
     private async Task OpenInvoicesAsync(Guid orderId) { await _invoiceList.LoadAsync(orderId); CurrentViewModel = _invoiceList; }
     private async Task OpenReceiptEditorAsync() { await _receiptEdit.LoadAsync(); CurrentViewModel = _receiptEdit; }
     private async Task OpenSaleEditorAsync() { await _saleEdit.LoadAsync(); CurrentViewModel = _saleEdit; }
 
+    // Вызывает активацию, если экран её поддерживает.
     private static async Task ActivateAsync(object? vm)
     {
         if (vm is IActivatable a) await a.OnActivatedAsync();

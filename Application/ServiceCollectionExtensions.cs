@@ -10,8 +10,10 @@ using TradeSystem.Application.Services;
 
 namespace TradeSystem.Application;
 
+// Регистрация сервисов прикладного слоя в DI.
 public static class ServiceCollectionExtensions
 {
+    // Добавляет AutoMapper, DtoMapper и сервисы приложения.
     public static IServiceCollection AddTradeSystemApplication(this IServiceCollection services)
     {
         ArgumentNullException.ThrowIfNull(services);

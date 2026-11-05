@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TradeSystem.UnitTests.Tests;
 
-/// <summary>Проверки складских операций: приход, расход, остатки, дефицит.</summary>
+// Проверки складских операций: приход, расход, остатки, дефицит.
 [TestClass]
 public sealed class StockServiceTests
 {
@@ -206,6 +206,7 @@ public sealed class StockServiceTests
 
         Check.Equal("Морковь", balances.Single().ProductName);
     }
+// Ожидаем: нулевой остаток удаляется.
 
     [TestMethod]
     public async Task RemoveZeroBalance_RemovesRecord()
@@ -219,6 +220,7 @@ public sealed class StockServiceTests
 
         Check.Equal(0, context.Balances.Items.Count);
     }
+// Ожидаем: исключение для ненулевого остатка.
 
     [TestMethod]
     public async Task RemoveZeroBalance_NonZero_Throws()

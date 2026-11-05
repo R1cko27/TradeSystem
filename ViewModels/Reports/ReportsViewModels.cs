@@ -13,32 +13,32 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace TradeSystem.App.ViewModels.Reports;
 
+// Экран отчётов: выбор вида, предпросмотр, печать и экспорт.
 public partial class ReportsViewModel : ViewModelBase, IActivatable
 {
-    private readonly IReportService _reports;
-    private readonly ICatalogService _catalog;
-    private readonly IDocumentOutputService _output;
+    private readonly IReportService _reports; // Сервис отчётов
+    private readonly ICatalogService _catalog; // Сервис справочников
+    private readonly IDocumentOutputService _output; // Сервис печати и сохранения
 
-    // Сформированный документ для печати/экспорта. Не биндится — обычное поле.
-    private ReportDocument? _document;
+    private ReportDocument? _document; // Сформированный документ (обычное поле, не биндится)
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsSupplierReport))]
-    private ReportKind _selectedKind = ReportKind.AllProducts;
+    private ReportKind _selectedKind = ReportKind.AllProducts; // Выбранный вид отчёта
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(GenerateCommand))]
-    private Guid _selectedSupplierId;
+    private Guid _selectedSupplierId; // Поставщик для отчёта
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(PrintCommand))]
     [NotifyCanExecuteChangedFor(nameof(SaveTextCommand))]
     [NotifyCanExecuteChangedFor(nameof(SaveCsvCommand))]
-    private string _previewText = string.Empty;
+    private string _previewText = string.Empty; // Текст предпросмотра
 
-    [ObservableProperty] private IReadOnlyList<SupplierDto> _suppliers = Array.Empty<SupplierDto>();
+    [ObservableProperty] private IReadOnlyList<SupplierDto> _suppliers = Array.Empty<SupplierDto>(); // Поставщики для выбора
 
-    public IReadOnlyList<ReportKindOption> AvailableKinds { get; } = new[]
+    public IReadOnlyList<ReportKindOption> AvailableKinds { get; } = new[] // Виды отчётов для ComboBox
     {
         new ReportKindOption(ReportKind.AllProducts, "Список всех товаров"),
         new ReportKindOption(ReportKind.Available, "Товары в наличии"),
@@ -46,9 +46,9 @@ public partial class ReportsViewModel : ViewModelBase, IActivatable
         new ReportKindOption(ReportKind.SupplierProducts, "Товары данного поставщика")
     };
 
-    /// <summary>ComboBox поставщика виден только для отчёта по поставщику.</summary>
-    public bool IsSupplierReport => SelectedKind == ReportKind.SupplierProducts;
+    public bool IsSupplierReport => SelectedKind == ReportKind.SupplierProducts; // Выбор поставщика виден только для отчёта по поставщику
 
+    // Сохраняет сервисы отчётов, справочников и вывода.
     public ReportsViewModel(
         IReportService reports,
         ICatalogService catalog,
@@ -73,11 +73,13 @@ public partial class ReportsViewModel : ViewModelBase, IActivatable
     }
 
     [RelayCommand(CanExecute = nameof(CanGenerate))]
+    // Формирует выбранный отчёт.
     private Task GenerateAsync() => RunAsync(GenerateImplementationAsync);
 
-    private bool CanGenerate =>
+    private bool CanGenerate => // Для отчёта по поставщику нужен выбранный поставщик
         SelectedKind != ReportKind.SupplierProducts || SelectedSupplierId != Guid.Empty;
 
+    // Строит документ в зависимости от вида отчёта.
     private async Task GenerateImplementationAsync()
     {
         ReportDocument doc = SelectedKind switch
@@ -94,11 +96,13 @@ public partial class ReportsViewModel : ViewModelBase, IActivatable
         PreviewText = doc.ToPlainText();
     }
 
+    // Название выбранного поставщика.
     private string SupplierName() =>
         Suppliers.FirstOrDefault(s => s.Id == SelectedSupplierId)?.Name ?? "—";
 
     [RelayCommand(CanExecute = nameof(HasDocument))]
-    private void Print() // Отправить документ на печать
+    // Отправляет документ на печать.
+    private void Print()
     {
         if (_document is null) return;
 
@@ -109,11 +113,14 @@ public partial class ReportsViewModel : ViewModelBase, IActivatable
     }
 
     [RelayCommand(CanExecute = nameof(HasDocument))]
+    // Сохраняет отчёт текстом.
     private void SaveText() => Save(_document!.ToPlainText(), ".txt", "Текстовый файл|*.txt");
 
     [RelayCommand(CanExecute = nameof(HasDocument))]
+    // Сохраняет отчёт в CSV.
     private void SaveCsv() => Save(_document!.ToCsv(), ".csv", "CSV (разделитель ;) |*.csv");
 
+    // Сохраняет содержимое через диалог, делая имя файла безопасным.
     private void Save(string content, string extension, string filter)
     {
         if (_document is null) return;
@@ -127,7 +134,7 @@ public partial class ReportsViewModel : ViewModelBase, IActivatable
             Dialog.ShowWarning("Сохранение отменено или недоступно.", "Экспорт");
     }
 
-    private bool HasDocument => _document is not null;
+    private bool HasDocument => _document is not null; // Есть ли документ для печати и экспорта
 
     // Смена вида отчёта сбрасывает документ и пересчитывает доступность команд.
     partial void OnSelectedKindChanged(ReportKind value)
@@ -137,14 +144,14 @@ public partial class ReportsViewModel : ViewModelBase, IActivatable
     }
 }
 
-/// <summary>Четыре справочных списка из задания 38.</summary>
+// Виды справочных отчётов.
 public enum ReportKind
 {
-    AllProducts = 0,
-    Available = 1,
-    ToReplenish = 2,
+    AllProducts = 0, // Все товары
+    Available = 1, // Товары в наличии
+    ToReplenish = 2, // Товары к пополнению
     SupplierProducts = 3 // Товары поставщика
 }
 
-/// <summary>Пара «значение + метка» для привязки к ComboBox (без x:Static в XAML).</summary>
+// Пара «значение + подпись» для ComboBox.
 public sealed record ReportKindOption(ReportKind Value, string Label);

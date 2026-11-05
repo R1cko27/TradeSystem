@@ -10,10 +10,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TradeSystem.UnitTests.Tests;
 
-/// <summary>Проверки преобразования сущностей в DTO и форматирования адреса.</summary>
+// Проверки преобразования сущностей в DTO и форматирования адреса.
 [TestClass]
 public sealed class MapperTests
 {
+    // Адрес со всеми заполненными полями.
     private static Address FullAddress() => new()
     {
         Country = "Россия",
@@ -33,12 +34,14 @@ public sealed class MapperTests
 
         Check.Equal("Россия, Новосибирская область, Новосибирск, ул. Ленина, д. 10, кв. 5, 630000", text);
     }
+// Ожидаем: null даёт пустую строку.
 
     [TestMethod]
     public void Format_NullAddress_ReturnsEmpty()
     {
         Check.Equal(string.Empty, DtoMapper.Format(null!));
     }
+// Ожидаем: пустой адрес даёт пустую строку.
 
     [TestMethod]
     public void Format_EmptyAddress_ReturnsEmpty()

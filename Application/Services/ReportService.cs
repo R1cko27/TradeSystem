@@ -15,16 +15,16 @@ namespace TradeSystem.Application.Contracts.Services
 {
     public interface IReportService
     {
-        /// <summary>Список всех товаров.</summary>
+        // Список всех активных товаров.
         Task<IReadOnlyList<ProductDto>> GetAllProductsReportAsync(CancellationToken ct = default);
 
-        /// <summary>Товары, имеющиеся в наличии (остаток &gt; 0).</summary>
+        // Товары с положительным остатком.
         Task<IReadOnlyList<ProductDto>> GetAvailableProductsReportAsync(CancellationToken ct = default);
 
-        /// <summary>Товары, количество которых необходимо пополнить.</summary>
+        // Товары, которым нужно пополнение.
         Task<IReadOnlyList<LowStockProductDto>> GetToReplenishReportAsync(CancellationToken ct = default);
 
-        /// <summary>Товары, поставляемые данным поставщиком.</summary>
+        // Товары, поставляемые выбранным поставщиком.
         Task<IReadOnlyList<SupplierProductDto>> GetSupplierProductsReportAsync(Guid supplierId, CancellationToken ct = default);
     }
 }
@@ -33,12 +33,12 @@ namespace TradeSystem.Application.Services
 {
     public sealed class ReportService : IReportService
     {
-        private readonly DtoMapper _mapper;
-        private readonly IProductRepository _products;
-        private readonly IShelfRepository _shelves;
-        private readonly ISupplierRepository _suppliers;
-        private readonly ISupplierProductRepository _supplierProducts;
-        private readonly IStockService _stock;
+        private readonly DtoMapper _mapper; // Преобразование в DTO
+        private readonly IProductRepository _products; // Репозиторий товаров
+        private readonly IShelfRepository _shelves; // Репозиторий полок
+        private readonly ISupplierRepository _suppliers; // Репозиторий поставщиков
+        private readonly ISupplierProductRepository _supplierProducts; // Репозиторий связей товара и поставщика
+        private readonly IStockService _stock; // Складской сервис
 
         public ReportService(
             IProductRepository products,
@@ -56,12 +56,14 @@ namespace TradeSystem.Application.Services
                     _mapper = mapper;
         }
 
+        // Все активные товары с расчётными полями.
         public async Task<IReadOnlyList<ProductDto>> GetAllProductsReportAsync(CancellationToken ct = default)
         {
             var products = (await _products.GetAllAsync(ct)).Where(p => p.IsActive).ToList();
             return await BuildAsync(products, ct);
         }
 
+        // Товары с положительным остатком и полками хранения.
         public async Task<IReadOnlyList<ProductDto>> GetAvailableProductsReportAsync(CancellationToken ct = default)
         {
             var products = (await _products.GetAllAsync(ct)).Where(p => p.IsActive).ToList();
@@ -84,9 +86,11 @@ namespace TradeSystem.Application.Services
                 .ToList();
         }
 
+        // Дефицит через складской сервис.
         public Task<IReadOnlyList<LowStockProductDto>> GetToReplenishReportAsync(CancellationToken ct = default)
             => _stock.GetLowStockProductsAsync(ct);
 
+        // Активные связи выбранного поставщика.
         public async Task<IReadOnlyList<SupplierProductDto>> GetSupplierProductsReportAsync(Guid supplierId, CancellationToken ct = default)
         {
             var links = (await _supplierProducts.GetAllAsync(ct))
@@ -102,6 +106,7 @@ namespace TradeSystem.Application.Services
                 .ToList();
         }
 
+        // Подставляет остатки, число поставщиков и полку по умолчанию.
         private async Task<IReadOnlyList<ProductDto>> BuildAsync(List<Product> products, CancellationToken ct)
         {
             if (products.Count == 0) return Array.Empty<ProductDto>();

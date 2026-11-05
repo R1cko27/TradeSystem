@@ -11,10 +11,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TradeSystem.UnitTests.Tests;
 
-/// <summary>Проверки поступлений товара: черновик, проведение, влияние на склад и заказ.</summary>
+// Проверки поступлений товара: черновик, проведение, влияние на склад и заказ.
 [TestClass]
 public sealed class ReceiptServiceTests
 {
+    // Готовит входные данные поступления.
     private static GoodsReceiptInput Receipt(Guid supplierId, Guid productId, Guid shelfId,
         int quantity = 5, Guid? orderLineId = null, Guid? orderId = null)
         => new()
@@ -45,6 +46,7 @@ public sealed class ReceiptServiceTests
             () => context.ReceiptService.CreateDraftAsync(Receipt(Guid.Empty, product.Id, shelf.Id)),
             "Не выбран поставщик");
     }
+// Ожидаем: исключение об отсутствии позиций.
 
     [TestMethod]
     public async Task CreateDraft_WithoutLines_Throws()
@@ -70,6 +72,7 @@ public sealed class ReceiptServiceTests
             () => context.ReceiptService.CreateDraftAsync(Receipt(Guid.NewGuid(), product.Id, shelf.Id)),
             "Поставщик не найден");
     }
+// Ожидаем: исключение о количестве.
 
     [TestMethod]
     public async Task CreateDraft_ZeroQuantity_Throws()
@@ -96,6 +99,7 @@ public sealed class ReceiptServiceTests
             () => context.ReceiptService.CreateDraftAsync(Receipt(supplier.Id, Guid.NewGuid(), shelf.Id)),
             "Товар не найден");
     }
+// Ожидаем: исключение «Полка не найдена».
 
     [TestMethod]
     public async Task CreateDraft_UnknownShelf_Throws()
@@ -142,6 +146,7 @@ public sealed class ReceiptServiceTests
         Check.Equal(6, context.Balances.Items.Single().Quantity);
         Check.Equal(6, context.Movements.Items.Single().QuantityDelta);
     }
+// Ожидаем: исключение для не-черновика.
 
     [TestMethod]
     public async Task Post_NonDraft_Throws()
@@ -196,6 +201,7 @@ public sealed class ReceiptServiceTests
         Check.True(order.Lines[0].IsClosed, "позиция должна быть закрыта");
         Check.Equal(PurchaseOrderStatus.Received, order.Status);
     }
+// Ожидаем: проведённое поступление нельзя удалить.
 
     [TestMethod]
     public async Task DeleteDraft_Posted_Throws()

@@ -14,23 +14,24 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace TradeSystem.App.ViewModels.Suppliers;
 
+// Список поставщиков с поиском и фильтром активности.
 public partial class SuppliersListViewModel : ViewModelBase, IActivatable
 {
-    private readonly ICatalogService _catalog;
-    private IReadOnlyList<SupplierDto> _all = Array.Empty<SupplierDto>();
+    private readonly ICatalogService _catalog; // Сервис справочников
+    private IReadOnlyList<SupplierDto> _all = Array.Empty<SupplierDto>(); // Полный список до фильтрации
 
-    public ObservableCollection<SupplierDto> Items { get; } = new();
+    public ObservableCollection<SupplierDto> Items { get; } = new(); // Отображаемые поставщики
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(EditCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteCommand))]
-    private SupplierDto? _selectedItem;
+    private SupplierDto? _selectedItem; // Выбранный поставщик
     
-    [ObservableProperty] private string _searchText = string.Empty;
-    [ObservableProperty] private bool _showInactive;
+    [ObservableProperty] private string _searchText = string.Empty; // Строка поиска
+    [ObservableProperty] private bool _showInactive; // Показывать неактивных
 
-    public event Action? AddRequested;
-    public event Action<Guid?>? EditRequested;
+    public event Action? AddRequested; // Запрос на добавление
+    public event Action<Guid?>? EditRequested; // Запрос на редактирование
 
     public SuppliersListViewModel(ICatalogService catalog, IDialogService dialog)
         : base(dialog)
@@ -53,6 +54,7 @@ public partial class SuppliersListViewModel : ViewModelBase, IActivatable
             EditRequested?.Invoke(SelectedItem.Id);
     }
 
+    // Удаляет выбранного поставщика после подтверждения.
     [RelayCommand(CanExecute = nameof(HasSelection))]
     private Task DeleteAsync()
     {
@@ -70,20 +72,21 @@ public partial class SuppliersListViewModel : ViewModelBase, IActivatable
         });
     }
 
-    private bool HasSelection => SelectedItem is not null;
+    private bool HasSelection => SelectedItem is not null; // Есть ли выбранная строка
 
     // Поиск фильтрует локально; переключатель активности перечитывает из сервиса.
     partial void OnSearchTextChanged(string value) => ApplyFilter();
     partial void OnShowInactiveChanged(bool value) => _ = RunAsync(LoadCoreAsync);
 
-    /// <summary>Загрузка без RunAsync: вызывается из мест, где RunAsync уже активен.</summary>
-    private async Task LoadCoreAsync() // Загрузить поставщиков и применить фильтр
+    // Загружает поставщиков без RunAsync: вызывается из уже активного RunAsync.
+    private async Task LoadCoreAsync()
     {
         _all = await _catalog.GetSuppliersAsync(ShowInactive);
         ApplyFilter();
     }
 
-    private void ApplyFilter() // Применить фильтр поиска
+    // Фильтрует по названию, телефону и налоговому номеру.
+    private void ApplyFilter()
     {
         IEnumerable<SupplierDto> query = _all;
 
@@ -103,28 +106,29 @@ public partial class SuppliersListViewModel : ViewModelBase, IActivatable
         !string.IsNullOrEmpty(source) && source.Contains(value, StringComparison.CurrentCultureIgnoreCase);
 }
 
+// Создание и редактирование поставщика.
 public partial class SupplierEditViewModel : ViewModelBase
 {
-    private readonly ICatalogService _catalog;
-    private Guid? _supplierId;
+    private readonly ICatalogService _catalog; // Сервис справочников
+    private Guid? _supplierId; // Id редактируемого поставщика (null — новый)
 
-    [ObservableProperty] private bool _isNew = true;
-    [ObservableProperty] private string _name = string.Empty;
-    [ObservableProperty] private string? _taxId;
-    [ObservableProperty] private string _phone = string.Empty;
-    [ObservableProperty] private string? _email;
-    [ObservableProperty] private bool _isActive = true;
-    [ObservableProperty] private string? _note;
+    [ObservableProperty] private bool _isNew = true; // Признак новой записи
+    [ObservableProperty] private string _name = string.Empty; // Наименование
+    [ObservableProperty] private string? _taxId; // Налоговый номер
+    [ObservableProperty] private string _phone = string.Empty; // Телефон
+    [ObservableProperty] private string? _email; // Электронная почта
+    [ObservableProperty] private bool _isActive = true; // Признак активности
+    [ObservableProperty] private string? _note; // Примечание
 
-    [ObservableProperty] private string? _country;
-    [ObservableProperty] private string? _region;
-    [ObservableProperty] private string? _city;
-    [ObservableProperty] private string? _street;
-    [ObservableProperty] private string? _building;
-    [ObservableProperty] private string? _apartment;
-    [ObservableProperty] private string? _postalCode;
+    [ObservableProperty] private string? _country; // Страна
+    [ObservableProperty] private string? _region; // Регион/область
+    [ObservableProperty] private string? _city; // Город
+    [ObservableProperty] private string? _street; // Улица
+    [ObservableProperty] private string? _building; // Дом
+    [ObservableProperty] private string? _apartment; // Квартира/офис
+    [ObservableProperty] private string? _postalCode; // Почтовый индекс
 
-    public event Action? CloseRequested;
+    public event Action? CloseRequested; // Запрос на закрытие
 
     public SupplierEditViewModel(ICatalogService catalog, IDialogService dialog)
         : base(dialog)
@@ -132,6 +136,7 @@ public partial class SupplierEditViewModel : ViewModelBase
         _catalog = catalog;
     }
 
+    // Загружает форму; id == null — новый поставщик.
     public async Task LoadAsync(Guid? id)
     {
         await RunAsync(async () =>
@@ -175,6 +180,7 @@ public partial class SupplierEditViewModel : ViewModelBase
     [RelayCommand]
     private void Cancel() => CloseRequested?.Invoke();
 
+    // Проверяет поля и сохраняет поставщика с адресом.
     private async Task SaveImplementationAsync()
     {
         var errors = Validate();
@@ -213,6 +219,7 @@ public partial class SupplierEditViewModel : ViewModelBase
         CloseRequested?.Invoke();
     }
 
+    // Проверяет обязательные поля.
     private List<string> Validate()
     {
         var errors = new List<string>();
@@ -223,6 +230,7 @@ public partial class SupplierEditViewModel : ViewModelBase
         return errors;
     }
 
+    // Очищает форму.
     private void ResetForm()
     {
         Name = string.Empty;
@@ -234,6 +242,7 @@ public partial class SupplierEditViewModel : ViewModelBase
         Country = Region = City = Street = Building = Apartment = PostalCode = null;
     }
 
+    // Обрезает строку; пустая превращается в null.
     private static string? TrimOrNull(string? value)
     {
         if (string.IsNullOrWhiteSpace(value)) return null;

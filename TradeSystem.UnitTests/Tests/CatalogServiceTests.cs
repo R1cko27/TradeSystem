@@ -11,17 +11,20 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TradeSystem.UnitTests.Tests;
 
-/// <summary>Проверки справочников: валидация, фильтрация и запреты удаления.</summary>
+// Проверки справочников: валидация, фильтрация и запреты удаления.
 [TestClass]
 public sealed class CatalogServiceTests
 {
+    // Готовит входные данные поставщика.
     private static SupplierInput Supplier(string name = "ООО Ромашка", string phone = "+7 383 111-22-33")
         => new() { Name = name, Phone = phone };
 
+    // Готовит входные данные товара.
     private static ProductInput Product(string name = "Морковь", int min = 0, int? target = null,
         MeasurementUnit unit = MeasurementUnit.Kilogram)
         => new() { Name = name, Article = "ART-1", Unit = unit, MinimumStockQuantity = min, TargetStockQuantity = target };
 
+    // Готовит входные данные полки.
     private static ShelfInput Shelf(string code = "A-1", string name = "Полка A-1")
         => new() { Code = code, Name = name };
 
@@ -127,6 +130,7 @@ public sealed class CatalogServiceTests
             () => context.Catalog.DeleteSupplierAsync(supplier.Id),
             "есть поступления");
     }
+// Ожидаем: поставщик без ссылок удаляется.
 
     [TestMethod]
     public async Task DeleteSupplier_WithoutReferences_Removes()
@@ -152,6 +156,7 @@ public sealed class CatalogServiceTests
         Check.Equal(1, items.Count);
         Check.Equal("Активный", items[0].Name);
     }
+// Ожидаем: с флагом возвращаются все поставщики.
 
     [TestMethod]
     public async Task GetSuppliers_IncludeInactive_ReturnsAll()
@@ -164,6 +169,7 @@ public sealed class CatalogServiceTests
 
         Check.Equal(2, items.Count);
     }
+// Ожидаем: исключение о наименовании товара.
 
     [TestMethod]
     public async Task CreateProduct_EmptyName_Throws()
@@ -209,6 +215,7 @@ public sealed class CatalogServiceTests
         Check.Equal("кг", dto.UnitLabel);
         Check.Equal(1, context.Products.Items.Count);
     }
+// Ожидаем: исключение о связях с поставщиками.
 
     [TestMethod]
     public async Task DeleteProduct_WithLinks_Throws()
@@ -222,6 +229,7 @@ public sealed class CatalogServiceTests
             () => context.Catalog.DeleteProductAsync(product.Id),
             "связи с поставщиками");
     }
+// Ожидаем: исключение о ненулевых остатках.
 
     [TestMethod]
     public async Task DeleteProduct_WithStock_Throws()
@@ -267,6 +275,7 @@ public sealed class CatalogServiceTests
             () => context.Catalog.DeleteProductAsync(product.Id),
             "движения товара");
     }
+// Ожидаем: товар без ссылок удаляется.
 
     [TestMethod]
     public async Task DeleteProduct_WithoutReferences_Removes()
@@ -278,6 +287,7 @@ public sealed class CatalogServiceTests
 
         Check.Equal(0, context.Products.Items.Count);
     }
+// Ожидаем: исключение о коде полки.
 
     [TestMethod]
     public async Task CreateShelf_EmptyCode_Throws()
@@ -288,6 +298,7 @@ public sealed class CatalogServiceTests
             () => context.Catalog.CreateShelfAsync(Shelf(code: "")),
             "Код полки");
     }
+// Ожидаем: исключение о названии полки.
 
     [TestMethod]
     public async Task CreateShelf_EmptyName_Throws()
@@ -298,6 +309,7 @@ public sealed class CatalogServiceTests
             () => context.Catalog.CreateShelfAsync(Shelf(name: " ")),
             "Название полки");
     }
+// Ожидаем: DTO с кодом, запись сохранена.
 
     [TestMethod]
     public async Task CreateShelf_Valid_ReturnsDto()

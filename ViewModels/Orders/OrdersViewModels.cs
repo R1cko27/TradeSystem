@@ -16,12 +16,13 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace TradeSystem.App.ViewModels.Orders;
 
+// Список заказов поставщикам с фильтрами.
 public partial class OrdersListViewModel : ViewModelBase, IActivatable
 {
-    private readonly IPurchaseOrderService _orders;
-    private IReadOnlyList<PurchaseOrderDto> _all = Array.Empty<PurchaseOrderDto>();
+    private readonly IPurchaseOrderService _orders; // Сервис заказов
+    private IReadOnlyList<PurchaseOrderDto> _all = Array.Empty<PurchaseOrderDto>(); // Полный список до фильтрации
 
-    public ObservableCollection<PurchaseOrderDto> Items { get; } = new();
+    public ObservableCollection<PurchaseOrderDto> Items { get; } = new(); // Отображаемые заказы
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ConfirmCommand))]
@@ -29,14 +30,14 @@ public partial class OrdersListViewModel : ViewModelBase, IActivatable
     [NotifyCanExecuteChangedFor(nameof(CloseCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteCommand))]
     [NotifyCanExecuteChangedFor(nameof(InvoicesCommand))]
-    private PurchaseOrderDto? _selectedOrder;
+    private PurchaseOrderDto? _selectedOrder; // Выбранный заказ
 
-    [ObservableProperty] private string _searchText = string.Empty;
-    [ObservableProperty] private bool _showCancelled;
+    [ObservableProperty] private string _searchText = string.Empty; // Строка поиска
+    [ObservableProperty] private bool _showCancelled; // Показывать отменённые
 
-    public event Action? AutoPreviewRequested;
-    public event Action? ManualCreateRequested;
-    public event Action<Guid>? InvoicesRequested;
+    public event Action? AutoPreviewRequested; // Запрос автоформирования
+    public event Action? ManualCreateRequested; // Запрос ручного создания
+    public event Action<Guid>? InvoicesRequested; // Запрос счетов заказа
 
     public OrdersListViewModel(IPurchaseOrderService orders, IDialogService dialog)
         : base(dialog)
@@ -68,6 +69,7 @@ public partial class OrdersListViewModel : ViewModelBase, IActivatable
         o => _orders.CloseOrderAsync(o.Id), "Закрытие заказа");
 
     [RelayCommand(CanExecute = nameof(CanDelete))]
+    // Удаляет черновик заказа после подтверждения.
     private Task DeleteAsync()
     {
         var target = SelectedOrder;
@@ -89,15 +91,16 @@ public partial class OrdersListViewModel : ViewModelBase, IActivatable
             InvoicesRequested?.Invoke(SelectedOrder.Id);
     }
 
-    private bool HasSelection => SelectedOrder is not null;
-    private bool CanConfirm => SelectedOrder?.Status == PurchaseOrderStatus.Draft;
+    private bool HasSelection => SelectedOrder is not null; // Есть ли выбранный заказ
+    private bool CanConfirm => SelectedOrder?.Status == PurchaseOrderStatus.Draft; // Подтвердить можно черновик
     private bool CanCancel => SelectedOrder?.Status == PurchaseOrderStatus.Draft; // Отмена допускается только для черновика
-    private bool CanClose => SelectedOrder?.Status == PurchaseOrderStatus.Received;
-    private bool CanDelete => SelectedOrder?.Status == PurchaseOrderStatus.Draft;
+    private bool CanClose => SelectedOrder?.Status == PurchaseOrderStatus.Received; // Закрыть можно полученный заказ
+    private bool CanDelete => SelectedOrder?.Status == PurchaseOrderStatus.Draft; // Удалить можно черновик
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
     partial void OnShowCancelledChanged(bool value) => ApplyFilter();
 
+    // Меняет статус после подтверждения и перечитывает список.
     private async Task GuardedStatusChangeAsync(Func<PurchaseOrderDto, Task> action, string title)
     {
         var target = SelectedOrder;
@@ -112,14 +115,15 @@ public partial class OrdersListViewModel : ViewModelBase, IActivatable
         });
     }
 
-    /// <summary>Загрузка без RunAsync: вызывается из мест, где RunAsync уже активен.</summary>
-    private async Task ReloadCoreAsync(Guid? keepSelectedId) // Загрузить заказы и применить фильтр
+    // Загружает заказы без RunAsync: вызывается из уже активного RunAsync.
+    private async Task ReloadCoreAsync(Guid? keepSelectedId)
     {
         _all = await _orders.GetOrdersAsync();
         ApplyFilter(keepSelectedId);
     }
 
-    private void ApplyFilter(Guid? keepSelectedId = null) // Применить фильтр поиска и отменённых
+    // Фильтрует по поиску и отменённым, сохраняя выбор.
+    private void ApplyFilter(Guid? keepSelectedId = null)
     {
         IEnumerable<PurchaseOrderDto> query = _all;
 
@@ -147,20 +151,21 @@ public partial class OrdersListViewModel : ViewModelBase, IActivatable
         !string.IsNullOrEmpty(source) && source.Contains(value, StringComparison.CurrentCultureIgnoreCase);
 }
 
+// Предпросмотр автоматического формирования заказов.
 public partial class OrderAutoPreviewViewModel : ViewModelBase
 {
-    private readonly IPurchaseOrderService _orders;
-    private readonly ICatalogService _catalog;
+    private readonly IPurchaseOrderService _orders; // Сервис заказов
+    private readonly ICatalogService _catalog; // Сервис справочников
 
-    private readonly HashSet<Guid> _additionalIds = new();
+    private readonly HashSet<Guid> _additionalIds = new(); // Дополнительно добавленные товары
 
-    [ObservableProperty] private IReadOnlyList<ProductDto> _allActiveProducts = Array.Empty<ProductDto>();
-    [ObservableProperty] private ProductDto? _productToAdd;
+    [ObservableProperty] private IReadOnlyList<ProductDto> _allActiveProducts = Array.Empty<ProductDto>(); // Активные товары для добавления
+    [ObservableProperty] private ProductDto? _productToAdd; // Выбранный товар для добавления
 
-    public ObservableCollection<PreviewRowViewModel> Rows { get; } = new();
-    public ObservableCollection<string> Warnings { get; } = new();
+    public ObservableCollection<PreviewRowViewModel> Rows { get; } = new(); // Строки плана
+    public ObservableCollection<string> Warnings { get; } = new(); // Предупреждения
 
-    public event Action? CloseRequested;
+    public event Action? CloseRequested; // Запрос на закрытие
 
     public OrderAutoPreviewViewModel(IPurchaseOrderService orders, ICatalogService catalog, IDialogService dialog)
         : base(dialog)
@@ -169,12 +174,10 @@ public partial class OrderAutoPreviewViewModel : ViewModelBase
         _catalog = catalog;
     }
 
+    // Загружает план.
     public Task LoadAsync() => RunAsync(ReloadCoreAsync);
 
-    /// <summary>
-    /// Перестроение плана. Не оборачивается в RunAsync: команды уже выполняются
-    /// внутри RunAsync, а вложенный вызов молча не сработал бы из-за флага IsBusy.
-    /// </summary>
+    // Перестраивает план без RunAsync: вызывается из уже активного RunAsync.
     private async Task ReloadCoreAsync()
     {
         AllActiveProducts = await _catalog.GetProductsAsync(includeInactive: false);
@@ -196,6 +199,7 @@ public partial class OrderAutoPreviewViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    // Добавляет товар сверх дефицита.
     private Task AddAdditionalAsync() => RunAsync(async () =>
     {
         if (ProductToAdd is null)
@@ -214,6 +218,7 @@ public partial class OrderAutoPreviewViewModel : ViewModelBase
     });
 
     [RelayCommand(CanExecute = nameof(CanRemoveAdditional))]
+    // Убирает последний добавленный товар.
     private Task RemoveAdditionalAsync() => RunAsync(async () =>
     {
         // Удаляем последний добавленный доп. товар (простое и предсказуемое поведение).
@@ -223,9 +228,10 @@ public partial class OrderAutoPreviewViewModel : ViewModelBase
         await ReloadCoreAsync();
     });
 
-    private bool CanRemoveAdditional => Rows.Any(r => r.IsAdditional);
+    private bool CanRemoveAdditional => Rows.Any(r => r.IsAdditional); // Есть дополнительные товары
 
     [RelayCommand]
+    // Создаёт заказы по плану и показывает итог.
     private Task ConfirmAsync() => RunAsync(async () =>
     {
         if (Rows.Count == 0)
@@ -250,6 +256,7 @@ public partial class OrderAutoPreviewViewModel : ViewModelBase
     [RelayCommand]
     private void Cancel() => CloseRequested?.Invoke();
 
+    // Собирает запрос: выбранные поставщики и дополнительные товары.
     private AutoOrderRequest BuildRequest()
     {
         var explicitChoice = new Dictionary<Guid, Guid>();
@@ -267,25 +274,26 @@ public partial class OrderAutoPreviewViewModel : ViewModelBase
     }
 }
 
+// Ручное создание заказа поставщику.
 public partial class OrderManualEditViewModel : ViewModelBase
 {
-    private readonly ICatalogService _catalog;
-    private readonly IPurchaseOrderService _orders;
+    private readonly ICatalogService _catalog; // Сервис справочников
+    private readonly IPurchaseOrderService _orders; // Сервис заказов
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(AddLineCommand))]
-    private Guid _supplierId;
+    private Guid _supplierId; // Выбранный поставщик
 
-    [ObservableProperty] private string _comment = string.Empty;
-    [ObservableProperty] private IReadOnlyList<SupplierDto> _suppliers = Array.Empty<SupplierDto>();
-    [ObservableProperty] private IReadOnlyList<SupplierProductDto> _availableProducts = Array.Empty<SupplierProductDto>();
-    [ObservableProperty] private ManualOrderLineViewModel? _selectedLine;
+    [ObservableProperty] private string _comment = string.Empty; // Комментарий
+    [ObservableProperty] private IReadOnlyList<SupplierDto> _suppliers = Array.Empty<SupplierDto>(); // Поставщики
+    [ObservableProperty] private IReadOnlyList<SupplierProductDto> _availableProducts = Array.Empty<SupplierProductDto>(); // Товары поставщика
+    [ObservableProperty] private ManualOrderLineViewModel? _selectedLine; // Выбранная строка
 
-    public ObservableCollection<ManualOrderLineViewModel> Lines { get; } = new();
+    public ObservableCollection<ManualOrderLineViewModel> Lines { get; } = new(); // Позиции заказа
 
-    public decimal TotalAmount => Lines.Sum(l => l.Total);
+    public decimal TotalAmount => Lines.Sum(l => l.Total); // Итог по позициям
 
-    public event Action? CloseRequested;
+    public event Action? CloseRequested; // Запрос на закрытие
 
     public OrderManualEditViewModel(ICatalogService catalog, IPurchaseOrderService orders, IDialogService dialog)
         : base(dialog)
@@ -297,6 +305,7 @@ public partial class OrderManualEditViewModel : ViewModelBase
         Lines.CollectionChanged += OnLinesCollectionChanged;
     }
 
+    // Подписывается на строки, чтобы пересчитывать итог.
     private void OnLinesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (e.NewItems is not null)
@@ -310,6 +319,7 @@ public partial class OrderManualEditViewModel : ViewModelBase
         OnPropertyChanged(nameof(TotalAmount));
     }
 
+    // Пересчитывает итог при изменении количества или товара.
     private void OnLinePropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName is nameof(ManualOrderLineViewModel.Quantity)
@@ -319,6 +329,7 @@ public partial class OrderManualEditViewModel : ViewModelBase
         }
     }
 
+    // Очищает форму и загружает поставщиков.
     public async Task LoadAsync()
     {
         await RunAsync(async () =>
@@ -333,14 +344,15 @@ public partial class OrderManualEditViewModel : ViewModelBase
         });
     }
 
-    partial void OnSupplierIdChanged(Guid value) => _ = HandleSupplierChangedAsync(value);
+    partial void OnSupplierIdChanged(Guid value) => _ = HandleSupplierChangedAsync(value); // Реагирует на смену поставщика
 
+    // Смена поставщика очищает позиции и загружает его товары.
     private async Task HandleSupplierChangedAsync(Guid supplierId)
     {
         if (Lines.Count > 0 &&
             !Dialog.Confirm("Смена поставщика очистит добавленные позиции. Продолжить?", "Смена поставщика"))
         {
-            return; // откат не делаем осознанно: пользователь сам разберётся, позиция останется битой до сохранения
+            return;
         }
 
         await RunAsync(async () =>
@@ -355,15 +367,17 @@ public partial class OrderManualEditViewModel : ViewModelBase
     }
 
     [RelayCommand(CanExecute = nameof(CanAddLine))]
+    // Добавляет пустую позицию.
     private void AddLine()
     {
         Lines.Add(new ManualOrderLineViewModel());
         OnPropertyChanged(nameof(TotalAmount));
     }
 
-    private bool CanAddLine => SupplierId != Guid.Empty && AvailableProducts.Count > 0;
+    private bool CanAddLine => SupplierId != Guid.Empty && AvailableProducts.Count > 0; // Добавлять можно при выбранном поставщике с товарами
 
     [RelayCommand(CanExecute = nameof(HasLineSelection))]
+    // Удаляет выбранную позицию.
     private void RemoveLine()
     {
         if (SelectedLine is null) return;
@@ -372,7 +386,7 @@ public partial class OrderManualEditViewModel : ViewModelBase
         OnPropertyChanged(nameof(TotalAmount));
     }
 
-    private bool HasLineSelection => SelectedLine is not null;
+    private bool HasLineSelection => SelectedLine is not null; // Есть выбранная позиция
 
     [RelayCommand]
     private Task SaveAsync() => RunAsync(SaveImplementationAsync);
@@ -380,6 +394,7 @@ public partial class OrderManualEditViewModel : ViewModelBase
     [RelayCommand]
     private void Cancel() => CloseRequested?.Invoke();
 
+    // Проверяет позиции и создаёт заказ.
     private async Task SaveImplementationAsync()
     {
         var errors = Validate();
@@ -406,6 +421,7 @@ public partial class OrderManualEditViewModel : ViewModelBase
         CloseRequested?.Invoke();
     }
 
+    // Проверяет поставщика, позиции и дубли товаров.
     private List<string> Validate()
     {
         var errors = new List<string>();
@@ -427,18 +443,16 @@ public partial class OrderManualEditViewModel : ViewModelBase
     }
 }
 
-/// <summary>
-/// Обёртка над read-only DTO предпросмотра: добавляет наблюдаемый выбор
-/// поставщика (для товаров с несколькими вариантами) и признак «дополнительный».
-/// </summary>
+// Строка плана: выбранный поставщик и признак дополнительного товара.
 public partial class PreviewRowViewModel : ObservableObject
 {
-    private readonly PreviewProductDto _source;
+    private readonly PreviewProductDto _source; // Исходный DTO товара
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SelectedSupplierId))]
     private PreviewSupplierOptionDto? _selectedOption; // Выбранный вариант поставщика
 
+    // Выбирает рекомендованного поставщика или первый вариант.
     public PreviewRowViewModel(PreviewProductDto source, bool isAdditional)
     {
         _source = source;
@@ -448,22 +462,19 @@ public partial class PreviewRowViewModel : ObservableObject
                          ?? source.Options.FirstOrDefault();
     }
 
-    public bool IsAdditional { get; }
-    public IReadOnlyList<PreviewSupplierOptionDto> Options { get; }
+    public bool IsAdditional { get; } // Товар добавлен сверх дефицита
+    public IReadOnlyList<PreviewSupplierOptionDto> Options { get; } // Варианты поставщиков
 
-    public Guid ProductId => _source.ProductId;
-    public string ProductName => _source.ProductName;
-    public string UnitLabel => _source.UnitLabel;
-    public int CurrentStock => _source.CurrentStock;
-    public int MinimumStockQuantity => _source.MinimumStockQuantity;
-    public bool HasMultipleOptions => Options.Count > 1;
-    public Guid SelectedSupplierId => SelectedOption?.SupplierId ?? Guid.Empty;
+    public Guid ProductId => _source.ProductId; // Идентификатор товара
+    public string ProductName => _source.ProductName; // Наименование товара
+    public string UnitLabel => _source.UnitLabel; // Единица измерения текстом
+    public int CurrentStock => _source.CurrentStock; // Текущий остаток
+    public int MinimumStockQuantity => _source.MinimumStockQuantity; // Минимальный остаток
+    public bool HasMultipleOptions => Options.Count > 1; // Есть несколько поставщиков
+    public Guid SelectedSupplierId => SelectedOption?.SupplierId ?? Guid.Empty; // Идентификатор выбранного поставщика
 }
 
-/// <summary>
-/// Одна позиция будущего заказа. Держит выбранный вариант «товар-поставщик»
-/// целиком, поэтому ProductId и цена всегда согласованы между собой.
-/// </summary>
+// Позиция ручного заказа: хранит выбранную связь товара и поставщика.
 public partial class ManualOrderLineViewModel : ObservableObject
 {
     [ObservableProperty]
@@ -473,12 +484,12 @@ public partial class ManualOrderLineViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(Total))]
-    private int _quantity = 1;
+    private int _quantity = 1; // Количество
 
-    public Guid ProductId => SelectedSupplierProduct?.ProductId ?? Guid.Empty;
-    public Guid SupplierProductId => SelectedSupplierProduct?.Id ?? Guid.Empty;
+    public Guid ProductId => SelectedSupplierProduct?.ProductId ?? Guid.Empty; // Идентификатор товара
+    public Guid SupplierProductId => SelectedSupplierProduct?.Id ?? Guid.Empty; // Идентификатор связи
 
-    public decimal UnitPrice => SelectedSupplierProduct?.PurchasePrice ?? 0m;
+    public decimal UnitPrice => SelectedSupplierProduct?.PurchasePrice ?? 0m; // Цена закупки
 
-    public decimal Total => UnitPrice * Math.Max(0, Quantity);
+    public decimal Total => UnitPrice * Math.Max(0, Quantity); // Стоимость позиции
 }

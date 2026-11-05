@@ -11,17 +11,15 @@ using TradeSystem.Domain.ValueObjects;
 
 namespace TradeSystem.Application.Mappers;
 
-/// <summary>
-/// Преобразование доменных сущностей в DTO.
-/// Копирование совпадающих по имени полей выполняет AutoMapper (MappingProfile),
-/// а вычисляемые поля (остатки, имена, суммы) добавляются через with.
-/// </summary>
+// Преобразует доменные сущности в DTO: общие поля копирует AutoMapper,
+// вычисляемые значения добавляются через with.
 public sealed class DtoMapper
 {
-    private readonly IMapper _mapper;
+    private readonly IMapper _mapper; // AutoMapper для копирования общих полей
 
     public DtoMapper(IMapper mapper) => _mapper = mapper;
 
+    // Склеивает части адреса в строку с сокращениями «ул.», «д.», «кв.».
     public static string Format(Address address)
     {
         if (address is null) return string.Empty;
@@ -38,6 +36,7 @@ public sealed class DtoMapper
         return string.Join(", ", parts.Where(p => !string.IsNullOrWhiteSpace(p)));
     }
 
+    // Поставщик: добавляет склеенный адрес и число товаров.
     public SupplierDto ToDto(Supplier s, int productsCount) =>
         _mapper.Map<SupplierDto>(s) with
         {
@@ -45,9 +44,11 @@ public sealed class DtoMapper
             ProductsCount = productsCount
         };
 
+    // Полка: добавляет число товаров.
     public ShelfDto ToDto(Shelf sh, int productsCount) =>
         _mapper.Map<ShelfDto>(sh) with { ProductsCount = productsCount };
 
+    // Товар: добавляет остаток, число поставщиков и признак пополнения.
     public ProductDto ToDto(
         Product p,
         int currentStock,
@@ -61,6 +62,7 @@ public sealed class DtoMapper
             NeedsReplenish = p.MinimumStockQuantity > 0 && currentStock < p.MinimumStockQuantity
         };
 
+    // Связь: подставляет названия товара и поставщика.
     public SupplierProductDto ToDto(
         SupplierProduct sp,
         string productName,
@@ -71,12 +73,14 @@ public sealed class DtoMapper
             SupplierName = supplierName
         };
 
+    // Позиция заказа: остаток к получению не может быть отрицательным.
     public PurchaseOrderLineDto ToDto(PurchaseOrderLine l) =>
         _mapper.Map<PurchaseOrderLineDto>(l) with
         {
             RemainingQuantity = Math.Max(0, l.OrderedQuantity - l.ReceivedQuantity)
         };
 
+    // Заказ: поставщик, статус оплаты и позиции.
     public PurchaseOrderDto ToDto(
         PurchaseOrder o,
         string supplierName,
@@ -89,9 +93,11 @@ public sealed class DtoMapper
             Lines = o.Lines.Select(ToDto).ToList()
         };
 
+    // Счёт: добавляет номер заказа.
     public InvoiceDto ToDto(Invoice i, string? orderNumber) =>
         _mapper.Map<InvoiceDto>(i) with { OrderNumber = orderNumber };
 
+    // Позиция поступления: названия товара и полки.
     public GoodsReceiptLineDto ToDto(GoodsReceiptLine l, string productName, string shelfName) =>
         _mapper.Map<GoodsReceiptLineDto>(l) with
         {
@@ -99,6 +105,7 @@ public sealed class DtoMapper
             ShelfName = shelfName
         };
 
+    // Поступление: поставщик, заказ и строки с названиями.
     public GoodsReceiptDto ToDto(
         GoodsReceipt r,
         string supplierName,
@@ -115,6 +122,7 @@ public sealed class DtoMapper
             }).ToList()
         };
 
+    // Позиция продажи: названия товара и полки.
     public SaleLineDto ToDto(SaleLine l, string productName, string shelfName) =>
         _mapper.Map<SaleLineDto>(l) with
         {
@@ -122,6 +130,7 @@ public sealed class DtoMapper
             ShelfName = shelfName
         };
 
+    // Продажа: сумма по строкам и позиции.
     public SaleDto ToDto(Sale s, Func<SaleLine, (string product, string shelf)> resolver) =>
         _mapper.Map<SaleDto>(s) with
         {
@@ -134,9 +143,10 @@ public sealed class DtoMapper
         };
 }
 
+// Человекочитаемые подписи для перечислений.
 public static class Labels
 {
-    private static readonly Dictionary<MeasurementUnit, string> Units = new()
+    private static readonly Dictionary<MeasurementUnit, string> Units = new() // Подписи единиц измерения
     {
         [MeasurementUnit.NotSpecified] = "не указано",
         [MeasurementUnit.Piece]        = "шт.",
@@ -148,7 +158,7 @@ public static class Labels
         [MeasurementUnit.Other]        = "др."
     };
 
-    private static readonly Dictionary<PurchaseOrderStatus, string> OrderStatuses = new()
+    private static readonly Dictionary<PurchaseOrderStatus, string> OrderStatuses = new() // Статусы заказов
     {
         [PurchaseOrderStatus.Draft]             = "Черновик",
         [PurchaseOrderStatus.Confirmed]         = "Подтверждён",
@@ -159,7 +169,7 @@ public static class Labels
         [PurchaseOrderStatus.Cancelled]         = "Отменён"
     };
 
-    private static readonly Dictionary<PaymentStatus, string> PaymentStatuses = new()
+    private static readonly Dictionary<PaymentStatus, string> PaymentStatuses = new() // Статусы оплаты
     {
         [PaymentStatus.Unpaid]         = "Не оплачен",
         [PaymentStatus.PartiallyPaid]  = "Частично оплачен",
@@ -167,20 +177,21 @@ public static class Labels
         [PaymentStatus.Cancelled]      = "Отменён"
     };
 
-    private static readonly Dictionary<GoodsReceiptStatus, string> ReceiptStatuses = new()
+    private static readonly Dictionary<GoodsReceiptStatus, string> ReceiptStatuses = new() // Статусы поступлений
     {
         [GoodsReceiptStatus.Draft]     = "Черновик",
         [GoodsReceiptStatus.Posted]    = "Проведён",
         [GoodsReceiptStatus.Cancelled] = "Отменён"
     };
 
-    private static readonly Dictionary<SaleStatus, string> SaleStatuses = new()
+    private static readonly Dictionary<SaleStatus, string> SaleStatuses = new() // Статусы продаж
     {
         [SaleStatus.Draft]     = "Черновик",
         [SaleStatus.Completed] = "Завершена",
         [SaleStatus.Cancelled] = "Отменена"
     };
 
+    // Возвращает подпись значения; для неизвестного значения — его имя.
     public static string Of(this MeasurementUnit unit) =>
         Units.TryGetValue(unit, out var v) ? v : unit.ToString();
 

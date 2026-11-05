@@ -13,22 +13,23 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace TradeSystem.App.ViewModels.Shelves;
 
+// Список полок с поиском и фильтром активности.
 public partial class ShelvesListViewModel : ViewModelBase, IActivatable
 {
-    private readonly ICatalogService _catalog;
-    private IReadOnlyList<ShelfDto> _all = Array.Empty<ShelfDto>();
+    private readonly ICatalogService _catalog; // Сервис справочников
+    private IReadOnlyList<ShelfDto> _all = Array.Empty<ShelfDto>(); // Полный список до фильтрации
 
-    public ObservableCollection<ShelfDto> Items { get; } = new();
+    public ObservableCollection<ShelfDto> Items { get; } = new(); // Отображаемые полки
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(EditCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteCommand))]
-    private ShelfDto? _selectedItem;
-    [ObservableProperty] private string _searchText = string.Empty;
-    [ObservableProperty] private bool _showInactive;
+    private ShelfDto? _selectedItem; // Выбранная полка
+    [ObservableProperty] private string _searchText = string.Empty; // Строка поиска
+    [ObservableProperty] private bool _showInactive; // Показывать неактивные полки
 
-    public event Action? AddRequested;
-    public event Action<Guid?>? EditRequested;
+    public event Action? AddRequested; // Запрос на добавление
+    public event Action<Guid?>? EditRequested; // Запрос на редактирование
 
     public ShelvesListViewModel(ICatalogService catalog, IDialogService dialog)
         : base(dialog)
@@ -52,6 +53,7 @@ public partial class ShelvesListViewModel : ViewModelBase, IActivatable
     }
 
     [RelayCommand(CanExecute = nameof(HasSelection))]
+    // Удаляет выбранную полку после подтверждения.
     private Task DeleteAsync()
     {
         var target = SelectedItem;
@@ -68,19 +70,20 @@ public partial class ShelvesListViewModel : ViewModelBase, IActivatable
         });
     }
 
-    private bool HasSelection => SelectedItem is not null;
+    private bool HasSelection => SelectedItem is not null; // Есть ли выбранная строка
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
     partial void OnShowInactiveChanged(bool value) => _ = RunAsync(LoadCoreAsync);
 
-    /// <summary>Загрузка без RunAsync: вызывается из мест, где RunAsync уже активен.</summary>
-    private async Task LoadCoreAsync() // Загрузить полки и применить фильтр
+    // Загружает полки без RunAsync: вызывается из уже активного RunAsync.
+    private async Task LoadCoreAsync()
     {
         _all = await _catalog.GetShelvesAsync(ShowInactive);
         ApplyFilter();
     }
 
-    private void ApplyFilter() // Применить фильтр поиска
+    // Фильтрует по коду, названию и расположению.
+    private void ApplyFilter()
     {
         IEnumerable<ShelfDto> query = _all;
 
@@ -100,19 +103,20 @@ public partial class ShelvesListViewModel : ViewModelBase, IActivatable
         !string.IsNullOrEmpty(source) && source.Contains(value, StringComparison.CurrentCultureIgnoreCase);
 }
 
+// Создание и редактирование полки.
 public partial class ShelfEditViewModel : ViewModelBase
 {
-    private readonly ICatalogService _catalog;
-    private Guid? _shelfId;
+    private readonly ICatalogService _catalog; // Сервис справочников
+    private Guid? _shelfId; // Id редактируемой полки (null — новая)
 
-    [ObservableProperty] private bool _isNew = true;
-    [ObservableProperty] private string _code = string.Empty;
-    [ObservableProperty] private string _name = string.Empty;
-    [ObservableProperty] private string? _location;
-    [ObservableProperty] private bool _isActive = true;
-    [ObservableProperty] private string? _note;
+    [ObservableProperty] private bool _isNew = true; // Признак новой записи
+    [ObservableProperty] private string _code = string.Empty; // Код полки
+    [ObservableProperty] private string _name = string.Empty; // Название полки
+    [ObservableProperty] private string? _location; // Расположение
+    [ObservableProperty] private bool _isActive = true; // Признак активности
+    [ObservableProperty] private string? _note; // Примечание
 
-    public event Action? CloseRequested;
+    public event Action? CloseRequested; // Запрос на закрытие
 
     public ShelfEditViewModel(ICatalogService catalog, IDialogService dialog)
         : base(dialog)
@@ -120,6 +124,7 @@ public partial class ShelfEditViewModel : ViewModelBase
         _catalog = catalog;
     }
 
+    // Загружает форму; id == null — новая полка.
     public async Task LoadAsync(Guid? id)
     {
         await RunAsync(async () =>
@@ -155,6 +160,7 @@ public partial class ShelfEditViewModel : ViewModelBase
     [RelayCommand]
     private void Cancel() => CloseRequested?.Invoke();
 
+    // Проверяет поля и сохраняет полку.
     private async Task SaveImplementationAsync()
     {
         var errors = Validate();
@@ -182,6 +188,7 @@ public partial class ShelfEditViewModel : ViewModelBase
         CloseRequested?.Invoke();
     }
 
+    // Проверяет обязательные поля.
     private List<string> Validate()
     {
         var errors = new List<string>();
@@ -192,6 +199,7 @@ public partial class ShelfEditViewModel : ViewModelBase
         return errors;
     }
 
+    // Очищает форму.
     private void ResetForm()
     {
         Code = string.Empty;
@@ -201,6 +209,7 @@ public partial class ShelfEditViewModel : ViewModelBase
         Note = null;
     }
 
+    // Обрезает строку; пустая превращается в null.
     private static string? TrimOrNull(string? value)
     {
         if (string.IsNullOrWhiteSpace(value)) return null;

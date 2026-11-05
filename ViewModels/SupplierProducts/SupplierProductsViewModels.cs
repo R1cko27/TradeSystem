@@ -14,36 +14,33 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace TradeSystem.App.ViewModels.SupplierProducts;
 
-/// <summary>
-/// Плоский список связей «товар-поставщик» с фильтрами по товару, поставщику,
-/// поиском и переключателем показа неактивных связей.
-/// Наглядно демонстрирует случай «один товар — несколько поставщиков».
-/// </summary>
+// Плоский список связей «товар — поставщик» с фильтрами.
+// Показывает случай, когда у одного товара несколько поставщиков.
 public partial class SupplierProductsListViewModel : ViewModelBase, IActivatable
 {
-    private readonly ICatalogService _catalog;
-    private IReadOnlyList<SupplierProductDto> _all = Array.Empty<SupplierProductDto>();
+    private readonly ICatalogService _catalog; // Сервис справочников
+    private IReadOnlyList<SupplierProductDto> _all = Array.Empty<SupplierProductDto>(); // Полный список до фильтрации
 
-    public ObservableCollection<SupplierProductDto> Items { get; } = new();
+    public ObservableCollection<SupplierProductDto> Items { get; } = new(); // Отображаемые связи
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(EditCommand))]
     [NotifyCanExecuteChangedFor(nameof(DeleteCommand))]
-    private SupplierProductDto? _selectedItem;
+    private SupplierProductDto? _selectedItem; // Выбранная связь
 
-    [ObservableProperty] private string _searchText = string.Empty;
-    [ObservableProperty] private bool _showInactive;
+    [ObservableProperty] private string _searchText = string.Empty; // Строка поиска
+    [ObservableProperty] private bool _showInactive; // Показывать неактивные связи
 
-    // Фильтры по товару и поставщику: выбраны сами элементы списка, чтобы ComboBox
+    // Фильтры хранят выбранные элементы списка, чтобы ComboBox показывал названия.
     [ObservableProperty] private ProductDto? _selectedProductFilter; // Выбранный товар-фильтр
     [ObservableProperty] private SupplierDto? _selectedSupplierFilter; // Выбранный поставщик-фильтр
 
     // Источники для ComboBox-фильтров (первый элемент — «все»).
-    [ObservableProperty] private IReadOnlyList<ProductDto> _productFilters = Array.Empty<ProductDto>();
-    [ObservableProperty] private IReadOnlyList<SupplierDto> _supplierFilters = Array.Empty<SupplierDto>();
+    [ObservableProperty] private IReadOnlyList<ProductDto> _productFilters = Array.Empty<ProductDto>(); // Товары для фильтра
+    [ObservableProperty] private IReadOnlyList<SupplierDto> _supplierFilters = Array.Empty<SupplierDto>(); // Поставщики для фильтра
 
-    public event Action? AddRequested;
-    public event Action<Guid?>? EditRequested;
+    public event Action? AddRequested; // Запрос на добавление
+    public event Action<Guid?>? EditRequested; // Запрос на редактирование
 
     public SupplierProductsListViewModel(ICatalogService catalog, IDialogService dialog)
         : base(dialog)
@@ -67,6 +64,7 @@ public partial class SupplierProductsListViewModel : ViewModelBase, IActivatable
     }
 
     [RelayCommand(CanExecute = nameof(HasSelection))]
+    // Удаляет связь после подтверждения.
     private Task DeleteAsync()
     {
         var target = SelectedItem;
@@ -85,7 +83,7 @@ public partial class SupplierProductsListViewModel : ViewModelBase, IActivatable
         });
     }
 
-    private bool HasSelection => SelectedItem is not null;
+    private bool HasSelection => SelectedItem is not null; // Есть ли выбранная строка
 
     // Все фильтры локальные — не дёргаем хранилище повторно.
     partial void OnSearchTextChanged(string value) => ApplyFilter();
@@ -93,7 +91,7 @@ public partial class SupplierProductsListViewModel : ViewModelBase, IActivatable
     partial void OnSelectedSupplierFilterChanged(SupplierDto? value) => ApplyFilter();
     partial void OnShowInactiveChanged(bool value) => ApplyFilter();
 
-    /// <summary>Загрузка без RunAsync: вызывается из мест, где RunAsync уже активен.</summary>
+    // Загружает связи без RunAsync: вызывается из уже активного RunAsync.
     private async Task LoadCoreAsync()
     {
         _all = await _catalog.GetSupplierProductsAsync();
@@ -115,6 +113,7 @@ public partial class SupplierProductsListViewModel : ViewModelBase, IActivatable
         ApplyFilter();
     }
 
+    // Добавляет в начало пункт «Все товары».
     private static IReadOnlyList<ProductDto> BuildProductFilters(IReadOnlyList<ProductDto> real)
     {
         var list = new List<ProductDto>(real.Count + 1)
@@ -125,6 +124,7 @@ public partial class SupplierProductsListViewModel : ViewModelBase, IActivatable
         return list;
     }
 
+    // Добавляет в начало пункт «Все поставщики».
     private static IReadOnlyList<SupplierDto> BuildSupplierFilters(IReadOnlyList<SupplierDto> real)
     {
         var list = new List<SupplierDto>(real.Count + 1)
@@ -135,6 +135,7 @@ public partial class SupplierProductsListViewModel : ViewModelBase, IActivatable
         return list;
     }
 
+    // Применяет фильтры активности, товара, поставщика и поиска.
     private void ApplyFilter()
     {
         IEnumerable<SupplierProductDto> query = _all;
@@ -170,27 +171,28 @@ public partial class SupplierProductsListViewModel : ViewModelBase, IActivatable
         !string.IsNullOrEmpty(source) && source.Contains(value, StringComparison.CurrentCultureIgnoreCase);
 }
 
+// Создание и редактирование связи «товар — поставщик».
 public partial class SupplierProductEditViewModel : ViewModelBase
 {
-    private readonly ICatalogService _catalog;
-    private Guid? _linkId;
+    private readonly ICatalogService _catalog; // Сервис справочников
+    private Guid? _linkId; // Id редактируемой связи (null — новая)
 
-    [ObservableProperty] private bool _isNew = true;
-    [ObservableProperty] private Guid _productId;
-    [ObservableProperty] private Guid _supplierId;
-    [ObservableProperty] private string? _supplierArticle;
-    [ObservableProperty] private string _purchasePriceText = string.Empty;
-    [ObservableProperty] private string _leadTimeText = string.Empty;
-    [ObservableProperty] private string _minOrderText = string.Empty;
-    [ObservableProperty] private string _multipleText = string.Empty;
-    [ObservableProperty] private bool _isPreferred;
-    [ObservableProperty] private bool _isActive = true;
-    [ObservableProperty] private string? _note;
+    [ObservableProperty] private bool _isNew = true; // Признак новой записи
+    [ObservableProperty] private Guid _productId; // Товар
+    [ObservableProperty] private Guid _supplierId; // Поставщик
+    [ObservableProperty] private string? _supplierArticle; // Артикул у поставщика
+    [ObservableProperty] private string _purchasePriceText = string.Empty; // Цена закупки (текст)
+    [ObservableProperty] private string _leadTimeText = string.Empty; // Срок поставки (текст)
+    [ObservableProperty] private string _minOrderText = string.Empty; // Минимальная партия (текст)
+    [ObservableProperty] private string _multipleText = string.Empty; // Кратность (текст)
+    [ObservableProperty] private bool _isPreferred; // Предпочтительный поставщик
+    [ObservableProperty] private bool _isActive = true; // Признак активности
+    [ObservableProperty] private string? _note; // Примечание
 
-    [ObservableProperty] private IReadOnlyList<ProductDto> _products = Array.Empty<ProductDto>();
-    [ObservableProperty] private IReadOnlyList<SupplierDto> _suppliers = Array.Empty<SupplierDto>();
+    [ObservableProperty] private IReadOnlyList<ProductDto> _products = Array.Empty<ProductDto>(); // Товары для ComboBox
+    [ObservableProperty] private IReadOnlyList<SupplierDto> _suppliers = Array.Empty<SupplierDto>(); // Поставщики для ComboBox
 
-    public event Action? CloseRequested;
+    public event Action? CloseRequested; // Запрос на закрытие
 
     public SupplierProductEditViewModel(ICatalogService catalog, IDialogService dialog)
         : base(dialog)
@@ -198,6 +200,7 @@ public partial class SupplierProductEditViewModel : ViewModelBase
         _catalog = catalog;
     }
 
+    // Загружает форму; id == null — новая связь.
     public async Task LoadAsync(Guid? id)
     {
         await RunAsync(async () =>
@@ -243,6 +246,7 @@ public partial class SupplierProductEditViewModel : ViewModelBase
     [RelayCommand]
     private void Cancel() => CloseRequested?.Invoke();
 
+    // Проверяет поля и сохраняет связь.
     private async Task SaveImplementationAsync()
     {
         var errors = Validate(out decimal? price, out int? lead, out int? min, out int? mult);
@@ -275,6 +279,7 @@ public partial class SupplierProductEditViewModel : ViewModelBase
         CloseRequested?.Invoke();
     }
 
+    // Проверяет ссылки и разбирает числовые поля.
     private List<string> Validate(
         out decimal? price, out int? lead, out int? min, out int? mult)
     {
@@ -309,6 +314,7 @@ public partial class SupplierProductEditViewModel : ViewModelBase
         return errors;
     }
 
+    // Очищает форму.
     private void ResetForm()
     {
         ProductId = Guid.Empty;
@@ -323,6 +329,7 @@ public partial class SupplierProductEditViewModel : ViewModelBase
         Note = null;
     }
 
+    // Разбирает число; пустая строка — null.
     private static bool TryParseDecimal(string? text, out decimal? value)
     {
         value = null;
@@ -335,6 +342,7 @@ public partial class SupplierProductEditViewModel : ViewModelBase
         return false;
     }
 
+    // Разбирает целое; пустая строка — null.
     private static bool TryParseInt(string? text, out int? value)
     {
         value = null;
@@ -347,6 +355,7 @@ public partial class SupplierProductEditViewModel : ViewModelBase
         return false;
     }
 
+    // Обрезает строку; пустая превращается в null.
     private static string? TrimOrNull(string? value) =>
         string.IsNullOrWhiteSpace(value) ? null : value.Trim();
 }

@@ -36,14 +36,14 @@ namespace TradeSystem.Application.Services
 {
     public sealed class PurchaseOrderService : IPurchaseOrderService
     {
-        private readonly DtoMapper _mapper;
-        private readonly IPurchaseOrderRepository _orders;
-        private readonly IProductRepository _products;
-        private readonly ISupplierRepository _suppliers;
-        private readonly ISupplierProductRepository _supplierProducts;
-        private readonly IInvoiceRepository _invoices;
-        private readonly IGoodsReceiptRepository _receipts;
-        private readonly IStockService _stock;
+        private readonly DtoMapper _mapper; // Преобразование в DTO
+        private readonly IPurchaseOrderRepository _orders; // Репозиторий заказов
+        private readonly IProductRepository _products; // Репозиторий товаров
+        private readonly ISupplierRepository _suppliers; // Репозиторий поставщиков
+        private readonly ISupplierProductRepository _supplierProducts; // Репозиторий связей товара и поставщика
+        private readonly IInvoiceRepository _invoices; // Репозиторий счетов
+        private readonly IGoodsReceiptRepository _receipts; // Репозиторий поступлений
+        private readonly IStockService _stock; // Складской сервис
 
         public PurchaseOrderService(
             IPurchaseOrderRepository orders,
@@ -65,12 +65,14 @@ namespace TradeSystem.Application.Services
                     _mapper = mapper;
         }
 
+        // Заказы с поставщиком, статусом оплаты и позициями.
         public async Task<IReadOnlyList<PurchaseOrderDto>> GetOrdersAsync(CancellationToken ct = default)
         {
             var orders = await _orders.GetAllAsync(ct);
             return await BuildDtosAsync(orders.ToList(), ct);
         }
 
+        // Один заказ по идентификатору.
         public async Task<PurchaseOrderDto?> GetOrderAsync(Guid id, CancellationToken ct = default)
         {
             var o = await _orders.GetByIdAsync(id, ct);
@@ -79,6 +81,7 @@ namespace TradeSystem.Application.Services
             return list.FirstOrDefault();
         }
 
+        // Создаёт черновик заказа, проверяя поставщика, товары и связи.
         public async Task<PurchaseOrderDto> CreateOrderAsync(CreatePurchaseOrderInput input, CancellationToken ct = default)
         {
             if (input.SupplierId == Guid.Empty) throw new BusinessException("Не выбран поставщик.");
@@ -133,6 +136,7 @@ namespace TradeSystem.Application.Services
             return dtos.First();
         }
 
+        // Строит план автоформирования без записи в хранилище.
         public async Task<AutoOrderPreviewDto> PreviewAutoOrdersAsync(AutoOrderRequest? request = null, CancellationToken ct = default)
         {
             request ??= new AutoOrderRequest();
@@ -183,6 +187,7 @@ namespace TradeSystem.Application.Services
             };
         }
 
+        // Создаёт черновики заказов по дефициту, группируя позиции по поставщикам.
         public async Task<AutoOrderResult> AutoGenerateOrdersAsync(AutoOrderRequest? request = null, CancellationToken ct = default)
         {
             request ??= new AutoOrderRequest();
@@ -255,6 +260,7 @@ namespace TradeSystem.Application.Services
             return result;
         }
 
+        // Подтверждает черновик заказа.
         public async Task ConfirmOrderAsync(Guid orderId, CancellationToken ct = default)
         {
             var order = await _orders.GetByIdAsync(orderId, ct) ?? throw new BusinessException("Заказ не найден.");
@@ -264,6 +270,7 @@ namespace TradeSystem.Application.Services
             await _orders.UpdateAsync(order, ct);
         }
 
+        // Отменяет черновик заказа.
         public async Task CancelOrderAsync(Guid orderId, CancellationToken ct = default)
         {
             var order = await _orders.GetByIdAsync(orderId, ct) ?? throw new BusinessException("Заказ не найден.");
@@ -273,6 +280,7 @@ namespace TradeSystem.Application.Services
             await _orders.UpdateAsync(order, ct);
         }
 
+        // Закрывает полностью полученный заказ.
         public async Task CloseOrderAsync(Guid orderId, CancellationToken ct = default)
         {
             var order = await _orders.GetByIdAsync(orderId, ct) ?? throw new BusinessException("Заказ не найден.");
@@ -285,6 +293,7 @@ namespace TradeSystem.Application.Services
             await _orders.UpdateAsync(order, ct);
         }
 
+        // Удаляет черновик, если на него нет ссылок из счетов и поступлений.
         public async Task DeleteOrderAsync(Guid orderId, CancellationToken ct = default)
         {
             var order = await _orders.GetByIdAsync(orderId, ct) ?? throw new BusinessException("Заказ не найден.");
@@ -301,6 +310,7 @@ namespace TradeSystem.Application.Services
             await _orders.DeleteAsync(orderId, ct);
         }
 
+        // Считает потребность по дефициту и дополнительным товарам.
         private async Task<Dictionary<Guid, int>> CollectNeedsAsync(AutoOrderRequest request, CancellationToken ct)
         {
             var low = await _stock.GetLowStockProductsAsync(ct);
@@ -321,18 +331,21 @@ namespace TradeSystem.Application.Services
             return needed;
         }
 
+        // Активные связи, сгруппированные по товару.
         private async Task<Dictionary<Guid, List<SupplierProduct>>> GetActiveLinksByProductAsync(CancellationToken ct)
             => (await _supplierProducts.GetAllAsync(ct))
                 .Where(l => l.IsActive)
                 .GroupBy(l => l.ProductId)
                 .ToDictionary(g => g.Key, g => g.ToList());
 
+        // Рекомендуемое количество до целевого остатка или удвоенного минимума.
         private static int ComputeRecommendedQuantity(Product p, int current)
         {
             var target = p.TargetStockQuantity ?? (p.MinimumStockQuantity > 0 ? p.MinimumStockQuantity * 2 : 1);
             return Math.Max(1, target - current);
         }
 
+        // Вариант поставщика для предпросмотра.
         private PreviewSupplierOptionDto BuildOption(SupplierProduct c, int baseQty, Dictionary<Guid, string> suppliers)
         {
             var adjusted = AdjustQuantity(baseQty, c);
@@ -352,6 +365,7 @@ namespace TradeSystem.Application.Services
             };
         }
 
+        // Выбирает поставщика: явный, предпочтительный, затем дешёвый и быстрый.
         private static SupplierProduct? ChooseSupplier(
             Guid productId,
             List<SupplierProduct> candidates,
@@ -370,6 +384,7 @@ namespace TradeSystem.Application.Services
                 .FirstOrDefault();
         }
 
+        // Подгоняет количество под минимальную партию и кратность.
         private static int AdjustQuantity(int requested, SupplierProduct link)
         {
             var qty = requested;
@@ -380,6 +395,7 @@ namespace TradeSystem.Application.Services
             return Math.Max(1, qty);
         }
 
+        // Номер вида PO-ГГГГММДД-НННН с порядковым номером за день.
         private async Task<string> GenerateNumberAsync(string prefix, CancellationToken ct)
         {
             var all = await _orders.GetAllAsync(ct);
@@ -388,6 +404,7 @@ namespace TradeSystem.Application.Services
             return $"{prefix}-{today}-{countToday + 1:D4}";
         }
 
+        // Подставляет поставщика и статус оплаты по счетам.
         private async Task<IReadOnlyList<PurchaseOrderDto>> BuildDtosAsync(List<PurchaseOrder> orders, CancellationToken ct)
         {
             if (orders.Count == 0) return Array.Empty<PurchaseOrderDto>();
@@ -406,6 +423,7 @@ namespace TradeSystem.Application.Services
                     ComputePaymentStatus(o.TotalAmount, invoicesByOrder.GetValueOrDefault(o.Id))))
                 .ToList();
         }
+        // Статус оплаты заказа по связанным счетам.
         private static PaymentStatus ComputePaymentStatus(decimal orderTotal, List<Invoice>? invoices)
         {
             if (invoices is null || invoices.Count == 0) return PaymentStatus.Unpaid;

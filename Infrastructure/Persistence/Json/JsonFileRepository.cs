@@ -10,20 +10,24 @@ using TradeSystem.Domain.Entities;
 
 namespace TradeSystem.Infrastructure.Persistence.Json;
 
+// Базовый репозиторий поверх JSON-файла.
 public class JsonFileRepository<TEntity> : IRepository<TEntity> where TEntity : Entity
 {
+    // Хранилище передаётся снаружи, чтобы репозиторий не знал о путях.
     protected JsonFileRepository(IJsonFileStore<TEntity> store)
     {
         Store = store ?? throw new ArgumentNullException(nameof(store));
     }
 
-    protected IJsonFileStore<TEntity> Store { get; }
+    protected IJsonFileStore<TEntity> Store { get; } // Хранилище JSON-файла
 
+    // Все записи.
     public virtual async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         return await Store.ReadAsync(cancellationToken).ConfigureAwait(false);
     }
 
+    // Запись по идентификатору или null.
     public virtual async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         if (id == Guid.Empty)
@@ -36,6 +40,7 @@ public class JsonFileRepository<TEntity> : IRepository<TEntity> where TEntity : 
         return items.FirstOrDefault(item => item.Id == id);
     }
 
+    // Добавляет запись, проверяя уникальность Id.
     public virtual async Task AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -64,6 +69,7 @@ public class JsonFileRepository<TEntity> : IRepository<TEntity> where TEntity : 
         }, cancellationToken).ConfigureAwait(false);
     }
 
+    // Обновляет запись, сохраняя дату создания.
     public virtual async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(entity);
@@ -87,6 +93,7 @@ public class JsonFileRepository<TEntity> : IRepository<TEntity> where TEntity : 
         }, cancellationToken).ConfigureAwait(false);
     }
 
+    // Удаляет запись по идентификатору.
     public virtual async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         if (id == Guid.Empty)

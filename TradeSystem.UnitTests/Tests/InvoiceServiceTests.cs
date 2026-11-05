@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TradeSystem.UnitTests.Tests;
 
-/// <summary>Проверки счетов на оплату.</summary>
+// Проверки счетов на оплату.
 [TestClass]
 public sealed class InvoiceServiceTests
 {
@@ -24,6 +24,7 @@ public sealed class InvoiceServiceTests
             () => context.InvoiceService.CreateInvoiceAsync(Guid.NewGuid(), "INV-1", 100m, null, null),
             "Заказ не найден");
     }
+// Ожидаем: исключение о номере счёта.
 
     [TestMethod]
     public async Task Create_EmptyNumber_Throws()
@@ -36,6 +37,7 @@ public sealed class InvoiceServiceTests
             () => context.InvoiceService.CreateInvoiceAsync(order.Id, " ", 100m, null, null),
             "Номер счёта");
     }
+// Ожидаем: исключение о сумме счёта.
 
     [TestMethod]
     public async Task Create_ZeroAmount_Throws()
@@ -106,6 +108,7 @@ public sealed class InvoiceServiceTests
             () => context.InvoiceService.MarkPaidAsync(invoice.Id),
             "отменённый счёт");
     }
+// Ожидаем: оплаченный счёт нельзя удалить.
 
     [TestMethod]
     public async Task Delete_Paid_Throws()
@@ -122,6 +125,7 @@ public sealed class InvoiceServiceTests
             () => context.InvoiceService.DeleteInvoiceAsync(invoice.Id),
             "оплаченный счёт");
     }
+// Ожидаем: неоплаченный счёт удаляется.
 
     [TestMethod]
     public async Task Delete_Unpaid_Removes()

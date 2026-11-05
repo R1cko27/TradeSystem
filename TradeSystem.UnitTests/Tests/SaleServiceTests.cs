@@ -11,10 +11,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TradeSystem.UnitTests.Tests;
 
-/// <summary>Проверки продаж: черновик, проведение, списание остатка.</summary>
+// Проверки продаж: черновик, проведение, списание остатка.
 [TestClass]
 public sealed class SaleServiceTests
 {
+    // Готовит входные данные продажи.
     private static SaleInput Sale(Guid productId, Guid shelfId, int quantity = 2, decimal price = 30m)
         => new()
         {
@@ -23,6 +24,7 @@ public sealed class SaleServiceTests
                 new SaleLineInput { ProductId = productId, ShelfId = shelfId, Quantity = quantity, UnitPrice = price }
             }
         };
+// Ожидаем: исключение об отсутствии позиций.
 
     [TestMethod]
     public async Task CreateDraft_WithoutLines_Throws()
@@ -33,6 +35,7 @@ public sealed class SaleServiceTests
             () => context.SaleService.CreateDraftAsync(new SaleInput()),
             "не содержит позиций");
     }
+// Ожидаем: исключение о количестве.
 
     [TestMethod]
     public async Task CreateDraft_ZeroQuantity_Throws()
@@ -57,6 +60,7 @@ public sealed class SaleServiceTests
             () => context.SaleService.CreateDraftAsync(Sale(Guid.NewGuid(), shelf.Id)),
             "Товар не найден");
     }
+// Ожидаем: исключение «Полка не найдена».
 
     [TestMethod]
     public async Task CreateDraft_UnknownShelf_Throws()
@@ -119,6 +123,7 @@ public sealed class SaleServiceTests
 
         Check.Equal(SaleStatus.Draft, context.Sales.Items.Single().Status);
     }
+// Ожидаем: исключение для не-черновика.
 
     [TestMethod]
     public async Task Post_NonDraft_Throws()
@@ -130,6 +135,7 @@ public sealed class SaleServiceTests
             () => context.SaleService.PostAsync(sale.Id),
             "Черновик");
     }
+// Ожидаем: завершённую продажу нельзя удалить.
 
     [TestMethod]
     public async Task DeleteDraft_Completed_Throws()

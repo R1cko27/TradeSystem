@@ -8,8 +8,10 @@ using TradeSystem.Domain.Entities;
 
 namespace TradeSystem.Infrastructure.Persistence.Json;
 
+// Регистрация JSON-хранилищ и репозиториев в DI.
 public static class ServiceCollectionExtensions
 {
+    // Регистрирует хранилища и репозитории для всех типов сущностей.
     public static IServiceCollection AddTradeSystemJsonPersistence(
         this IServiceCollection services,
         JsonStorageOptions? options = null)
@@ -30,6 +32,7 @@ public static class ServiceCollectionExtensions
 
         rootPath = Path.GetFullPath(rootPath);
 
+        // По одному хранилищу на тип сущности.
         AddStore<Supplier>(services, rootPath, JsonFileNames.Suppliers, options.WriteIndented);
         AddStore<Product>(services, rootPath, JsonFileNames.Products, options.WriteIndented);
         AddStore<Shelf>(services, rootPath, JsonFileNames.Shelves, options.WriteIndented);
@@ -41,6 +44,7 @@ public static class ServiceCollectionExtensions
         AddStore<Sale>(services, rootPath, JsonFileNames.Sales, options.WriteIndented);
         AddStore<StockMovement>(services, rootPath, JsonFileNames.StockMovements, options.WriteIndented);
 
+        // Репозитории поверх этих хранилищ.
         services.AddSingleton<ISupplierRepository, SupplierRepository>();
         services.AddSingleton<IProductRepository, ProductRepository>();
         services.AddSingleton<IShelfRepository, ShelfRepository>();
@@ -55,6 +59,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
+    // Создаёт хранилище для одного типа сущности.
     private static void AddStore<TEntity>(
         IServiceCollection services,
         string rootPath,

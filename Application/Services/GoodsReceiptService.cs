@@ -32,13 +32,13 @@ namespace TradeSystem.Application.Services
 {
     public sealed class GoodsReceiptService : IGoodsReceiptService
     {
-        private readonly DtoMapper _mapper;
-        private readonly IGoodsReceiptRepository _receipts;
-        private readonly IPurchaseOrderRepository _orders;
-        private readonly IProductRepository _products;
-        private readonly IShelfRepository _shelves;
-        private readonly ISupplierRepository _suppliers;
-        private readonly IStockService _stock;
+        private readonly DtoMapper _mapper; // Преобразование в DTO
+        private readonly IGoodsReceiptRepository _receipts; // Репозиторий поступлений
+        private readonly IPurchaseOrderRepository _orders; // Репозиторий заказов
+        private readonly IProductRepository _products; // Репозиторий товаров
+        private readonly IShelfRepository _shelves; // Репозиторий полок
+        private readonly ISupplierRepository _suppliers; // Репозиторий поставщиков
+        private readonly IStockService _stock; // Складской сервис
 
         public GoodsReceiptService(
             IGoodsReceiptRepository receipts,
@@ -58,12 +58,14 @@ namespace TradeSystem.Application.Services
                     _mapper = mapper;
         }
 
+        // Поступления с поставщиком, заказом и строками.
         public async Task<IReadOnlyList<GoodsReceiptDto>> GetReceiptsAsync(CancellationToken ct = default)
         {
             var all = await _receipts.GetAllAsync(ct);
             return await BuildDtosAsync(all.ToList(), ct);
         }
 
+        // Одно поступление по идентификатору.
         public async Task<GoodsReceiptDto?> GetReceiptAsync(Guid id, CancellationToken ct = default)
         {
             var r = await _receipts.GetByIdAsync(id, ct);
@@ -72,6 +74,7 @@ namespace TradeSystem.Application.Services
             return list.FirstOrDefault();
         }
 
+        // Создаёт черновик поступления с проверкой товаров и полок.
         public async Task<GoodsReceiptDto> CreateDraftAsync(GoodsReceiptInput input, CancellationToken ct = default)
         {
             if (input.SupplierId == Guid.Empty) throw new BusinessException("Не выбран поставщик.");
@@ -114,6 +117,7 @@ namespace TradeSystem.Application.Services
             return dtos.First();
         }
 
+        // Проводит поступление: приход на склад и обновление заказа.
         public async Task<GoodsReceiptDto> PostAsync(Guid receiptId, CancellationToken ct = default)
         {
             var receipt = await _receipts.GetByIdAsync(receiptId, ct)
@@ -155,6 +159,7 @@ namespace TradeSystem.Application.Services
             return dtos.First();
         }
 
+        // Удаляет черновик поступления.
         public async Task DeleteDraftAsync(Guid receiptId, CancellationToken ct = default)
         {
             var receipt = await _receipts.GetByIdAsync(receiptId, ct)
@@ -164,6 +169,7 @@ namespace TradeSystem.Application.Services
             await _receipts.DeleteAsync(receiptId, ct);
         }
 
+        // Пересчитывает статус заказа по полученным количествам.
         private static void RecalculateOrderStatus(PurchaseOrder order)
         {
             if (order.Lines.Count == 0) return;
@@ -177,6 +183,7 @@ namespace TradeSystem.Application.Services
                     : order.Status;
         }
 
+        // Номер вида GR-ГГГГММДД-НННН.
         private async Task<string> GenerateNumberAsync(string prefix, CancellationToken ct)
         {
             var all = await _receipts.GetAllAsync(ct);
@@ -185,6 +192,7 @@ namespace TradeSystem.Application.Services
             return $"{prefix}-{today}-{n + 1:D4}";
         }
 
+        // Подставляет поставщика, заказ, товары и полки.
         private async Task<IReadOnlyList<GoodsReceiptDto>> BuildDtosAsync(List<GoodsReceipt> receipts, CancellationToken ct)
         {
             if (receipts.Count == 0) return Array.Empty<GoodsReceiptDto>();

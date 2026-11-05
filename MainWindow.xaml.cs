@@ -4,6 +4,7 @@ using System.Windows;
 
 namespace TradeSystem.App;
 
+// Главное окно приложения.
 public partial class MainWindow : Window
 {
     public MainWindow()
@@ -12,6 +13,7 @@ public partial class MainWindow : Window
         Loaded += MainWindow_Loaded;
     }
 
+    // При загрузке окна запускает начальную ViewModel.
     private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
         if (DataContext is ViewModels.MainViewModel vm)

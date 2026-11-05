@@ -32,9 +32,9 @@ namespace TradeSystem.Application.Services
 {
     public sealed class InvoiceService : IInvoiceService
     {
-        private readonly DtoMapper _mapper;
-        private readonly IInvoiceRepository _invoices;
-        private readonly IPurchaseOrderRepository _orders;
+        private readonly DtoMapper _mapper; // Преобразование в DTO
+        private readonly IInvoiceRepository _invoices; // Репозиторий счетов
+        private readonly IPurchaseOrderRepository _orders; // Репозиторий заказов
 
         public InvoiceService(IInvoiceRepository invoices, IPurchaseOrderRepository orders,
             DtoMapper mapper)
@@ -44,18 +44,21 @@ namespace TradeSystem.Application.Services
                     _mapper = mapper;
         }
 
+        // Счета с номерами заказов.
         public async Task<IReadOnlyList<InvoiceDto>> GetInvoicesAsync(CancellationToken ct = default)
         {
             var all = await _invoices.GetAllAsync(ct);
             return await BuildDtosAsync(all.ToList(), ct);
         }
 
+        // Счета выбранного заказа.
         public async Task<IReadOnlyList<InvoiceDto>> GetInvoicesByOrderAsync(Guid orderId, CancellationToken ct = default)
         {
             var all = (await _invoices.GetAllAsync(ct)).Where(i => i.OrderId == orderId).ToList();
             return await BuildDtosAsync(all.ToList(), ct);
         }
 
+        // Создаёт счёт с проверкой заказа, номера и суммы.
         public async Task<InvoiceDto> CreateInvoiceAsync(
             Guid orderId, string number, decimal amount, DateTimeOffset? dueDate, string? comment,
             CancellationToken ct = default)
@@ -83,6 +86,7 @@ namespace TradeSystem.Application.Services
             return dtos.First();
         }
 
+        // Отмечает счёт оплаченным и фиксирует дату.
         public async Task<InvoiceDto> MarkPaidAsync(
             Guid invoiceId, DateTimeOffset? paidAt = null, string? comment = null,
             CancellationToken ct = default)
@@ -103,6 +107,7 @@ namespace TradeSystem.Application.Services
             return dtos.First();
         }
 
+        // Удаляет неоплаченный счёт.
         public async Task DeleteInvoiceAsync(Guid invoiceId, CancellationToken ct = default)
         {
             var invoice = await _invoices.GetByIdAsync(invoiceId, ct) ?? throw new BusinessException("Счёт не найден.");
@@ -111,6 +116,7 @@ namespace TradeSystem.Application.Services
             await _invoices.DeleteAsync(invoiceId, ct);
         }
 
+        // Подставляет номер заказа.
         private async Task<IReadOnlyList<InvoiceDto>> BuildDtosAsync(List<Invoice> invoices, CancellationToken ct)
         {
             if (invoices.Count == 0) return Array.Empty<InvoiceDto>();

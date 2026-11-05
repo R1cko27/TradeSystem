@@ -16,18 +16,21 @@ namespace TradeSystem.Application.Contracts.Services
 {
     public interface ICatalogService
     {
+        // Поставщики с числом активных товаров, по алфавиту.
         Task<IReadOnlyList<SupplierDto>> GetSuppliersAsync(bool includeInactive = false, CancellationToken ct = default);
         Task<SupplierDto?> GetSupplierAsync(Guid id, CancellationToken ct = default);
         Task<SupplierDto> CreateSupplierAsync(SupplierInput input, CancellationToken ct = default);
         Task<SupplierDto> UpdateSupplierAsync(SupplierInput input, CancellationToken ct = default);
         Task DeleteSupplierAsync(Guid id, CancellationToken ct = default);
 
+        // Товары с остатками, числом поставщиков и полкой по умолчанию.
         Task<IReadOnlyList<ProductDto>> GetProductsAsync(bool includeInactive = false, CancellationToken ct = default);
         Task<ProductDto?> GetProductAsync(Guid id, CancellationToken ct = default);
         Task<ProductDto> CreateProductAsync(ProductInput input, CancellationToken ct = default);
         Task<ProductDto> UpdateProductAsync(ProductInput input, CancellationToken ct = default);
         Task DeleteProductAsync(Guid id, CancellationToken ct = default);
 
+        // Полки с числом товаров на них.
         Task<IReadOnlyList<ShelfDto>> GetShelvesAsync(bool includeInactive = false, CancellationToken ct = default);
         Task<ShelfDto?> GetShelfAsync(Guid id, CancellationToken ct = default);
 
@@ -35,6 +38,7 @@ namespace TradeSystem.Application.Contracts.Services
         Task<ShelfDto> UpdateShelfAsync(ShelfInput input, CancellationToken ct = default);
         Task DeleteShelfAsync(Guid id, CancellationToken ct = default);
 
+        // Все связи «товар — поставщик» с названиями сторон.
         Task<IReadOnlyList<SupplierProductDto>> GetSupplierProductsAsync(CancellationToken ct = default);
         Task<IReadOnlyList<SupplierProductDto>> GetSupplierProductsBySupplierAsync(Guid supplierId, CancellationToken ct = default);
         Task<IReadOnlyList<SupplierProductDto>> GetSupplierProductsByProductAsync(Guid productId, CancellationToken ct = default);
@@ -48,16 +52,16 @@ namespace TradeSystem.Application.Services
 {
     public sealed class CatalogService : ICatalogService
     {
-        private readonly DtoMapper _mapper;
-        private readonly ISupplierRepository _suppliers;
-        private readonly IProductRepository _products;
-        private readonly IShelfRepository _shelves;
-        private readonly ISupplierProductRepository _supplierProducts;
-        private readonly IPurchaseOrderRepository _orders;
-        private readonly IGoodsReceiptRepository _receipts;
-        private readonly ISaleRepository _sales;
-        private readonly IStockMovementRepository _movements;
-        private readonly IStockService _stock;
+        private readonly DtoMapper _mapper; // Преобразование сущностей в DTO
+        private readonly ISupplierRepository _suppliers; // Репозиторий поставщиков
+        private readonly IProductRepository _products; // Репозиторий товаров
+        private readonly IShelfRepository _shelves; // Репозиторий полок
+        private readonly ISupplierProductRepository _supplierProducts; // Репозиторий связей товара и поставщика
+        private readonly IPurchaseOrderRepository _orders; // Репозиторий заказов
+        private readonly IGoodsReceiptRepository _receipts; // Репозиторий поступлений
+        private readonly ISaleRepository _sales; // Репозиторий продаж
+        private readonly IStockMovementRepository _movements; // Репозиторий движений товара
+        private readonly IStockService _stock; // Складской сервис
 
         public CatalogService(
             ISupplierRepository suppliers,
@@ -83,6 +87,7 @@ namespace TradeSystem.Application.Services
                     _mapper = mapper;
         }
 
+        // Поставщики с числом активных связей, по алфавиту.
         public async Task<IReadOnlyList<SupplierDto>> GetSuppliersAsync(bool includeInactive = false, CancellationToken ct = default)
         {
             var all = await _suppliers.GetAllAsync(ct);
@@ -100,6 +105,7 @@ namespace TradeSystem.Application.Services
                 .ToList();
         }
 
+        // Один поставщик с числом активных связей.
         public async Task<SupplierDto?> GetSupplierAsync(Guid id, CancellationToken ct = default)
         {
             var s = await _suppliers.GetByIdAsync(id, ct);
@@ -116,6 +122,7 @@ namespace TradeSystem.Application.Services
         public Task<SupplierDto> UpdateSupplierAsync(SupplierInput input, CancellationToken ct = default)
             => SaveSupplierAsync(input, isNew: false, ct);
 
+        // Общая логика создания и обновления поставщика.
         private async Task<SupplierDto> SaveSupplierAsync(SupplierInput input, bool isNew, CancellationToken ct)
         {
             ValidateSupplier(input);
@@ -147,6 +154,7 @@ namespace TradeSystem.Application.Services
             return (await GetSupplierAsync(entity.Id, ct))!;
         }
 
+        // Удаление запрещено, если поставщик используется в справочнике или документах.
         public async Task DeleteSupplierAsync(Guid id, CancellationToken ct = default)
         {
             var links = await _supplierProducts.GetAllAsync(ct);
@@ -163,6 +171,7 @@ namespace TradeSystem.Application.Services
             await _suppliers.DeleteAsync(id, ct);
         }
 
+        // Проверяет обязательные поля поставщика.
         private static void ValidateSupplier(SupplierInput input)
         {
             if (string.IsNullOrWhiteSpace(input.Name))
@@ -171,6 +180,7 @@ namespace TradeSystem.Application.Services
                 throw new BusinessException("Телефон поставщика обязателен.");
         }
 
+        // Товары с вычисленными остатками; по умолчанию без неактивных.
         public async Task<IReadOnlyList<ProductDto>> GetProductsAsync(bool includeInactive = false, CancellationToken ct = default)
         {
             var all = await _products.GetAllAsync(ct);
@@ -179,6 +189,7 @@ namespace TradeSystem.Application.Services
             return await BuildProductDtosAsync(all.ToList(), ct);
         }
 
+        // Один товар с вычисленными остатками.
         public async Task<ProductDto?> GetProductAsync(Guid id, CancellationToken ct = default)
         {
             var p = await _products.GetByIdAsync(id, ct);
@@ -193,6 +204,7 @@ namespace TradeSystem.Application.Services
         public Task<ProductDto> UpdateProductAsync(ProductInput input, CancellationToken ct = default)
             => SaveProductAsync(input, isNew: false, ct);
 
+        // Общая логика создания и обновления товара.
         private async Task<ProductDto> SaveProductAsync(ProductInput input, bool isNew, CancellationToken ct)
         {
             ValidateProduct(input);
@@ -226,6 +238,7 @@ namespace TradeSystem.Application.Services
             return dtos.First();
         }
 
+        // Удаление запрещено, если товар используется в связях, остатках или документах.
         public async Task DeleteProductAsync(Guid id, CancellationToken ct = default)
         {
             var links = await _supplierProducts.GetAllAsync(ct);
@@ -252,6 +265,7 @@ namespace TradeSystem.Application.Services
             await _products.DeleteAsync(id, ct);
         }
 
+        // Проверяет обязательные поля и неотрицательные остатки товара.
         private static void ValidateProduct(ProductInput input)
         {
             if (string.IsNullOrWhiteSpace(input.Name))
@@ -262,6 +276,7 @@ namespace TradeSystem.Application.Services
                 throw new BusinessException("Целевой остаток не может быть отрицательным.");
         }
 
+        // Полки с числом различных товаров на них.
         public async Task<IReadOnlyList<ShelfDto>> GetShelvesAsync(bool includeInactive = false, CancellationToken ct = default)
         {
             var all = await _shelves.GetAllAsync(ct);
@@ -279,6 +294,7 @@ namespace TradeSystem.Application.Services
                 .Select(s => _mapper.ToDto(s, perShelf.GetValueOrDefault(s.Id)))
                 .ToList();
         }
+        // Одна полка с числом товаров.
         public async Task<ShelfDto?> GetShelfAsync(Guid id, CancellationToken ct = default)
         {
             var sh = await _shelves.GetByIdAsync(id, ct);
@@ -300,6 +316,7 @@ namespace TradeSystem.Application.Services
         public Task<ShelfDto> UpdateShelfAsync(ShelfInput input, CancellationToken ct = default)
             => SaveShelfAsync(input, isNew: false, ct);
 
+        // Общая логика создания и обновления полки.
         private async Task<ShelfDto> SaveShelfAsync(ShelfInput input, bool isNew, CancellationToken ct)
         {
             if (string.IsNullOrWhiteSpace(input.Code))
@@ -335,6 +352,7 @@ namespace TradeSystem.Application.Services
             return await BuildShelfDtoAsync(me, ct);
         }
 
+        // Собирает DTO полки с числом товаров.
         private async Task<ShelfDto> BuildShelfDtoAsync(Shelf me, CancellationToken ct)
         {
             var raw = await _stock.GetAllBalancesRawAsync(ct);
@@ -342,6 +360,7 @@ namespace TradeSystem.Application.Services
             return _mapper.ToDto(me, count);
         }
 
+        // Удаление запрещено, если на полке есть товар или она используется в документах.
         public async Task DeleteShelfAsync(Guid id, CancellationToken ct = default)
         {
             var raw = await _stock.GetAllBalancesRawAsync(ct);
@@ -368,18 +387,21 @@ namespace TradeSystem.Application.Services
             await _shelves.DeleteAsync(id, ct);
         }
 
+        // Все связи с названиями товара и поставщика.
         public async Task<IReadOnlyList<SupplierProductDto>> GetSupplierProductsAsync(CancellationToken ct = default)
         {
             var links = await _supplierProducts.GetAllAsync(ct);
             return await BuildLinkDtosAsync(links.ToList(), ct);
         }
 
+        // Связи выбранного поставщика.
         public async Task<IReadOnlyList<SupplierProductDto>> GetSupplierProductsBySupplierAsync(Guid supplierId, CancellationToken ct = default)
         {
             var links = (await _supplierProducts.GetAllAsync(ct)).Where(l => l.SupplierId == supplierId).ToList();
             return await BuildLinkDtosAsync(links, ct);
         }
 
+        // Связи выбранного товара.
         public async Task<IReadOnlyList<SupplierProductDto>> GetSupplierProductsByProductAsync(Guid productId, CancellationToken ct = default)
         {
             var links = (await _supplierProducts.GetAllAsync(ct)).Where(l => l.ProductId == productId).ToList();
@@ -392,6 +414,7 @@ namespace TradeSystem.Application.Services
         public Task<SupplierProductDto> UpdateLinkAsync(SupplierProductInput input, CancellationToken ct = default)
             => SaveLinkAsync(input, isNew: false, ct);
 
+        // Создание или обновление связи; предпочтительной может быть только одна.
         private async Task<SupplierProductDto> SaveLinkAsync(SupplierProductInput input, bool isNew, CancellationToken ct)
         {
             if (input.ProductId == Guid.Empty) throw new BusinessException("Не указан товар.");
@@ -444,9 +467,11 @@ namespace TradeSystem.Application.Services
             return dtos.First();
         }
 
+        // Удаляет связь товара и поставщика.
         public async Task UnlinkAsync(Guid id, CancellationToken ct = default)
             => await _supplierProducts.DeleteAsync(id, ct);
 
+        // Подставляет остатки, число поставщиков и название полки по умолчанию.
         private async Task<IReadOnlyList<ProductDto>> BuildProductDtosAsync(List<Product> products, CancellationToken ct)
         {
             if (products.Count == 0) return Array.Empty<ProductDto>();
@@ -468,6 +493,7 @@ namespace TradeSystem.Application.Services
             )).ToList();
         }
 
+        // Подставляет названия товара и поставщика.
         private async Task<IReadOnlyList<SupplierProductDto>> BuildLinkDtosAsync(List<SupplierProduct> links, CancellationToken ct)
         {
             if (links.Count == 0) return Array.Empty<SupplierProductDto>();

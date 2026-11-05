@@ -2,68 +2,75 @@
 
 namespace TradeSystem.Domain.Enums;
 
+// Единица измерения товара.
 public enum MeasurementUnit
 {
-    NotSpecified = 0,
-    Piece = 1,
-    Kilogram = 2,
-    Liter = 3,
-    Meter = 4,
-    Pack = 5,
-    Box = 6,
-    Other = 99
+    NotSpecified = 0, // Единица не указана
+    Piece = 1, // Штука
+    Kilogram = 2, // Килограмм
+    Liter = 3, // Литр
+    Meter = 4, // Метр
+    Pack = 5, // Упаковка
+    Box = 6, // Коробка
+    Other = 99 // Другая единица
 }
 
+// Тип документа, создающего движение по складу.
 public enum DocumentType
 {
-    None = 0,
+    None = 0, // Нет документа-источника
 
     PurchaseOrder = 1, // Заказ на покупку
-    GoodsReceipt = 2,
-    Sale = 3,
-    InventoryCorrection = 4
+    GoodsReceipt = 2, // Поступление товара
+    Sale = 3, // Продажа
+    InventoryCorrection = 4 // Корректировка остатков
 }
 
+// Статус заказа поставщику.
 public enum PurchaseOrderStatus
 {
-    Draft = 0,
-    Confirmed = 1,
-    Sent = 2,
-    PartiallyReceived = 3,
-    Received = 4,
-    Closed = 5,
-    Cancelled = 6
+    Draft = 0, // Черновик
+    Confirmed = 1, // Подтверждён
+    Sent = 2, // Отправлен поставщику
+    PartiallyReceived = 3, // Частично получен
+    Received = 4, // Получен
+    Closed = 5, // Закрыт
+    Cancelled = 6 // Отменён
 }
 
+// Статус оплаты счёта.
 public enum PaymentStatus
 {
-    Unpaid = 0,
-    PartiallyPaid = 1,
-    Paid = 2,
-    Cancelled = 3
+    Unpaid = 0, // Не оплачен
+    PartiallyPaid = 1, // Частично оплачен
+    Paid = 2, // Оплачен
+    Cancelled = 3 // Отменён
 }
 
+// Статус поступления товара.
 public enum GoodsReceiptStatus
 {
-    Draft = 0,
-    Posted = 1,
-    Cancelled = 2
+    Draft = 0, // Черновик
+    Posted = 1, // Проведён
+    Cancelled = 2 // Отменён
 }
 
+// Статус продажи.
 public enum SaleStatus
 {
-    Draft = 0,
-    Completed = 1,
-    Cancelled = 2
+    Draft = 0, // Черновик
+    Completed = 1, // Завершена
+    Cancelled = 2 // Отменена
 }
 
+// Тип складского движения.
 public enum StockMovementType
 {
-    PurchaseReceipt = 1,
+    PurchaseReceipt = 1, // Приход по поступлению
 
-    Sale = 2,
-    WriteOff = 3,
-    TransferIn = 4,
-    TransferOut = 5,
-    Correction = 6
+    Sale = 2, // Расход по продаже
+    WriteOff = 3, // Списание
+    TransferIn = 4, // Перемещение на полку
+    TransferOut = 5, // Перемещение с полки
+    Correction = 6 // Корректировка
 }

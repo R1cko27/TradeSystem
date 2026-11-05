@@ -5,57 +5,49 @@ using System.Collections.Generic;
 
 namespace TradeSystem.Application.Dto;
 
-/// <summary>
-/// READ-ONLY план автоформирования: что будет создано, но без записи в хранилище.
-/// Позволяет мастеру показать пользователю разбивку и варианты поставщиков
-/// до подтверждения, не дублируя бизнес-правила выбора в UI.
-/// </summary>
+// План автоформирования: что будет создано, без записи в хранилище.
 public sealed class AutoOrderPreviewDto
 {
-    public IReadOnlyList<PreviewProductDto> Products { get; init; } = Array.Empty<PreviewProductDto>();
-    public IReadOnlyList<string> Warnings { get; init; } = Array.Empty<string>();
+    public IReadOnlyList<PreviewProductDto> Products { get; init; } = Array.Empty<PreviewProductDto>(); // Товары плана
+    public IReadOnlyList<string> Warnings { get; init; } = Array.Empty<string>(); // Предупреждения по пропущенным товарам
 }
 
+// Товар в плане автоформирования.
 public sealed class PreviewProductDto
 {
-    public Guid ProductId { get; init; }
-    public string ProductName { get; init; } = string.Empty;
-    public string UnitLabel { get; init; } = string.Empty;
-    public int CurrentStock { get; init; }
-    public int MinimumStockQuantity { get; init; }
+    public Guid ProductId { get; init; } // Товар
+    public string ProductName { get; init; } = string.Empty; // Наименование товара
+    public string UnitLabel { get; init; } = string.Empty; // Единица измерения текстом
+    public int CurrentStock { get; init; } // Текущий остаток
+    public int MinimumStockQuantity { get; init; } // Минимальный остаток
 
-    /// <summary>Потребность до корректировки под конкретного поставщика.</summary>
-    public int BaseNeededQuantity { get; init; }
+    public int BaseNeededQuantity { get; init; } // Потребность до корректировки под поставщика
 
-    public IReadOnlyList<PreviewSupplierOptionDto> Options { get; init; } = Array.Empty<PreviewSupplierOptionDto>();
+    public IReadOnlyList<PreviewSupplierOptionDto> Options { get; init; } = Array.Empty<PreviewSupplierOptionDto>(); // Варианты поставщиков
 
-    /// <summary>Рекомендованный поставщик (с учётом явного выбора, если был передан).</summary>
-    public Guid? RecommendedSupplierId { get; init; }
+    public Guid? RecommendedSupplierId { get; init; } // Рекомендованный поставщик
 }
 
-public sealed class PreviewSupplierOptionDto // DTO варианта поставщика в предварительном плане
+// Вариант поставщика в плане.
+public sealed class PreviewSupplierOptionDto
 {
-    public Guid SupplierId { get; init; }
-    public string SupplierName { get; init; } = string.Empty;
-    public Guid SupplierProductId { get; init; }
-    public decimal? PurchasePrice { get; init; }
-    public int? LeadTimeDays { get; init; }
-    public int? MinimumOrderQuantity { get; init; }
-    public int? OrderMultiple { get; init; }
-    public bool IsPreferred { get; init; }
+    public Guid SupplierId { get; init; } // Поставщик
+    public string SupplierName { get; init; } = string.Empty; // Наименование поставщика
+    public Guid SupplierProductId { get; init; } // Связь товара с поставщиком
+    public decimal? PurchasePrice { get; init; } // Закупочная цена
+    public int? LeadTimeDays { get; init; } // Срок поставки, дней
+    public int? MinimumOrderQuantity { get; init; } // Минимальная партия
+    public int? OrderMultiple { get; init; } // Кратность заказа
+    public bool IsPreferred { get; init; } // Предпочтительный поставщик
 
-    /// <summary>Количество с учётом минималки и кратности именно этого поставщика.</summary>
-    public int AdjustedQuantity { get; init; }
+    public int AdjustedQuantity { get; init; } // Количество с учётом минималки и кратности
 
-    public decimal LineAmount { get; init; }
+    public decimal LineAmount { get; init; } // Сумма по строке
 }
 
-/// <summary>
-/// Результат автоформирования заказов: сами заказы + предупреждения
-/// (например, товар без активного поставщика был пропущен).
-/// </summary>
+// Результат автоформирования: созданные заказы и предупреждения.
 public sealed class AutoOrderResult
 {
-    public List<PurchaseOrderDto> Orders { get; } = new();
-    public List<string> Warnings { get; } = new();
+    public List<PurchaseOrderDto> Orders { get; } = new(); // Созданные заказы
+    public List<string> Warnings { get; } = new(); // Предупреждения
 }

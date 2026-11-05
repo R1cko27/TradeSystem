@@ -22,7 +22,7 @@ namespace TradeSystem.Application.Contracts.Services
 
         Task<SaleDto> CreateDraftAsync(SaleInput input, CancellationToken ct = default);
 
-        /// <summary>Проведение: списание с полок (с проверкой достаточности).</summary>
+        // Проведение: списание с полок с проверкой достаточности.
         Task<SaleDto> PostAsync(Guid saleId, CancellationToken ct = default);
 
         Task DeleteDraftAsync(Guid saleId, CancellationToken ct = default);
@@ -33,11 +33,11 @@ namespace TradeSystem.Application.Services
 {
     public sealed class SaleService : ISaleService
     {
-        private readonly DtoMapper _mapper;
-        private readonly ISaleRepository _sales;
-        private readonly IProductRepository _products;
-        private readonly IShelfRepository _shelves;
-        private readonly IStockService _stock;
+        private readonly DtoMapper _mapper; // Преобразование в DTO
+        private readonly ISaleRepository _sales; // Репозиторий продаж
+        private readonly IProductRepository _products; // Репозиторий товаров
+        private readonly IShelfRepository _shelves; // Репозиторий полок
+        private readonly IStockService _stock; // Складской сервис
 
         public SaleService(
             ISaleRepository sales,
@@ -53,12 +53,14 @@ namespace TradeSystem.Application.Services
                     _mapper = mapper;
         }
 
+        // Продажи с позициями и названиями.
         public async Task<IReadOnlyList<SaleDto>> GetSalesAsync(CancellationToken ct = default)
         {
             var all = await _sales.GetAllAsync(ct);
             return await BuildDtosAsync(all.ToList(), ct);
         }
 
+        // Одна продажа по идентификатору.
         public async Task<SaleDto?> GetSaleAsync(Guid id, CancellationToken ct = default)
         {
             var s = await _sales.GetByIdAsync(id, ct);
@@ -67,6 +69,7 @@ namespace TradeSystem.Application.Services
             return list.FirstOrDefault();
         }
 
+        // Создаёт черновик продажи с проверкой товаров и полок.
         public async Task<SaleDto> CreateDraftAsync(SaleInput input, CancellationToken ct = default)
         {
             if (input.Lines.Count == 0) throw new BusinessException("Продажа не содержит позиций.");
@@ -104,6 +107,7 @@ namespace TradeSystem.Application.Services
             return dtos.First();
         }
 
+        // Проводит продажу: списание остатков и статус «Завершена».
         public async Task<SaleDto> PostAsync(Guid saleId, CancellationToken ct = default)
         {
             var sale = await _sales.GetByIdAsync(saleId, ct)
@@ -127,6 +131,7 @@ namespace TradeSystem.Application.Services
             return dtos.First();
         }
 
+        // Удаляет черновик продажи.
         public async Task DeleteDraftAsync(Guid saleId, CancellationToken ct = default)
         {
             var sale = await _sales.GetByIdAsync(saleId, ct)
@@ -136,6 +141,7 @@ namespace TradeSystem.Application.Services
             await _sales.DeleteAsync(saleId, ct);
         }
 
+        // Номер вида SALE-ГГГГММДД-НННН.
         private async Task<string> GenerateNumberAsync(string prefix, CancellationToken ct)
         {
             var all = await _sales.GetAllAsync(ct);
@@ -144,6 +150,7 @@ namespace TradeSystem.Application.Services
             return $"{prefix}-{today}-{n + 1:D4}";
         }
 
+        // Подставляет названия товаров и полок.
         private async Task<IReadOnlyList<SaleDto>> BuildDtosAsync(List<Sale> sales, CancellationToken ct)
         {
             if (sales.Count == 0) return Array.Empty<SaleDto>();

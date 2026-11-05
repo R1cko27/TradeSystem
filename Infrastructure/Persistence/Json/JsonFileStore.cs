@@ -10,21 +10,27 @@ using System.Threading.Tasks;
 
 namespace TradeSystem.Infrastructure.Persistence.Json;
 
+// Хранилище списка записей в JSON-файле.
 public interface IJsonFileStore<T>
 {
+    // Читает все записи.
     Task<IReadOnlyList<T>> ReadAsync(CancellationToken cancellationToken = default);
 
+    // Перезаписывает файл.
     Task WriteAsync(IReadOnlyList<T> items, CancellationToken cancellationToken = default);
 
+    // Читает, изменяет и записывает обратно.
     Task UpdateAsync(Func<List<T>, Task> mutateAsync, CancellationToken cancellationToken = default);
 }
 
+// JSON-хранилище с последовательным доступом через семафор.
 public sealed class JsonFileStore<T> : IJsonFileStore<T>, IDisposable
 {
-    private readonly string _filePath;
-    private readonly JsonSerializerOptions _options;
+    private readonly string _filePath; // Полный путь к файлу
+    private readonly JsonSerializerOptions _options; // Настройки сериализации
     private readonly SemaphoreSlim _gate = new(1, 1); // Семафор для синхронизации доступа к файлу
 
+    // Настраивает сериализацию: camelCase, отступы, enum строками.
     public JsonFileStore(string filePath, bool writeIndented = true)
     {
         if (string.IsNullOrWhiteSpace(filePath))
@@ -45,6 +51,7 @@ public sealed class JsonFileStore<T> : IJsonFileStore<T>, IDisposable
         };
     }
 
+    // Читает файл под семафором.
     public async Task<IReadOnlyList<T>> ReadAsync(CancellationToken cancellationToken = default)
     {
         await _gate.WaitAsync(cancellationToken).ConfigureAwait(false);
@@ -59,6 +66,7 @@ public sealed class JsonFileStore<T> : IJsonFileStore<T>, IDisposable
         }
     }
 
+    // Перезаписывает файл под семафором.
     public async Task WriteAsync(IReadOnlyList<T> items, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(items);
@@ -75,6 +83,7 @@ public sealed class JsonFileStore<T> : IJsonFileStore<T>, IDisposable
         }
     }
 
+    // Читает, даёт изменить список и записывает обратно под семафором.
     public async Task UpdateAsync(Func<List<T>, Task> mutateAsync, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(mutateAsync);
@@ -95,7 +104,8 @@ public sealed class JsonFileStore<T> : IJsonFileStore<T>, IDisposable
         }
     }
 
-    private async Task<List<T>> ReadCoreAsync(CancellationToken cancellationToken) // Внутреннее чтение данных из файла без блокировки
+    // Читает файл без блокировки: вызывается только под семафором.
+    private async Task<List<T>> ReadCoreAsync(CancellationToken cancellationToken)
     {
         if (!File.Exists(_filePath))
         {
@@ -112,7 +122,8 @@ public sealed class JsonFileStore<T> : IJsonFileStore<T>, IDisposable
         return JsonSerializer.Deserialize<List<T>>(json, _options) ?? new List<T>();
     }
 
-    private async Task WriteCoreAsync(IReadOnlyList<T> items, CancellationToken cancellationToken) // Внутренняя запись данных в файл без блокировки
+    // Пишет файл без блокировки: вызывается только под семафором.
+    private async Task WriteCoreAsync(IReadOnlyList<T> items, CancellationToken cancellationToken)
     {
         var directory = Path.GetDirectoryName(_filePath);
 
@@ -121,6 +132,7 @@ public sealed class JsonFileStore<T> : IJsonFileStore<T>, IDisposable
             Directory.CreateDirectory(directory);
         }
 
+        // Сначала пишем во временный файл, затем заменяем основной.
         var tempPath = _filePath + ".tmp";
 
         var json = JsonSerializer.Serialize(items, _options);
@@ -130,29 +142,32 @@ public sealed class JsonFileStore<T> : IJsonFileStore<T>, IDisposable
         File.Move(tempPath, _filePath, overwrite: true);
     }
 
+    // Освобождает семафор.
     public void Dispose()
     {
         _gate.Dispose();
     }
 }
 
+// Настройки хранения JSON.
 public sealed class JsonStorageOptions
 {
-    public string DirectoryPath { get; set; } = "data";
+    public string DirectoryPath { get; set; } = "data"; // Папка для JSON-файлов
 
-    public bool WriteIndented { get; set; } = true;
+    public bool WriteIndented { get; set; } = true; // Форматировать JSON с отступами
 }
 
+// Имена файлов для каждого типа сущностей.
 public static class JsonFileNames
 {
-    public const string Suppliers = "suppliers.json";
-    public const string Products = "products.json";
-    public const string Shelves = "shelves.json";
-    public const string SupplierProducts = "supplier-products.json";
-    public const string StockBalances = "stock-balances.json";
-    public const string PurchaseOrders = "purchase-orders.json";
-    public const string Invoices = "invoices.json";
-    public const string GoodsReceipts = "goods-receipts.json";
-    public const string Sales = "sales.json";
-    public const string StockMovements = "stock-movements.json";
+    public const string Suppliers = "suppliers.json"; // Поставщики
+    public const string Products = "products.json"; // Товары
+    public const string Shelves = "shelves.json"; // Полки
+    public const string SupplierProducts = "supplier-products.json"; // Связи товара и поставщика
+    public const string StockBalances = "stock-balances.json"; // Остатки на полках
+    public const string PurchaseOrders = "purchase-orders.json"; // Заказы поставщикам
+    public const string Invoices = "invoices.json"; // Счета
+    public const string GoodsReceipts = "goods-receipts.json"; // Поступления
+    public const string Sales = "sales.json"; // Продажи
+    public const string StockMovements = "stock-movements.json"; // Движения товара
 }

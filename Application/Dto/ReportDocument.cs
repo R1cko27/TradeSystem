@@ -8,14 +8,10 @@ using System.Text;
 
 namespace TradeSystem.Application.Dto;
 
-/// <summary>
-/// Структурированный справочный документ (таблица с заголовком).
-/// Является value object: не имеет идентичности, только данные и способы
-/// сериализации в текстовое/CSV-представление. Печать и экспорт строятся
-/// из одного экземпляра, поэтому форматирование нигде не дублируется.
-/// </summary>
+// Таблица отчёта с заголовком и строками; умеет выводиться текстом и в CSV.
 public sealed class ReportDocument
 {
+    // Создаёт документ с заголовком, колонками и строками.
     public ReportDocument(string title, IReadOnlyList<string> headers, IReadOnlyList<IReadOnlyList<string>> rows)
     {
         Title = title ?? throw new ArgumentNullException(nameof(title));
@@ -23,14 +19,11 @@ public sealed class ReportDocument
         Rows = rows ?? Array.Empty<IReadOnlyList<string>>();
     }
 
-    public string Title { get; }
-    public IReadOnlyList<string> Headers { get; }
-    public IReadOnlyList<IReadOnlyList<string>> Rows { get; }
+    public string Title { get; } // Заголовок документа
+    public IReadOnlyList<string> Headers { get; } // Заголовки колонок
+    public IReadOnlyList<IReadOnlyList<string>> Rows { get; } // Строки таблицы
 
-    /// <summary>
-    /// Выровненная текстовая таблица (колонки дополнены пробелами до максимальной ширины).
-    /// Используется и для предпросмотра, и для печати (моноширинный шрифт сохраняет выравнивание).
-    /// </summary>
+    // Формирует выровненную текстовую таблицу для предпросмотра и печати.
     public string ToPlainText()
     {
         var sb = new StringBuilder();
@@ -67,7 +60,7 @@ public sealed class ReportDocument
         return sb.ToString();
     }
 
-    /// <summary>CSV с экранированием кавычек/разделителей; разделитель — точка с запятой (локаль RU).</summary>
+    // Формирует CSV с разделителем «;» и экранированием кавычек.
     public string ToCsv()
     {
         var sb = new StringBuilder();
@@ -77,6 +70,7 @@ public sealed class ReportDocument
         return sb.ToString();
     }
 
+    // Собирает строку таблицы с колонками фиксированной ширины.
     private static string FormatRow(IReadOnlyList<string> cells, int[] widths)
     {
         var sb = new StringBuilder();
@@ -89,6 +83,7 @@ public sealed class ReportDocument
         return sb.ToString().TrimEnd();
     }
 
+    // Экранирует значение для CSV: кавычки удваиваются, поле оборачивается в кавычки.
     private static string EscapeCsv(string? value)
     {
         value ??= string.Empty;

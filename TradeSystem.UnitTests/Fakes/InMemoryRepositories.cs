@@ -10,12 +10,12 @@ using TradeSystem.Domain.Entities;
 
 namespace TradeSystem.UnitTests.Fakes;
 
-/// <summary>Репозиторий в памяти для изоляции тестов от файловой системы.</summary>
+// Репозиторий в памяти для изоляции тестов от файловой системы.
 public class InMemoryRepository<TEntity> : IRepository<TEntity> where TEntity : Entity
 {
-    private readonly List<TEntity> _items = new();
+    private readonly List<TEntity> _items = new(); // Записи в памяти
 
-    public IReadOnlyList<TEntity> Items => _items;
+    public IReadOnlyList<TEntity> Items => _items; // Все записи
 
     public Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
         => Task.FromResult<IReadOnlyList<TEntity>>(_items.ToList());
@@ -39,12 +39,14 @@ public class InMemoryRepository<TEntity> : IRepository<TEntity> where TEntity : 
     public Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         => Task.FromResult(_items.RemoveAll(item => item.Id == id) > 0);
 
+    // Добавляет запись напрямую, минуя проверки.
     public TEntity Seed(TEntity entity)
     {
         _items.Add(entity);
         return entity;
     }
 
+    // Очищает репозиторий.
     public void Clear() => _items.Clear();
 }
 

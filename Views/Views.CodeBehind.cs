@@ -4,6 +4,7 @@ using System.Windows.Controls;
 
 namespace TradeSystem.App.Views;
 
+// Пустые code-behind классы представлений: разметка лежит в XAML.
 public partial class InvoiceListView : UserControl { public InvoiceListView() => InitializeComponent(); }
 
 public partial class OrderAutoPreviewView : UserControl { public OrderAutoPreviewView() => InitializeComponent(); }

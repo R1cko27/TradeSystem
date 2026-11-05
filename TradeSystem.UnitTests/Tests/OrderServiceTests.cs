@@ -12,10 +12,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TradeSystem.UnitTests.Tests;
 
-/// <summary>Проверки заказов поставщикам и автоматического формирования.</summary>
+// Проверки заказов поставщикам и автоматического формирования.
 [TestClass]
 public sealed class OrderServiceTests
 {
+    // Готовит входные данные заказа.
     private static CreatePurchaseOrderInput Order(Guid supplierId, Guid productId, int quantity,
         decimal? price = 50m)
         => new()
@@ -131,6 +132,7 @@ public sealed class OrderServiceTests
 
         Check.True(second.Number.EndsWith("-0002"), $"ожидался номер с 0002, получен {second.Number}");
     }
+// Ожидаем: статус меняется на «Подтверждён».
 
     [TestMethod]
     public async Task ConfirmOrder_Draft_ChangesStatus()
@@ -143,6 +145,7 @@ public sealed class OrderServiceTests
 
         Check.Equal(PurchaseOrderStatus.Confirmed, context.Orders.Items.Single().Status);
     }
+// Ожидаем: исключение для не-черновика.
 
     [TestMethod]
     public async Task ConfirmOrder_NonDraft_Throws()
@@ -155,6 +158,7 @@ public sealed class OrderServiceTests
             () => context.OrderService.ConfirmOrderAsync(order.Id),
             "Черновик");
     }
+// Ожидаем: статус меняется на «Отменён».
 
     [TestMethod]
     public async Task CancelOrder_Draft_ChangesStatus()
@@ -193,6 +197,7 @@ public sealed class OrderServiceTests
             () => context.OrderService.CloseOrderAsync(order.Id),
             "Получен");
     }
+// Ожидаем: статус меняется на «Закрыт».
 
     [TestMethod]
     public async Task CloseOrder_Received_ChangesStatus()

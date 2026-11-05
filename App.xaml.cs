@@ -21,21 +21,26 @@ using AppBase = System.Windows.Application;
 
 namespace TradeSystem.App
 {
+    // Точка входа: собирает DI-контейнер и открывает главное окно.
     public partial class App : AppBase
     {
-        public static IServiceProvider Services { get; private set; } = null!;
+        public static IServiceProvider Services { get; private set; } = null!; // Глобальный доступ к сервисам приложения
 
+        // Регистрирует зависимости и показывает главное окно.
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
             var services = new ServiceCollection();
 
+            // Инфраструктура и прикладные сервисы.
             services.AddTradeSystemJsonPersistence();
             services.AddTradeSystemApplication();
+            // Сервисы представления.
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<IDocumentOutputService, DocumentOutputService>();
 
+            // ViewModel-и приложения: по одному экземпляру на экран.
             services.AddSingleton<ProductsListViewModel>();
             services.AddSingleton<ProductEditViewModel>();
             services.AddSingleton<SuppliersListViewModel>();
@@ -55,6 +60,7 @@ namespace TradeSystem.App
             services.AddSingleton<ReportsViewModel>();
             services.AddSingleton<MainViewModel>();
 
+            // Создаём провайдер и открываем главное окно.
             Services = services.BuildServiceProvider();
 
             var mainVm = Services.GetRequiredService<MainViewModel>();
